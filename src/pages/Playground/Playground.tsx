@@ -110,6 +110,31 @@ export const Playground: FC = () => {
             checked={config.readOnly}
             onChange={(v) => set('readOnly', v)}
           />
+          <ToggleRow
+            label={t.playground.table}
+            checked={config.table}
+            onChange={(v) => set('table', v)}
+          />
+          <ToggleRow
+            label={t.playground.trackChanges}
+            checked={config.trackChanges}
+            onChange={(v) => set('trackChanges', v)}
+          />
+          <ToggleRow
+            label={t.playground.comments}
+            checked={config.comments}
+            onChange={(v) => set('comments', v)}
+          />
+          <ToggleRow
+            label={t.playground.ai}
+            checked={config.ai}
+            onChange={(v) => set('ai', v)}
+          />
+          <ToggleRow
+            label={t.playground.blocks}
+            checked={config.blocks}
+            onChange={(v) => set('blocks', v)}
+          />
 
           <SectionTitle>{t.playground.theme}</SectionTitle>
           <SelectRow
@@ -136,6 +161,20 @@ export const Playground: FC = () => {
                   showCharCount={config.showCharCount}
                   readOnly={config.readOnly}
                   minHeight={PLAYGROUND_EDITOR_MIN_HEIGHT_PX}
+                  features={{
+                    table: config.table,
+                    trackChanges: config.trackChanges,
+                    comments: config.comments,
+                    ai: config.ai,
+                    blocks: config.blocks,
+                    slash: true,
+                  }}
+                  showCommentsPanel={config.comments}
+                  ai={
+                    config.ai
+                      ? { enabled: true, placement: 'sidebar', openOnInit: true, showHistory: true }
+                      : undefined
+                  }
                 />
               </div>
             </div>

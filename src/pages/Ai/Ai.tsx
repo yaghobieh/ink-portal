@@ -1,35 +1,105 @@
-import type { FC } from 'react';
+import { useState, type FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
-import { Button, Typography } from '@forgedevstack/bear';
+import { Button, Flex, Typography } from '@forgedevstack/bear';
+import { InkEditor, INK_AI_MODEL_CATALOG, INK_COLLAB_TOOLBAR } from '@forgedevstack/ink';
 import { Layout } from '@components/Layout';
 import { useI18n } from '@i18n/index';
-import { ROUTES } from '@const/index';
+import { DEMO_HTML_AI, HERO_EDITOR_MIN_HEIGHT_PX, ROUTES, THEME_CLASS_SNOW } from '@const/index';
 
 export const Ai: FC = () => {
   const { t } = useI18n();
+  const [value, setValue] = useState(DEMO_HTML_AI);
+
+  const features = [
+    { title: t.ai.chatTitle, body: t.ai.chatBody },
+    { title: t.ai.reviewTitle, body: t.ai.reviewBody },
+    { title: t.ai.translateTitle, body: t.ai.translateBody },
+    { title: t.ai.quickTitle, body: t.ai.quickBody },
+    { title: t.ai.modelsTitle, body: t.ai.modelsBody },
+    { title: t.ai.costTitle, body: t.ai.costBody },
+    { title: t.ai.securityTitle, body: t.ai.securityBody },
+  ];
 
   return (
     <Layout>
-      <div className="fade-in max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <Typography variant="h1" className="text-4xl font-bold mb-3 tracking-tight">
-          {t.ai.title}
-        </Typography>
-        <Typography variant="body1" className="text-slate-500 mb-8">
-          {t.ai.description}
-        </Typography>
-        <pre className="ink-code mb-8">{`import { inkAi } from '@forgedevstack/ink/plugins/ai';
+      <div className="fade-in">
+        <section className="border-b border-slate-200/80 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+            <Typography variant="caption" className="text-teal-700 font-mono mb-3 block">
+              @forgedevstack/ink/plugins/ai
+            </Typography>
+            <Typography variant="h1" className="text-4xl md:text-5xl font-bold tracking-tight mb-3 max-w-3xl">
+              {t.ai.headline}
+            </Typography>
+            <Typography variant="body1" className="text-slate-500 max-w-2xl mb-4">
+              {t.ai.description}
+            </Typography>
+            <Typography variant="body2" className="text-amber-900/80 bg-amber-50 border border-amber-100 rounded-xl px-4 py-3 max-w-3xl mb-8">
+              {t.ai.honesty}
+            </Typography>
+            <Flex gap={2} className="mb-12 flex-wrap">
+              <a href="#live-demo">
+                <Button size="lg">{t.ai.tryDemo}</Button>
+              </a>
+              <Link to={ROUTES.DOCS}>
+                <Button size="lg" variant="outline">
+                  {t.ctaDocs}
+                </Button>
+              </Link>
+            </Flex>
 
-inkAi.register({
-  id: 'my-agent',
-  name: 'My Agent',
-  capabilities: ['rewrite'],
-  async run({ html }) {
-    return { html };
-  },
-});`}</pre>
-        <Link to={`${ROUTES.DOCS}#ai`}>
-          <Button variant="outline">{t.ai.redirect}</Button>
-        </Link>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-14">
+              {features.map((feature) => (
+                <article key={feature.title} className="ink-demo-card">
+                  <Typography variant="h5" className="font-semibold mb-2">
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" className="text-slate-500">
+                    {feature.body}
+                  </Typography>
+                </article>
+              ))}
+            </div>
+
+            <Typography variant="h3" className="text-xl font-semibold mb-3">
+              {t.ai.modelsTitle}
+            </Typography>
+            <div className="ink-paper p-4 mb-12 overflow-x-auto">
+              <div className="flex flex-wrap gap-2">
+                {INK_AI_MODEL_CATALOG.slice(0, 16).map((model) => (
+                  <span
+                    key={model.id}
+                    className="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200"
+                  >
+                    {model.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <Typography id="live-demo" variant="h3" className="text-xl font-semibold mb-3 scroll-mt-24">
+              {t.ai.liveDemo}
+            </Typography>
+            <div className={`${THEME_CLASS_SNOW} ink-paper ink-hero-editor`}>
+              <InkEditor
+                value={value}
+                onChange={setValue}
+                minHeight={HERO_EDITOR_MIN_HEIGHT_PX}
+                toolbar={INK_COLLAB_TOOLBAR}
+                features={{
+                  table: true,
+                  trackChanges: false,
+                  comments: false,
+                  ai: true,
+                  blocks: true,
+                  slash: true,
+                }}
+                ai={{ enabled: true, placement: 'sidebar', openOnInit: true, showHistory: true }}
+                typoAutoFix
+              />
+            </div>
+          </div>
+        </section>
       </div>
     </Layout>
   );

@@ -81,6 +81,24 @@ a {
     0 24px 48px -24px rgb(15 118 110 / 0.18);
 }
 
+.ink-demo-card {
+  display: block;
+  background: var(--ink-portal-paper);
+  border: 1px solid var(--ink-portal-border);
+  border-radius: 1rem;
+  padding: 1.25rem 1.35rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.ink-demo-card:hover {
+  border-color: rgb(15 118 110 / 0.35);
+  box-shadow: 0 12px 28px -18px rgb(15 118 110 / 0.35);
+  transform: translateY(-1px);
+}
+
 .ink-code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.8125rem;
