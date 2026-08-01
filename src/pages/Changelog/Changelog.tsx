@@ -1,19 +1,42 @@
+import type { FC } from 'react';
 import { Typography } from '@forgedevstack/bear';
-import { INK_VERSION } from '@const/index';
+import { Layout } from '@components/Layout';
+import { useI18n } from '@i18n/index';
 
-export const Changelog = () => (
-  <div className="fade-in">
-    <Typography variant="h2" className="text-teal-200 mb-4">
-      Changelog
-    </Typography>
-    <Typography variant="h4" className="text-teal-300 mb-2">
-      {INK_VERSION}
-    </Typography>
-    <ul className="list-disc pl-5 text-zinc-300 space-y-2">
-      <li>InkEditor React WYSIWYG with controlled HTML value/onChange</li>
-      <li>Toolbar, colors, lists, links, image paste</li>
-      <li>Typo auto-fix MVP</li>
-      <li>AI plugin stub, Angular entry, WordPress stub</li>
-    </ul>
-  </div>
-);
+export const Changelog: FC = () => {
+  const { t } = useI18n();
+
+  return (
+    <Layout>
+      <div className="fade-in max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <Typography variant="h1" className="text-4xl font-bold mb-3 tracking-tight">
+          {t.changelog.title}
+        </Typography>
+        <Typography variant="body1" className="text-slate-500 mb-10">
+          {t.changelog.description}
+        </Typography>
+
+        <section className="mb-10">
+          <Typography variant="h2" className="text-xl font-bold mb-2">
+            1.0.1
+          </Typography>
+          <ul className="list-disc pl-5 text-slate-600 space-y-1">
+            <li>Expanded README: props, toolbar options, CSS variables, Quill positioning</li>
+            <li>Theme CSS classes documented for snow / bubble / dark / minimal</li>
+            <li>Portal docs + playground ship alongside</li>
+          </ul>
+        </section>
+
+        <section>
+          <Typography variant="h2" className="text-xl font-bold mb-2">
+            1.0.0
+          </Typography>
+          <ul className="list-disc pl-5 text-slate-600 space-y-1">
+            <li>Initial InkEditor release with toolbar, typo auto-fix MVP, AI stub</li>
+            <li>Angular helpers and WordPress plugin stub</li>
+          </ul>
+        </section>
+      </div>
+    </Layout>
+  );
+};

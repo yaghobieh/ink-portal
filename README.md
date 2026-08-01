@@ -1,12 +1,34 @@
-# Ink Portal
+# ink-portal
 
-Documentation and demos for [`@forgedevstack/ink`](https://www.npmjs.com/package/@forgedevstack/ink).
+Docs + playground for [`@forgedevstack/ink`](https://www.npmjs.com/package/@forgedevstack/ink).
 
-**Site (placeholder):** [inkforgejs.com](https://inkforgejs.com) — register at your registrar.
+Light Quill-inspired UI: landing with live editor, sidebar docs, and Format / Modules / Theme playground.
+
+## Develop
 
 ```bash
 npm install
 npm run dev
 ```
 
-Uses Bear for chrome and a local/file dependency on the Ink library during development.
+## Routes
+
+| Path | Purpose |
+|------|---------|
+| `/` | Landing + live `InkEditor` hero |
+| `/docs` | Documentation with sidebar TOC + nav search |
+| `/playground` | Studio-like Format / Modules / Theme controls |
+| `/get-started` | Short install |
+| `/changelog` | Release notes |
+| `/ai` | AI plugin stub (links into docs) |
+
+## Stack
+
+- React + Vite
+- `@forgedevstack/bear`, `@forgedevstack/forge-compass`, `@forgedevstack/ink`
+
+## Links
+
+- Package: https://www.npmjs.com/package/@forgedevstack/ink
+- Library: https://github.com/yaghobieh/ink
+- Site: https://inkforgejs.com

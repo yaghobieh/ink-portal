@@ -1,0 +1,11 @@
+export const NAV_HEIGHT_PX = 64;
+export const MAX_CONTENT_WIDTH_PX = 1280;
+export const DOCS_SIDEBAR_WIDTH_PX = 224;
+export const PLAYGROUND_CONTROLS_WIDTH_PX = 288;
+export const HERO_EDITOR_MIN_HEIGHT_PX = 280;
+export const PLAYGROUND_EDITOR_MIN_HEIGHT_PX = 360;
+export const SEARCH_DEBOUNCE_MS = 120;
+export const SEARCH_MAX_RESULTS = 8;
+export const FADE_DURATION_MS = 400;
+export const CHAR_COUNT_DEFAULT_MAX = 2000;
+export const MOBILE_BREAKPOINT_PX = 768;
