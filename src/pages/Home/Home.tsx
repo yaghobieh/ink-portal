@@ -3,6 +3,7 @@ import { Link } from '@forgedevstack/forge-compass/react';
 import { Badge, BearIcons, Button, Flex, Typography } from '@forgedevstack/bear';
 import { InkEditor } from '@forgedevstack/ink';
 import { Layout } from '@components/Layout';
+import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import {
   GITHUB_URL,
@@ -22,6 +23,7 @@ import {
 
 export const Home: FC = () => {
   const { t } = useI18n();
+  const { premium, active } = useInkPremium();
   const [value, setValue] = useState(HERO_EDITOR_HTML);
 
   const features = [
@@ -126,6 +128,9 @@ export const Home: FC = () => {
                   typoAutoFix
                   showCharCount
                   variant="classic"
+                  premium={premium}
+                  pasteMode={active ? 'rich' : 'plain'}
+                  wysiwyg={active}
                   features={{
                     table: true,
                     trackChanges: false,

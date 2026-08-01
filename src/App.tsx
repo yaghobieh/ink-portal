@@ -1,5 +1,6 @@
 import { CompassProvider, Routes } from '@forgedevstack/forge-compass/react';
 import { ThemeSync } from '@components/ThemeSync';
+import { InkPremiumProvider } from '@hooks/index';
 import { ROUTES } from '@const/index';
 import { Home } from '@pages/Home';
 import { Docs } from '@pages/Docs';
@@ -9,6 +10,7 @@ import { Changelog } from '@pages/Changelog';
 import { Ai } from '@pages/Ai';
 import { DemoPage, Demos } from '@pages/Demos';
 import { Pricing } from '@pages/Pricing';
+import { PremiumSuccess } from '@pages/PremiumSuccess';
 
 const routes = [
   { path: ROUTES.HOME, name: 'home', component: Home },
@@ -26,13 +28,16 @@ const routes = [
   { path: ROUTES.GET_STARTED, name: 'get-started', component: GetStarted },
   { path: ROUTES.CHANGELOG, name: 'changelog', component: Changelog },
   { path: ROUTES.AI, name: 'ai', component: Ai },
+  { path: ROUTES.PREMIUM_SUCCESS, name: 'premium-success', component: PremiumSuccess },
   { path: ROUTES.PRICING, name: 'pricing', component: Pricing },
 ];
 
 export const App = () => (
   <ThemeSync>
-    <CompassProvider routes={routes}>
-      <Routes />
-    </CompassProvider>
+    <InkPremiumProvider>
+      <CompassProvider routes={routes}>
+        <Routes />
+      </CompassProvider>
+    </InkPremiumProvider>
   </ThemeSync>
 );

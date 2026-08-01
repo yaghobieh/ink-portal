@@ -2,6 +2,7 @@ import { useState, type FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { BearIcons, Button, Flex, Typography } from '@forgedevstack/bear';
 import { InkEditor } from '@forgedevstack/ink';
+import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { PLAYGROUND_EDITOR_MIN_HEIGHT_PX, ROUTES } from '@const/index';
 import { usePlaygroundConfig } from './hooks/usePlaygroundConfig';
@@ -13,6 +14,7 @@ import type { PlaygroundTheme, PlaygroundView, ToolbarPreset } from './Playgroun
 
 export const Playground: FC = () => {
   const { t } = useI18n();
+  const { premium, active } = useInkPremium();
   const { config, set, reset, html, setHtml, toolbar, themeClass, generatedCode } =
     usePlaygroundConfig();
   const [view, setView] = useState<PlaygroundView>('preview');
@@ -161,6 +163,9 @@ export const Playground: FC = () => {
                   showCharCount={config.showCharCount}
                   readOnly={config.readOnly}
                   minHeight={PLAYGROUND_EDITOR_MIN_HEIGHT_PX}
+                  premium={premium}
+                  pasteMode={active ? 'rich' : 'plain'}
+                  wysiwyg={active}
                   features={{
                     table: config.table,
                     trackChanges: config.trackChanges,

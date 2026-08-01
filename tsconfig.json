@@ -18,6 +18,8 @@
       "@const/*": ["src/constants/*"],
       "@pages/*": ["src/pages/*"],
       "@components/*": ["src/components/*"],
+      "@hooks": ["src/hooks"],
+      "@hooks/*": ["src/hooks/*"],
       "@i18n/*": ["src/i18n/*"],
       "@config": ["src/config"],
       "@config/*": ["src/config/*"]
