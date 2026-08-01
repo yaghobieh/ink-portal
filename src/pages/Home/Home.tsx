@@ -1,103 +1,227 @@
 import { useState, type FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
-import { Button, Flex, Typography } from '@forgedevstack/bear';
-import { InkEditor, INK_DEFAULT_TOOLBAR } from '@forgedevstack/ink';
-import type { InkCommentThread } from '@forgedevstack/ink';
+import { Badge, BearIcons, Button, Flex, Typography } from '@forgedevstack/bear';
+import { InkEditor } from '@forgedevstack/ink';
 import { Layout } from '@components/Layout';
 import { useI18n } from '@i18n/index';
 import {
-  HERO_EDITOR_MIN_HEIGHT_PX,
-  HERO_IMG_SRC,
-  INK_VERSION,
+  GITHUB_URL,
+  HERO_EDITOR_HTML,
+  HOME_CUSTOMERS_SOON,
+  HOME_EXAMPLES,
+  HOME_FEATURE_IDS,
+  HOME_GALLERY,
+  HOME_HERO_EDITOR_MIN_HEIGHT_PX,
+  HOME_HERO_TOOLBAR,
+  LANDING_BG_SRC,
   LOGO_SRC,
   ROUTES,
+  STACK_LABELS,
   THEME_CLASS_SNOW,
 } from '@const/index';
 
-const HERO_DEFAULT =
-  '<h2>Ink 1.1</h2><p>Write with <strong>ForgeStack</strong> — CKEditor-inspired shell, comments archive, and Ink AI with a local demo provider.</p><p>Select text to comment, open AI for rewrite / review / translate, or type <code>/</code> for slash commands.</p>';
-
 export const Home: FC = () => {
   const { t } = useI18n();
-  const [value, setValue] = useState(HERO_DEFAULT);
-  const [comments, setComments] = useState<InkCommentThread[]>([]);
+  const [value, setValue] = useState(HERO_EDITOR_HTML);
+
+  const features = [
+    {
+      id: HOME_FEATURE_IDS[0],
+      title: t.home.featureLightweightTitle,
+      body: t.home.featureLightweightBody,
+      Icon: BearIcons.ZapIcon,
+    },
+    {
+      id: HOME_FEATURE_IDS[1],
+      title: t.home.featureExtensibleTitle,
+      body: t.home.featureExtensibleBody,
+      Icon: BearIcons.LayersIcon,
+    },
+    {
+      id: HOME_FEATURE_IDS[2],
+      title: t.home.featureDeveloperTitle,
+      body: t.home.featureDeveloperBody,
+      Icon: BearIcons.EditIcon,
+    },
+  ];
 
   return (
     <Layout>
-      <div className="fade-in">
-        <section className="relative overflow-hidden border-b border-slate-200/80 bg-white">
+      <div className="fade-in ink-landing">
+        <section className="ink-landing__hero">
           <div
-            className="absolute inset-0 opacity-[0.4] pointer-events-none"
-            style={{
-              backgroundImage: `url(${HERO_IMG_SRC})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center top',
-            }}
+            className="ink-landing__atmosphere"
+            style={{ backgroundImage: `url(${LANDING_BG_SRC})` }}
+            aria-hidden
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/90 to-[#fafafa]" />
-          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 md:pt-20 pb-12 text-center">
-            <img
-              src={LOGO_SRC}
-              alt={t.brand}
-              width={88}
-              height={88}
-              className="mx-auto mb-5 w-20 h-20 md:w-22 md:h-22 rounded-2xl object-cover shadow-sm"
-            />
-            <Typography
-              variant="h1"
-              className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 mb-3"
-            >
-              {t.brand}
+          <div className="ink-landing__veil" aria-hidden />
+
+          <div className="ink-landing__grid">
+            <div className="ink-landing__copy">
+              <Flex align="center" gap={2} className="mb-8">
+                <img
+                  src={LOGO_SRC}
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="ink-landing__mark"
+                />
+                <Typography variant="h5" className="ink-landing__brand">
+                  {t.brand}
+                </Typography>
+              </Flex>
+
+              <h1 className="ink-landing__headline">
+                {t.home.headlineBefore}{' '}
+                <span className="ink-landing__accent">{t.home.headlineAccent}</span>
+              </h1>
+
+              <Typography variant="body1" className="ink-landing__support">
+                {t.heroSupport}
+              </Typography>
+
+              <ul className="ink-landing__features">
+                {features.map(({ id, title, body, Icon }) => (
+                  <li key={id} className="ink-landing__feature">
+                    <span className="ink-landing__feature-icon" aria-hidden>
+                      <Icon size="sm" />
+                    </span>
+                    <div>
+                      <Typography variant="body1" className="font-semibold ink-text-strong">
+                        {title}
+                      </Typography>
+                      <Typography variant="body2" className="ink-text-muted">
+                        {body}
+                      </Typography>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              <Flex gap={3} className="ink-landing__ctas flex-wrap">
+                <Link to={ROUTES.GET_STARTED}>
+                  <Button size="lg" variant="ink">
+                    {t.ctaGetStarted}
+                  </Button>
+                </Link>
+                <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    size="lg"
+                    variant="inkOutline"
+                    leftIcon={<BearIcons.GithubIcon size="sm" />}
+                  >
+                    {t.ctaGithub}
+                  </Button>
+                </a>
+              </Flex>
+            </div>
+
+            <div className="ink-landing__editor-wrap">
+              <div className={`ink-landing__editor ${THEME_CLASS_SNOW}`}>
+                <InkEditor
+                  value={value}
+                  onChange={setValue}
+                  minHeight={HOME_HERO_EDITOR_MIN_HEIGHT_PX}
+                  toolbar={HOME_HERO_TOOLBAR}
+                  typoAutoFix
+                  showCharCount
+                  variant="classic"
+                  features={{
+                    table: true,
+                    trackChanges: false,
+                    comments: false,
+                    ai: false,
+                    blocks: true,
+                    slash: true,
+                  }}
+                  placeholder="Start writing…"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="ink-landing__stack">
+            <Typography variant="caption" className="ink-landing__stack-label">
+              {t.home.stackTitle}
             </Typography>
-            <Typography variant="h3" className="text-xl md:text-2xl font-medium text-slate-800 mb-3">
-              {t.tagline}
-            </Typography>
-            <Typography variant="body1" className="text-slate-500 max-w-2xl mx-auto mb-6">
-              {t.heroSupport}
-            </Typography>
-            <Typography variant="caption" className="text-teal-700/80 mb-8 block font-mono">
-              @forgedevstack/ink@{INK_VERSION}
-            </Typography>
-            <Flex gap={2} justify="center" className="mb-10 flex-wrap">
-              <Link to={ROUTES.DEMOS}>
-                <Button size="lg">{t.ctaDemos}</Button>
-              </Link>
-              <Link to={ROUTES.AI}>
-                <Button size="lg" variant="outline">
-                  {t.ctaAi}
-                </Button>
-              </Link>
-              <Link to={ROUTES.DOCS}>
-                <Button size="lg" variant="outline">
-                  {t.ctaDocs}
-                </Button>
-              </Link>
+            <Flex gap={6} justify="center" align="center" className="ink-landing__stack-row flex-wrap">
+              {STACK_LABELS.map((label) => (
+                <span key={label} className="ink-landing__stack-item">
+                  {label}
+                </span>
+              ))}
             </Flex>
-            <Typography variant="caption" className="text-slate-400 mb-3 block">
-              {t.home.liveDemo}
+          </div>
+        </section>
+
+        <section className="ink-home-section">
+          <div className="ink-home-section__inner">
+            <Typography variant="h2" className="ink-home-section__title">
+              {t.home.galleryTitle}
             </Typography>
-            <div className={`ink-paper ink-hero-editor text-left ${THEME_CLASS_SNOW}`}>
-              <InkEditor
-                value={value}
-                onChange={setValue}
-                minHeight={HERO_EDITOR_MIN_HEIGHT_PX}
-                toolbar={INK_DEFAULT_TOOLBAR}
-                typoAutoFix
-                showCharCount
-                features={{
-                  table: true,
-                  trackChanges: true,
-                  comments: true,
-                  ai: true,
-                  blocks: true,
-                  slash: true,
-                }}
-                comments={comments}
-                onCommentsChange={setComments}
-                showCommentsPanel
-                ai={{ enabled: true, placement: 'sidebar', openOnInit: true, showHistory: true }}
-                placeholder="Start writing…"
-              />
+            <Typography variant="body1" className="ink-home-section__body">
+              {t.home.galleryBody}
+            </Typography>
+            <div className="ink-home-gallery">
+              {HOME_GALLERY.map((item) => (
+                <figure key={item.src} className="ink-home-gallery__item">
+                  <img src={item.src} alt={t.home[item.altKey]} className="ink-home-gallery__img" />
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="ink-home-section ink-home-section--muted">
+          <div className="ink-home-section__inner">
+            <Typography variant="h2" className="ink-home-section__title">
+              {t.home.examplesTitle}
+            </Typography>
+            <Typography variant="body1" className="ink-home-section__body">
+              {t.home.examplesBody}
+            </Typography>
+            <div className="ink-home-examples">
+              {HOME_EXAMPLES.map((example) => (
+                <Link key={example.id} to={example.href} className="ink-demo-card">
+                  <Typography variant="h4" className="font-semibold mb-2">
+                    {t.home[example.titleKey]}
+                  </Typography>
+                  <Typography variant="body2" className="ink-text-muted mb-4">
+                    {t.home[example.bodyKey]}
+                  </Typography>
+                  <Typography variant="caption" className="ink-example-cta font-medium">
+                    {t.home.exampleOpen} →
+                  </Typography>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="ink-home-section">
+          <div className="ink-home-section__inner">
+            <Flex align="center" gap={2} className="mb-2">
+              <Typography variant="h2" className="ink-home-section__title mb-0">
+                {t.home.customersTitle}
+              </Typography>
+              <Badge variant="warning" className="text-xs">
+                {t.home.customersSoon}
+              </Badge>
+            </Flex>
+            <Typography variant="body1" className="ink-home-section__body">
+              {t.home.customersBody}
+            </Typography>
+            <div className="ink-home-customers">
+              {HOME_CUSTOMERS_SOON.map((name) => (
+                <div key={name} className="ink-home-customers__card">
+                  <Typography variant="body2" className="font-semibold ink-text-muted">
+                    {name}
+                  </Typography>
+                  <Typography variant="caption" className="ink-text-muted">
+                    {t.home.customersSoon}
+                  </Typography>
+                </div>
+              ))}
             </div>
           </div>
         </section>

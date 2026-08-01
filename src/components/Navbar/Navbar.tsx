@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FC } from 'react';
+import { useMemo, useState, type FC } from 'react';
 import { Link, useRoute } from '@forgedevstack/forge-compass/react';
 import {
   Badge,
@@ -38,10 +38,7 @@ export const Navbar: FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
-
-  useEffect(() => {
-    document.body.classList.toggle('light', mode === 'light');
-  }, [mode]);
+  const isDark = mode === 'dark';
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -58,15 +55,20 @@ export const Navbar: FC = () => {
     onClick: () => setLocale(loc),
   }));
 
-  const goToResult = (hash: string) => {
+  const goToResult = (path: string) => {
     setQuery('');
     setSearchOpen(false);
     setMenuOpen(false);
-    window.location.assign(docsHref(hash));
+    window.location.assign(docsHref(path));
   };
 
+  const navActive = (href: string) =>
+    href === ROUTES.DOCS
+      ? activePath === ROUTES.DOCS || activePath.startsWith(`${ROUTES.DOCS}/`)
+      : activePath === href;
+
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/90 border-b border-slate-200/80">
+    <nav className="ink-navbar sticky top-0 z-50 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
         <Flex align="center" gap={3} className="flex-shrink-0">
           <Link to={ROUTES.HOME} className="flex items-center gap-2.5">
@@ -86,7 +88,7 @@ export const Navbar: FC = () => {
               key={item.id}
               to={item.href}
               className="ink-nav-link"
-              data-active={activePath === item.href ? 'true' : 'false'}
+              data-active={navActive(item.href) ? 'true' : 'false'}
             >
               <Typography variant="body2" className="whitespace-nowrap">
                 {t.nav[item.id]}
@@ -111,7 +113,7 @@ export const Navbar: FC = () => {
           {searchOpen && query.trim() && (
             <div className="ink-search-panel">
               {results.length === 0 ? (
-                <Typography variant="caption" className="block px-3 py-3 text-slate-500">
+                <Typography variant="caption" className="block px-3 py-3 ink-text-muted">
                   {t.nav.searchEmpty}
                 </Typography>
               ) : (
@@ -121,13 +123,13 @@ export const Navbar: FC = () => {
                     type="button"
                     className="ink-search-item"
                     onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => goToResult(entry.hash)}
+                    onClick={() => goToResult(entry.path)}
                   >
                     <Typography variant="body2" className="font-medium">
                       {entry.title}
                     </Typography>
-                    <Typography variant="caption" className="text-slate-500">
-                      /docs#{entry.hash}
+                    <Typography variant="caption" className="ink-text-muted">
+                      {entry.path}
                     </Typography>
                   </button>
                 ))
@@ -163,15 +165,17 @@ export const Navbar: FC = () => {
             size="sm"
             onClick={toggleMode}
             aria-label={t.nav.toggleTheme}
-            icon={mode === 'dark' ? <BearIcons.SunIcon size="xs" /> : <BearIcons.MoonIcon size="xs" />}
+            icon={isDark ? <BearIcons.SunIcon size="xs" /> : <BearIcons.MoonIcon size="xs" />}
           />
           <Link to={ROUTES.PLAYGROUND} className="hidden sm:inline-flex">
-            <Button size="sm">{t.ctaPlayground}</Button>
+            <Button size="sm" variant="ink">
+              {t.ctaPlayground}
+            </Button>
           </Link>
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 text-slate-500 hover:text-teal-700"
+            className="md:hidden p-2 ink-nav-menu-btn"
             aria-label="Menu"
           >
             {menuOpen ? <BearIcons.CloseIcon size="sm" /> : <BearIcons.MenuIcon size="sm" />}
@@ -180,7 +184,7 @@ export const Navbar: FC = () => {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden px-4 pb-4 space-y-1 border-t border-slate-200/80 bg-white">
+        <div className="md:hidden px-4 pb-4 space-y-1 ink-navbar__mobile">
           <div className="py-3">
             <Input
               size="sm"
@@ -190,9 +194,9 @@ export const Navbar: FC = () => {
               aria-label={SEARCH_ARIA_LABEL}
             />
             {query.trim() && (
-              <div className="mt-2 rounded-lg border border-slate-200 overflow-hidden">
+              <div className="mt-2 rounded-lg overflow-hidden ink-search-panel ink-search-panel--inline">
                 {results.length === 0 ? (
-                  <Typography variant="caption" className="block px-3 py-3 text-slate-500">
+                  <Typography variant="caption" className="block px-3 py-3 ink-text-muted">
                     {t.nav.searchEmpty}
                   </Typography>
                 ) : (
@@ -201,7 +205,7 @@ export const Navbar: FC = () => {
                       key={entry.id}
                       type="button"
                       className="ink-search-item"
-                      onClick={() => goToResult(entry.hash)}
+                      onClick={() => goToResult(entry.path)}
                     >
                       {entry.title}
                     </button>
@@ -212,7 +216,7 @@ export const Navbar: FC = () => {
           </div>
           {NAV_LINKS.map((item) => (
             <Link key={item.id} to={item.href} onClick={() => setMenuOpen(false)}>
-              <Typography variant="body2" className="block px-3 py-2 rounded-lg text-slate-600 hover:text-teal-700">
+              <Typography variant="body2" className="block px-3 py-2 rounded-lg ink-nav-mobile-link">
                 {t.nav[item.id]}
               </Typography>
             </Link>

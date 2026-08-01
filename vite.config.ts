@@ -8,7 +8,12 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
+      '@config': resolve(__dirname, 'src/config'),
       '@forgedevstack/anvil': resolve(__dirname, 'src/shims/forgedevstack-anvil.ts'),
     },
   },
+  optimizeDeps: {
+    include: ['@forgedevstack/ink'],
+  },
 });
+

@@ -18,7 +18,9 @@
       "@const/*": ["src/constants/*"],
       "@pages/*": ["src/pages/*"],
       "@components/*": ["src/components/*"],
-      "@i18n/*": ["src/i18n/*"]
+      "@i18n/*": ["src/i18n/*"],
+      "@config": ["src/config"],
+      "@config/*": ["src/config/*"]
     }
   },
   "include": ["src"]
