@@ -1,22 +1,34 @@
-import { Typography } from '@forgedevstack/bear';
+import type { FC } from 'react';
+import { Link } from '@forgedevstack/forge-compass/react';
+import { Button, Typography } from '@forgedevstack/bear';
+import { Layout } from '@components/Layout';
+import { useI18n } from '@i18n/index';
+import { ROUTES } from '@const/index';
 
-const SNIPPET = `npm install @forgedevstack/ink
+export const GetStarted: FC = () => {
+  const { t } = useI18n();
 
-import { InkEditor } from '@forgedevstack/ink';
+  return (
+    <Layout>
+      <div className="fade-in max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <Typography variant="h1" className="text-4xl font-bold mb-3 tracking-tight">
+          {t.getStarted.title}
+        </Typography>
+        <Typography variant="body1" className="text-slate-500 mb-8">
+          {t.getStarted.description}
+        </Typography>
+        <Typography variant="h3" className="text-lg font-semibold mb-3">
+          {t.getStarted.install}
+        </Typography>
+        <pre className="ink-code mb-8">{`npm install @forgedevstack/ink`}</pre>
+        <pre className="ink-code mb-8">{`import { InkEditor } from '@forgedevstack/ink';
 import '@forgedevstack/ink/styles.css';
 
-<InkEditor value={html} onChange={setHtml} typoAutoFix />`;
-
-export const GetStarted = () => (
-  <div className="fade-in">
-    <Typography variant="h2" className="text-teal-200 mb-4">
-      Get started
-    </Typography>
-    <Typography variant="body1" className="text-zinc-300 mb-6">
-      Install the package, import styles, and render a controlled editor.
-    </Typography>
-    <pre className="rounded-xl bg-black/40 border border-teal-900/50 p-4 overflow-x-auto text-sm text-teal-100">
-      {SNIPPET}
-    </pre>
-  </div>
-);
+<InkEditor value={html} onChange={setHtml} typoAutoFix />`}</pre>
+        <Link to={ROUTES.DOCS}>
+          <Button>{t.getStarted.next}</Button>
+        </Link>
+      </div>
+    </Layout>
+  );
+};

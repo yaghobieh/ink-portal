@@ -5,11 +5,12 @@ import '@forgedevstack/ink/styles.css';
 import { BearProvider } from '@forgedevstack/bear';
 import { I18nProvider } from './i18n';
 import { App } from './App';
+import { THEME_STORAGE_KEY } from '@const/index';
 import './styles/index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BearProvider defaultMode="dark" persistPreference storageKey="ink-theme">
+    <BearProvider defaultMode="light" persistPreference storageKey={THEME_STORAGE_KEY}>
       <I18nProvider>
         <App />
       </I18nProvider>
