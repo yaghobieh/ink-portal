@@ -1,17 +1,41 @@
 import { useState, type FC, type ReactNode } from 'react';
+import { Link, useParams } from '@forgedevstack/forge-compass/react';
 import { BearIcons, Typography } from '@forgedevstack/bear';
 import { Layout } from '../Layout';
-import { DOCS_TOC } from '@const/index';
+import { DOCS_TOC, DEFAULT_DOCS_SLUG, docsPath } from '@const/index';
 import { useI18n } from '@i18n/index';
 
 interface DocLayoutProps {
   children: ReactNode;
+  title?: string;
+  description?: string;
 }
 
 export const DocLayout: FC<DocLayoutProps> = (props) => {
-  const { children } = props;
+  const { children, title, description } = props;
   const { t } = useI18n();
+  const params = useParams<{ slug?: string }>();
+  const activeSlug = params.slug ?? DEFAULT_DOCS_SLUG;
   const [tocOpen, setTocOpen] = useState(false);
+
+  const nav = (
+    <nav className="space-y-1">
+      {DOCS_TOC.map((item) => {
+        const active = item.id === activeSlug;
+        return (
+          <Link
+            key={item.id}
+            to={docsPath(item.id)}
+            className="ink-doc-nav-link"
+            data-active={active ? 'true' : 'false'}
+            onClick={() => setTocOpen(false)}
+          >
+            {t.docs[item.labelKey]}
+          </Link>
+        );
+      })}
+    </nav>
+  );
 
   return (
     <Layout>
@@ -19,40 +43,10 @@ export const DocLayout: FC<DocLayoutProps> = (props) => {
         <div className="flex gap-10">
           <aside className="hidden lg:block w-56 flex-shrink-0">
             <div className="sticky top-24 ink-doc-aside">
-              <Typography
-                variant="caption"
-                className="uppercase tracking-widest font-semibold mb-3 block text-slate-400"
-              >
+              <Typography variant="caption" className="ink-muted-label uppercase tracking-widest font-semibold mb-3 block">
                 {t.docs.title}
               </Typography>
-              <nav className="space-y-1 mb-6 pb-4 border-b border-slate-200">
-                {DOCS_TOC.map((item) => (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    className="block py-1 text-sm text-slate-500 transition-colors"
-                  >
-                    {t.docs[item.labelKey]}
-                  </a>
-                ))}
-              </nav>
-              <Typography
-                variant="caption"
-                className="uppercase tracking-widest font-semibold mb-3 block text-slate-400"
-              >
-                {t.docs.onThisPage}
-              </Typography>
-              <nav className="space-y-1">
-                {DOCS_TOC.map((item) => (
-                  <a
-                    key={`toc-${item.id}`}
-                    href={`#${item.id}`}
-                    className="block py-1 text-sm text-slate-500 transition-colors"
-                  >
-                    {t.docs[item.labelKey]}
-                  </a>
-                ))}
-              </nav>
+              {nav}
             </div>
           </aside>
 
@@ -67,39 +61,30 @@ export const DocLayout: FC<DocLayoutProps> = (props) => {
 
           {tocOpen && (
             <div
-              className="lg:hidden fixed inset-0 z-40 flex items-end justify-center p-4 bg-slate-900/20"
+              className="lg:hidden fixed inset-0 z-40 flex items-end justify-center p-4 ink-mobile-scrim"
               onClick={() => setTocOpen(false)}
             >
               <div
-                className="w-full max-w-sm rounded-2xl p-6 shadow-2xl max-h-[70vh] overflow-auto bg-white border border-slate-200"
+                className="w-full max-w-sm rounded-2xl p-6 shadow-2xl max-h-[70vh] overflow-auto ink-mobile-sheet"
                 onClick={(e) => e.stopPropagation()}
               >
                 <Typography variant="body2" className="font-semibold mb-3">
                   {t.docs.title}
                 </Typography>
-                <nav className="space-y-2">
-                  {DOCS_TOC.map((item) => (
-                    <a
-                      key={item.id}
-                      href={`#${item.id}`}
-                      className="block py-1 text-sm text-slate-600"
-                      onClick={() => setTocOpen(false)}
-                    >
-                      {t.docs[item.labelKey]}
-                    </a>
-                  ))}
-                </nav>
+                {nav}
               </div>
             </div>
           )}
 
           <div className="flex-1 min-w-0">
             <Typography variant="h1" className="text-4xl md:text-5xl font-bold mb-3 tracking-tight">
-              {t.docs.title}
+              {title ?? t.docs.title}
             </Typography>
-            <Typography variant="body1" className="mb-12 text-lg text-slate-500">
-              {t.docs.description}
-            </Typography>
+            {description && (
+              <Typography variant="body1" className="mb-10 text-lg ink-text-muted">
+                {description}
+              </Typography>
+            )}
             {children}
           </div>
         </div>

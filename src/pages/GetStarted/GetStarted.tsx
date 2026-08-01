@@ -3,7 +3,7 @@ import { Link } from '@forgedevstack/forge-compass/react';
 import { Button, Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
 import { useI18n } from '@i18n/index';
-import { ROUTES } from '@const/index';
+import { DEFAULT_DOCS_SLUG, docsPath } from '@const/index';
 
 export const GetStarted: FC = () => {
   const { t } = useI18n();
@@ -14,7 +14,7 @@ export const GetStarted: FC = () => {
         <Typography variant="h1" className="text-4xl font-bold mb-3 tracking-tight">
           {t.getStarted.title}
         </Typography>
-        <Typography variant="body1" className="text-slate-500 mb-8">
+        <Typography variant="body1" className="ink-text-muted mb-8">
           {t.getStarted.description}
         </Typography>
         <Typography variant="h3" className="text-lg font-semibold mb-3">
@@ -25,8 +25,8 @@ export const GetStarted: FC = () => {
 import '@forgedevstack/ink/styles.css';
 
 <InkEditor value={html} onChange={setHtml} typoAutoFix />`}</pre>
-        <Link to={ROUTES.DOCS}>
-          <Button>{t.getStarted.next}</Button>
+        <Link to={docsPath(DEFAULT_DOCS_SLUG)}>
+          <Button variant="ink">{t.getStarted.next}</Button>
         </Link>
       </div>
     </Layout>

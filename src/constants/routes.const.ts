@@ -1,6 +1,7 @@
 export const ROUTES = {
   HOME: '/',
   DOCS: '/docs',
+  DOC_PAGE: '/docs/:slug',
   DEMOS: '/demos',
   DEMO_FEATURE: '/demos/feature-rich',
   DEMO_AI: '/demos/ai',
@@ -13,6 +14,7 @@ export const ROUTES = {
   GET_STARTED: '/get-started',
   CHANGELOG: '/changelog',
   AI: '/ai',
+  PRICING: '/pricing',
 } as const;
 
 export const INK_VERSION = '1.1.0';
@@ -22,6 +24,7 @@ export const NAV_LINKS = [
   { id: 'demos' as const, href: ROUTES.DEMOS },
   { id: 'ai' as const, href: ROUTES.AI },
   { id: 'playground' as const, href: ROUTES.PLAYGROUND },
+  { id: 'pricing' as const, href: ROUTES.PRICING },
   { id: 'getStarted' as const, href: ROUTES.GET_STARTED },
   { id: 'changelog' as const, href: ROUTES.CHANGELOG },
 ];

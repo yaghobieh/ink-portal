@@ -1,128 +1,132 @@
 import { ROUTES } from './routes.const';
+import { DEFAULT_DOCS_SLUG, DOCS_PAGES } from './docsContent.const';
 
 export interface DocsIndexEntry {
   id: string;
   title: string;
   keywords: string[];
-  hash: string;
+  path: string;
 }
 
-export const DOCS_TOC = [
-  { id: 'installation', labelKey: 'tocInstallation' as const },
-  { id: 'quickstart', labelKey: 'tocQuickstart' as const },
-  { id: 'configuration', labelKey: 'tocConfiguration' as const },
-  { id: 'toolbar', labelKey: 'tocToolbar' as const },
-  { id: 'modules', labelKey: 'tocModules' as const },
-  { id: 'tables', labelKey: 'tocTables' as const },
-  { id: 'track-changes', labelKey: 'tocTrackChanges' as const },
-  { id: 'comments', labelKey: 'tocComments' as const },
-  { id: 'blocks', labelKey: 'tocBlocks' as const },
-  { id: 'themes', labelKey: 'tocThemes' as const },
-  { id: 'typo', labelKey: 'tocTypo' as const },
-  { id: 'ai', labelKey: 'tocAi' as const },
-  { id: 'angular', labelKey: 'tocAngular' as const },
-  { id: 'wordpress', labelKey: 'tocWordpress' as const },
-  { id: 'accessibility', labelKey: 'tocA11y' as const },
-] as const;
+export const DOCS_TOC = DOCS_PAGES.map((page) => ({
+  id: page.id,
+  labelKey: page.labelKey,
+}));
 
 export const DOCS_INDEX: DocsIndexEntry[] = [
   {
     id: 'installation',
     title: 'Installation',
     keywords: ['install', 'npm', 'package', 'setup'],
-    hash: 'installation',
+    path: `${ROUTES.DOCS}/installation`,
   },
   {
     id: 'quickstart',
     title: 'Quickstart',
     keywords: ['quickstart', 'hello', 'basic', 'example'],
-    hash: 'quickstart',
+    path: `${ROUTES.DOCS}/quickstart`,
   },
   {
     id: 'configuration',
     title: 'Configuration',
     keywords: ['props', 'config', 'value', 'onchange', 'variant', 'features'],
-    hash: 'configuration',
+    path: `${ROUTES.DOCS}/configuration`,
   },
   {
     id: 'toolbar',
     title: 'Toolbar & Formats',
     keywords: ['toolbar', 'formats', 'bold', 'heading', 'list', 'table'],
-    hash: 'toolbar',
+    path: `${ROUTES.DOCS}/toolbar`,
   },
   {
     id: 'modules',
     title: 'Modules & features',
     keywords: ['modules', 'features', 'table', 'comments', 'track', 'ai'],
-    hash: 'modules',
+    path: `${ROUTES.DOCS}/modules`,
   },
   {
     id: 'tables',
     title: 'Tables',
     keywords: ['table', 'grid', 'cells'],
-    hash: 'tables',
+    path: `${ROUTES.DOCS}/tables`,
   },
   {
     id: 'track-changes',
     title: 'Track changes',
     keywords: ['track', 'changes', 'ins', 'del', 'accept', 'reject'],
-    hash: 'track-changes',
+    path: `${ROUTES.DOCS}/track-changes`,
   },
   {
     id: 'comments',
     title: 'Comments',
     keywords: ['comments', 'threads', 'archive', 'highlight'],
-    hash: 'comments',
+    path: `${ROUTES.DOCS}/comments`,
   },
   {
     id: 'blocks',
     title: 'Blocks & slash',
     keywords: ['blocks', 'slash', 'handles', 'document'],
-    hash: 'blocks',
+    path: `${ROUTES.DOCS}/blocks`,
   },
   {
     id: 'themes',
     title: 'Themes',
     keywords: ['theme', 'css', 'variables', 'snow', 'dark', 'minimal'],
-    hash: 'themes',
+    path: `${ROUTES.DOCS}/themes`,
   },
   {
     id: 'typo',
     title: 'Typo auto-fix',
     keywords: ['typo', 'spell', 'autofix', 'dictionary'],
-    hash: 'typo',
+    path: `${ROUTES.DOCS}/typo`,
   },
   {
     id: 'ai',
     title: 'Ink AI',
     keywords: ['ai', 'provider', 'chat', 'review', 'translate', 'demo'],
-    hash: 'ai',
+    path: `${ROUTES.DOCS}/ai`,
   },
   {
     id: 'angular',
     title: 'Angular',
     keywords: ['angular', 'adapter', 'bridge'],
-    hash: 'angular',
+    path: `${ROUTES.DOCS}/angular`,
   },
   {
     id: 'wordpress',
     title: 'WordPress',
     keywords: ['wordpress', 'plugin', 'gutenberg'],
-    hash: 'wordpress',
+    path: `${ROUTES.DOCS}/wordpress`,
   },
   {
     id: 'accessibility',
     title: 'Accessibility',
     keywords: ['a11y', 'aria', 'keyboard'],
-    hash: 'accessibility',
+    path: `${ROUTES.DOCS}/accessibility`,
+  },
+  {
+    id: 'premium',
+    title: 'Premium',
+    keywords: ['premium', 'license', 'theme', 'icons', 'paste', 'polar', 'billing'],
+    path: `${ROUTES.DOCS}/premium`,
   },
   {
     id: 'demos',
     title: 'Demos',
     keywords: ['demos', 'examples', 'ckeditor'],
-    hash: ROUTES.DEMOS.replace('/', ''),
+    path: ROUTES.DEMOS,
+  },
+  {
+    id: 'pricing',
+    title: 'Pricing',
+    keywords: ['pricing', 'polar', 'lemon', 'israel', 'stripe', 'apple pay'],
+    path: ROUTES.PRICING,
   },
 ];
 
-export const docsHref = (hash: string): string =>
-  hash.startsWith('/') ? hash : `${ROUTES.DOCS}#${hash}`;
+export const docsHref = (slugOrPath: string): string => {
+  if (slugOrPath.startsWith('/')) return slugOrPath;
+  return `${ROUTES.DOCS}/${slugOrPath || DEFAULT_DOCS_SLUG}`;
+};
+
+export const docsPath = (slug: string): string => `${ROUTES.DOCS}/${slug}`;

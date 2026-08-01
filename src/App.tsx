@@ -1,4 +1,5 @@
 import { CompassProvider, Routes } from '@forgedevstack/forge-compass/react';
+import { ThemeSync } from '@components/ThemeSync';
 import { ROUTES } from '@const/index';
 import { Home } from '@pages/Home';
 import { Docs } from '@pages/Docs';
@@ -7,9 +8,11 @@ import { GetStarted } from '@pages/GetStarted';
 import { Changelog } from '@pages/Changelog';
 import { Ai } from '@pages/Ai';
 import { DemoPage, Demos } from '@pages/Demos';
+import { Pricing } from '@pages/Pricing';
 
 const routes = [
   { path: ROUTES.HOME, name: 'home', component: Home },
+  { path: ROUTES.DOC_PAGE, name: 'doc-page', component: Docs },
   { path: ROUTES.DOCS, name: 'docs', component: Docs },
   { path: ROUTES.DEMOS, name: 'demos', component: Demos },
   { path: ROUTES.DEMO_FEATURE, name: 'demo-feature', component: DemoPage },
@@ -23,10 +26,13 @@ const routes = [
   { path: ROUTES.GET_STARTED, name: 'get-started', component: GetStarted },
   { path: ROUTES.CHANGELOG, name: 'changelog', component: Changelog },
   { path: ROUTES.AI, name: 'ai', component: Ai },
+  { path: ROUTES.PRICING, name: 'pricing', component: Pricing },
 ];
 
 export const App = () => (
-  <CompassProvider routes={routes}>
-    <Routes />
-  </CompassProvider>
+  <ThemeSync>
+    <CompassProvider routes={routes}>
+      <Routes />
+    </CompassProvider>
+  </ThemeSync>
 );

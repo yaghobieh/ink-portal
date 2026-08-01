@@ -39,10 +39,12 @@ export const Ai: FC = () => {
             </Typography>
             <Flex gap={2} className="mb-12 flex-wrap">
               <a href="#live-demo">
-                <Button size="lg">{t.ai.tryDemo}</Button>
+                <Button size="lg" variant="ink">
+                  {t.ai.tryDemo}
+                </Button>
               </a>
               <Link to={ROUTES.DOCS}>
-                <Button size="lg" variant="outline">
+                <Button size="lg" variant="inkOutline">
                   {t.ctaDocs}
                 </Button>
               </Link>

@@ -22,7 +22,7 @@ export const Footer: FC = () => {
   const { t } = useI18n();
 
   return (
-    <footer className="mt-auto border-t border-slate-200/80 bg-white/80">
+    <footer className="ink-footer mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
@@ -32,7 +32,7 @@ export const Footer: FC = () => {
                 {t.brand}
               </Typography>
             </Flex>
-            <Typography variant="caption" className="text-slate-500">
+            <Typography variant="caption" className="ink-text-muted">
               {t.tagline}
             </Typography>
           </div>
@@ -43,10 +43,8 @@ export const Footer: FC = () => {
             </Typography>
             <Flex direction="column" gap={1}>
               {ECOSYSTEM.map((lib) => (
-                <a key={lib.name} href={lib.href} target="_blank" rel="noopener noreferrer">
-                  <Typography variant="caption" className="text-slate-500 hover:text-teal-700">
-                    {lib.name}
-                  </Typography>
+                <a key={lib.name} href={lib.href} target="_blank" rel="noopener noreferrer" className="ink-footer-link">
+                  <Typography variant="caption">{lib.name}</Typography>
                 </a>
               ))}
             </Flex>
@@ -57,35 +55,27 @@ export const Footer: FC = () => {
               {t.footer.resources}
             </Typography>
             <Flex direction="column" gap={1}>
-              <Link to={ROUTES.DOCS}>
-                <Typography variant="caption" className="text-slate-500 hover:text-teal-700">
-                  {t.ctaDocs}
-                </Typography>
+              <Link to={ROUTES.DOCS} className="ink-footer-link">
+                <Typography variant="caption">{t.ctaDocs}</Typography>
               </Link>
-              <Link to={ROUTES.PLAYGROUND}>
-                <Typography variant="caption" className="text-slate-500 hover:text-teal-700">
-                  {t.ctaPlayground}
-                </Typography>
+              <Link to={ROUTES.PLAYGROUND} className="ink-footer-link">
+                <Typography variant="caption">{t.ctaPlayground}</Typography>
               </Link>
-              <a href={NPM_URL} target="_blank" rel="noopener noreferrer">
-                <Typography variant="caption" className="text-slate-500 hover:text-teal-700">
-                  npm
-                </Typography>
+              <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="ink-footer-link">
+                <Typography variant="caption">npm</Typography>
               </a>
-              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-                <Typography variant="caption" className="text-slate-500 hover:text-teal-700">
-                  GitHub
-                </Typography>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="ink-footer-link">
+                <Typography variant="caption">GitHub</Typography>
               </a>
             </Flex>
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <Typography variant="caption" className="text-slate-400">
+        <div className="ink-footer__bottom mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <Typography variant="caption" className="ink-text-muted">
             {t.footer.mitLicense} · {t.footer.builtWith} ForgeStack
           </Typography>
-          <Typography variant="caption" className="text-slate-400">
+          <Typography variant="caption" className="ink-text-muted">
             {t.footer.domainNote}
           </Typography>
         </div>

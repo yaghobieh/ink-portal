@@ -111,10 +111,10 @@ export const DemoPage: FC = () => {
         </Typography>
         {kind === 'markdown' ? (
           <Flex gap={2} className="mb-4">
-            <Button size="sm" variant={showSource ? 'outline' : undefined} onClick={() => setShowSource(false)}>
+            <Button size="sm" variant={showSource ? 'inkOutline' : 'ink'} onClick={() => setShowSource(false)}>
               Editor
             </Button>
-            <Button size="sm" variant={showSource ? undefined : 'outline'} onClick={() => setShowSource(true)}>
+            <Button size="sm" variant={showSource ? 'ink' : 'inkOutline'} onClick={() => setShowSource(true)}>
               HTML
             </Button>
           </Flex>
