@@ -10,6 +10,11 @@ export interface PlaygroundConfig {
   allowImagePaste: boolean;
   showCharCount: boolean;
   readOnly: boolean;
+  table: boolean;
+  trackChanges: boolean;
+  comments: boolean;
+  ai: boolean;
+  blocks: boolean;
   theme: PlaygroundTheme;
 }
 

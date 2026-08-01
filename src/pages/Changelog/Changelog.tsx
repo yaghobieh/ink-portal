@@ -18,6 +18,18 @@ export const Changelog: FC = () => {
 
         <section className="mb-10">
           <Typography variant="h2" className="text-xl font-bold mb-2">
+            1.1.0
+          </Typography>
+          <ul className="list-disc pl-5 text-slate-600 space-y-1">
+            <li>CKEditor-inspired shell, document variant, block handles, slash commands</li>
+            <li>Tables, track changes, comments archive, undo/redo toolbar</li>
+            <li>Ink AI suite — chat, quick actions, review, translate, demo provider, model catalog</li>
+            <li>Portal demos hub, AI marketing page, playground module toggles</li>
+          </ul>
+        </section>
+
+        <section className="mb-10">
+          <Typography variant="h2" className="text-xl font-bold mb-2">
             1.0.1
           </Typography>
           <ul className="list-disc pl-5 text-slate-600 space-y-1">

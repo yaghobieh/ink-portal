@@ -12,9 +12,7 @@ export const Docs: FC = () => {
     <DocLayout>
       <div className="fade-in">
         <DocSection id="installation" title={t.docs.tocInstallation}>
-          <Typography variant="body1">
-            Install from npm. Peer deps: React 18+.
-          </Typography>
+          <Typography variant="body1">Install from npm. Peer deps: React 18+.</Typography>
           <pre className="ink-code">{`npm install @forgedevstack/ink`}</pre>
           <Typography variant="body1">
             Package:{' '}
@@ -32,76 +30,119 @@ import '@forgedevstack/ink/styles.css';
 export function App() {
   const [value, setValue] = useState('<p>Hello Ink</p>');
   return (
-    <InkEditor value={value} onChange={setValue} typoAutoFix />
+    <InkEditor
+      value={value}
+      onChange={setValue}
+      variant="classic"
+      ai={{ enabled: true, placement: 'sidebar' }}
+      showCommentsPanel
+      typoAutoFix
+    />
   );
 }`}</pre>
         </DocSection>
 
         <DocSection id="configuration" title={t.docs.tocConfiguration}>
           <Typography variant="body1">
-            Controlled HTML via <code>value</code> / <code>onChange</code>. Optional{' '}
-            <code>defaultValue</code>, <code>placeholder</code>, <code>disabled</code>,{' '}
-            <code>readOnly</code>, <code>minHeight</code>, <code>maxHeight</code>,{' '}
-            <code>toolbar</code>, <code>testId</code>.
+            Controlled HTML via <code>value</code> / <code>onChange</code>. New in 1.1:{' '}
+            <code>variant</code>, <code>features</code>, <code>trackChanges</code>,{' '}
+            <code>comments</code>, <code>showCommentsPanel</code>, <code>ai</code>,{' '}
+            <code>slashCommands</code>, <code>author</code>, <code>tableRows</code> /{' '}
+            <code>tableCols</code>.
           </Typography>
         </DocSection>
 
         <DocSection id="toolbar" title={t.docs.tocToolbar}>
           <Typography variant="body1">
-            Pass a <code>ToolbarOption[]</code>: bold, italic, underline, strikethrough, heading1–6,
-            paragraph, headingDropdown, bulletList, orderedList, blockquote, code, link, image,
-            textColor, highlightColor, align*, indent/outdent, clearFormat, divider.
+            Toolbar options now include <code>table</code>, <code>undo</code>, <code>redo</code>,{' '}
+            <code>trackChanges</code>, <code>comments</code>, <code>ai</code> plus classic formats.
+            Presets: <code>INK_DEFAULT_TOOLBAR</code>, <code>INK_SIMPLE_TOOLBAR</code>,{' '}
+            <code>INK_COLLAB_TOOLBAR</code>.
           </Typography>
-          <pre className="ink-code">{`toolbar={['bold', 'italic', 'divider', 'bulletList', 'link']}`}</pre>
         </DocSection>
 
         <DocSection id="modules" title={t.docs.tocModules}>
           <Typography variant="body1">
-            Module-style props: <code>typoAutoFix</code>, <code>allowImagePaste</code>,{' '}
-            <code>showCharCount</code>, <code>charCountMax</code>, <code>readOnly</code>.
+            Pass <code>features=&#123;&#123; table, trackChanges, comments, ai, blocks, slash &#125;&#125;</code>{' '}
+            to enable modules. Legacy props <code>typoAutoFix</code>, <code>allowImagePaste</code>,{' '}
+            <code>showCharCount</code> still work.
+          </Typography>
+        </DocSection>
+
+        <DocSection id="tables" title={t.docs.tocTables}>
+          <Typography variant="body1">
+            Toolbar table button inserts an N×M HTML table (<code>tableRows</code> /{' '}
+            <code>tableCols</code>). Cells are contenteditable. Helper:{' '}
+            <code>buildTableHtml(rows, cols)</code>.
+          </Typography>
+        </DocSection>
+
+        <DocSection id="track-changes" title={t.docs.tocTrackChanges}>
+          <Typography variant="body1">
+            Enable via toolbar toggle. Inserts wrap in <code>Ink-tc-insert</code>, deletes in{' '}
+            <code>Ink-tc-delete</code>. Parallel model: <code>trackChanges</code> /{' '}
+            <code>onTrackChangesChange</code> with Accept/Reject strip.
+          </Typography>
+        </DocSection>
+
+        <DocSection id="comments" title={t.docs.tocComments}>
+          <Typography variant="body1">
+            Highlight selection → prompt → yellow mark + Comments archive sidebar. Props:{' '}
+            <code>comments</code>, <code>onCommentsChange</code>, <code>showCommentsPanel</code>.
+          </Typography>
+        </DocSection>
+
+        <DocSection id="blocks" title={t.docs.tocBlocks}>
+          <Typography variant="body1">
+            Document/classic variants outline the active block. Block handles move up/down (DnD
+            Planned). Slash menu: type <code>/</code> for heading, list, table, AI.
           </Typography>
         </DocSection>
 
         <DocSection id="themes" title={t.docs.tocThemes}>
           <Typography variant="body1">
-            Override CSS variables on <code>.Ink-Editor</code>: <code>--ink-border</code>,{' '}
-            <code>--ink-bg</code>, <code>--ink-toolbar</code>, <code>--ink-text</code>,{' '}
-            <code>--ink-muted</code>, <code>--ink-accent</code>, <code>--ink-accent-soft</code>.
-          </Typography>
-          <Typography variant="body1">
-            Portal themes: <code>.ink-theme-snow</code>, <code>.ink-theme-bubble</code>,{' '}
-            <code>.ink-theme-dark</code>, <code>.ink-theme-minimal</code>. Try them in the{' '}
-            <a className="text-teal-700 underline" href="/playground">
-              playground
-            </a>
-            .
+            CSS variables on <code>.Ink-Editor</code> including <code>--ink-shadow</code>,{' '}
+            <code>--ink-radius</code>, <code>--ink-ai-*</code>. Theme classes: snow / bubble / dark /
+            minimal.
           </Typography>
         </DocSection>
 
         <DocSection id="typo" title={t.docs.tocTypo}>
           <Typography variant="body1">
-            Enable <code>typoAutoFix</code> for blur-time corrections from a small bundled dictionary
-            (MVP — not a full spell engine). Export <code>applyTypoAutoFix</code> for custom pipelines.
+            <code>typoAutoFix</code> runs blur-time dictionary fixes. Export{' '}
+            <code>applyTypoAutoFix</code>.
           </Typography>
         </DocSection>
 
         <DocSection id="ai" title={t.docs.tocAi}>
-          <pre className="ink-code">{`import { inkAi } from '@forgedevstack/ink/plugins/ai';
+          <Typography variant="body1">
+            Side panel via <code>ai=&#123;&#123; enabled: true, placement: &apos;sidebar&apos; &#125;&#125;</code>.
+            Demo provider is built-in. Bring your own LLM:
+          </Typography>
+          <pre className="ink-code">{`import { inkAi, INK_AI_MODEL_CATALOG } from '@forgedevstack/ink/plugins/ai';
 
-inkAi.register({
-  id: 'my-agent',
-  name: 'My Agent',
-  capabilities: ['rewrite'],
-  async run({ html }) {
-    return { html };
+inkAi.registerProvider({
+  id: 'my-provider',
+  name: 'My provider',
+  models: INK_AI_MODEL_CATALOG.filter((m) => m.provider === 'openai'),
+  async run(request) {
+    return { text: '…', html: request.html };
   },
 });`}</pre>
+          <Typography variant="body2" className="text-slate-500">
+            Honesty: catalog constants only — Ink does not host models or claim SOC2/enterprise
+            hosting. See the{' '}
+            <a className="text-teal-700 underline" href="/ai">
+              AI page
+            </a>
+            .
+          </Typography>
         </DocSection>
 
         <DocSection id="angular" title={t.docs.tocAngular}>
           <Typography variant="body1">
             Import helpers from <code>@forgedevstack/ink/angular</code>. Mount React{' '}
-            <code>InkEditor</code> via your preferred bridge; a dedicated Angular component lands in 1.x.
+            <code>InkEditor</code> via your preferred bridge.
           </Typography>
         </DocSection>
 
@@ -113,8 +154,8 @@ inkAi.register({
 
         <DocSection id="accessibility" title={t.docs.tocA11y}>
           <Typography variant="body1">
-            Toolbar controls expose titles; contenteditable surface supports keyboard formatting via
-            browser execCommand. Prefer labelled wrappers and sufficient contrast when theming.
+            Toolbar controls expose titles; contenteditable supports keyboard formatting via
+            execCommand. Prefer labelled wrappers and sufficient contrast when theming.
           </Typography>
           <Typography variant="caption" className="text-slate-400 block">
             Docs site: {SITE_URL} · Portal source: {PORTAL_GITHUB_URL}

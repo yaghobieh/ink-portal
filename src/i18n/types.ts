@@ -6,11 +6,15 @@ export interface Messages {
   heroSupport: string;
   ctaDocs: string;
   ctaPlayground: string;
+  ctaDemos: string;
+  ctaAi: string;
   ctaNpm: string;
   ctaGetStarted: string;
   nav: {
     docs: string;
+    demos: string;
     playground: string;
+    ai: string;
     getStarted: string;
     changelog: string;
     toggleTheme: string;
@@ -36,6 +40,10 @@ export interface Messages {
     tocThemes: string;
     tocTypo: string;
     tocAi: string;
+    tocTables: string;
+    tocTrackChanges: string;
+    tocComments: string;
+    tocBlocks: string;
     tocAngular: string;
     tocWordpress: string;
     tocA11y: string;
@@ -55,6 +63,11 @@ export interface Messages {
     allowImagePaste: string;
     showCharCount: string;
     readOnly: string;
+    table: string;
+    trackChanges: string;
+    comments: string;
+    ai: string;
+    blocks: string;
     themeSnow: string;
     themeBubble: string;
     themeDark: string;
@@ -73,9 +86,44 @@ export interface Messages {
     title: string;
     description: string;
   };
-  ai: {
+  demos: {
     title: string;
     description: string;
-    redirect: string;
+    back: string;
+    open: string;
+    mobileNote: string;
+    featureRich: { title: string; description: string };
+    ai: { title: string; description: string };
+    collab: { title: string; description: string };
+    document: { title: string; description: string };
+    tables: { title: string; description: string };
+    markdown: { title: string; description: string };
+    playground: { title: string; description: string };
+    mobile: { title: string; description: string };
+  };
+  ai: {
+    title: string;
+    headline: string;
+    description: string;
+    honesty: string;
+    tryDemo: string;
+    chatTitle: string;
+    chatBody: string;
+    reviewTitle: string;
+    reviewBody: string;
+    translateTitle: string;
+    translateBody: string;
+    quickTitle: string;
+    quickBody: string;
+    modelsTitle: string;
+    modelsBody: string;
+    costTitle: string;
+    costBody: string;
+    securityTitle: string;
+    securityBody: string;
+    liveDemo: string;
+  };
+  home: {
+    liveDemo: string;
   };
 }
