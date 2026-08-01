@@ -9,6 +9,7 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, 'src'),
       '@config': resolve(__dirname, 'src/config'),
+      '@hooks': resolve(__dirname, 'src/hooks'),
       '@forgedevstack/anvil': resolve(__dirname, 'src/shims/forgedevstack-anvil.ts'),
     },
   },

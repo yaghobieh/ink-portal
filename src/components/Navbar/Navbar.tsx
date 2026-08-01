@@ -10,6 +10,7 @@ import {
   Typography,
   useBear,
 } from '@forgedevstack/bear';
+import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import type { Locale } from '@i18n/types';
 import {
@@ -33,6 +34,7 @@ const LOCALE_META: Record<Locale, { flag: string; label: string }> = {
 export const Navbar: FC = () => {
   const { mode, toggleMode } = useBear();
   const { t, locale, setLocale } = useI18n();
+  const { active: premiumActive } = useInkPremium();
   const route = useRoute();
   const activePath = route?.path ?? ROUTES.HOME;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -80,6 +82,11 @@ export const Navbar: FC = () => {
           <Badge variant="info" className="hidden md:inline-flex text-xs font-mono">
             v{INK_VERSION}
           </Badge>
+          {premiumActive ? (
+            <Badge variant="success" className="hidden md:inline-flex text-xs">
+              {t.nav.premium}
+            </Badge>
+          ) : null}
         </Flex>
 
         <Flex align="center" gap={5} className="hidden md:flex flex-1 justify-center">

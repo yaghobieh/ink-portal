@@ -1,14 +1,22 @@
 import { useState, type FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { Button, Flex, Typography } from '@forgedevstack/bear';
-import { InkEditor, INK_AI_MODEL_CATALOG, INK_COLLAB_TOOLBAR } from '@forgedevstack/ink';
+import {
+  InkEditor,
+  INK_AI_MODEL_CATALOG,
+  INK_COLLAB_TOOLBAR,
+  type InkAiModelCatalogEntry,
+} from '@forgedevstack/ink';
 import { Layout } from '@components/Layout';
+import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { DEMO_HTML_AI, HERO_EDITOR_MIN_HEIGHT_PX, ROUTES, THEME_CLASS_SNOW } from '@const/index';
 
 export const Ai: FC = () => {
   const { t } = useI18n();
+  const { premium, active } = useInkPremium();
   const [value, setValue] = useState(DEMO_HTML_AI);
+  const modelCatalog: InkAiModelCatalogEntry[] = INK_AI_MODEL_CATALOG;
 
   const features = [
     { title: t.ai.chatTitle, body: t.ai.chatBody },
@@ -68,7 +76,7 @@ export const Ai: FC = () => {
             </Typography>
             <div className="ink-paper p-4 mb-12 overflow-x-auto">
               <div className="flex flex-wrap gap-2">
-                {INK_AI_MODEL_CATALOG.slice(0, 16).map((model) => (
+                {modelCatalog.slice(0, 16).map((model) => (
                   <span
                     key={model.id}
                     className="text-xs font-mono px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200"
@@ -88,6 +96,9 @@ export const Ai: FC = () => {
                 onChange={setValue}
                 minHeight={HERO_EDITOR_MIN_HEIGHT_PX}
                 toolbar={INK_COLLAB_TOOLBAR}
+                premium={premium}
+                pasteMode={active ? 'rich' : 'plain'}
+                wysiwyg={active}
                 features={{
                   table: true,
                   trackChanges: false,

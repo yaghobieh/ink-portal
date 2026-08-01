@@ -4,6 +4,7 @@ import { Button, Flex, Typography } from '@forgedevstack/bear';
 import { InkEditor, INK_COLLAB_TOOLBAR, INK_DEFAULT_TOOLBAR } from '@forgedevstack/ink';
 import type { InkCommentThread, InkTrackChange } from '@forgedevstack/ink';
 import { Layout } from '@components/Layout';
+import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import {
   DEMO_HTML_AI,
@@ -32,6 +33,7 @@ const pathToKind = (path: string): DemoKind => {
 
 export const DemoPage: FC = () => {
   const { t } = useI18n();
+  const { premium, active } = useInkPremium();
   const route = useRoute();
   const kind = pathToKind(route?.path ?? ROUTES.DEMO_FEATURE);
   const [value, setValue] = useState(() => {
@@ -129,6 +131,9 @@ export const DemoPage: FC = () => {
               minHeight={HERO_EDITOR_MIN_HEIGHT_PX}
               toolbar={kind === 'collaborative' ? INK_COLLAB_TOOLBAR : INK_DEFAULT_TOOLBAR}
               variant={kind === 'document' ? 'document' : 'classic'}
+              premium={premium}
+              pasteMode={active ? 'rich' : 'plain'}
+              wysiwyg={active}
               features={{
                 table: true,
                 trackChanges: kind === 'collaborative' || kind === 'feature-rich',

@@ -15,6 +15,7 @@ export const ROUTES = {
   CHANGELOG: '/changelog',
   AI: '/ai',
   PRICING: '/pricing',
+  PREMIUM_SUCCESS: '/pricing/success',
 } as const;
 
 export const INK_VERSION = '1.1.0';
