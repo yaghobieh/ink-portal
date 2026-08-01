@@ -1,0 +1,9 @@
+---
+alwaysApply: true
+---
+# Ink Portal Code Style
+
+- Types in `*.types.ts`, constants in `*.const.ts`
+- User-facing copy through `useI18n()` / Messages
+- Bear components for UI chrome
+- Path aliases: `@/*`, `@const/*`, `@pages/*`, `@components/*`, `@i18n/*`

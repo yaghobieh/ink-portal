@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink-portal-bg: #071a1a;
+  --ink-portal-accent: #14b8a6;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgb(20 184 166 / 0.22), transparent 55%),
+    radial-gradient(900px 500px at 90% 0%, rgb(252 211 77 / 0.12), transparent 50%),
+    var(--ink-portal-bg);
+  color: #f4f4f5;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
+.fade-in {
+  animation: ink-fade 0.45s ease both;
+}
+
+@keyframes ink-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.ink-shell {
+  min-height: 100vh;
+}
+
+.ink-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.ink-nav a {
+  color: #a1a1aa;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+.ink-nav a:hover,
+.ink-nav a[data-active='true'] {
+  color: #5eead4;
+}
