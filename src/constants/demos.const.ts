@@ -27,7 +27,7 @@ export const DEMO_CARDS: DemoCard[] = [
 ];
 
 export const DEMO_HTML_FEATURE =
-  '<h1>Quarterly product update</h1><p>Ink ships a <strong>CKEditor-inspired</strong> shell with tables, comments, track changes, and pluggable AI.</p><ul><li>Headings & lists</li><li>Links & images</li><li>Undo / redo</li></ul><p>Try the toolbar — teal accents, soft paper card.</p>';
+  '<h1>Quarterly product update</h1><p>Ink ships a <strong>soft document shell</strong> with tables, comments, track changes, and pluggable AI.</p><ul><li>Headings & lists</li><li>Links & images</li><li>Undo / redo</li></ul><p>Try the toolbar — teal accents, soft paper card.</p>';
 
 export const DEMO_HTML_COLLAB =
   '<h2>Design review notes</h2><p>Lily suggested clarifying the <mark class="Ink-comment-mark" data-ink-comment="hl-demo-1" style="background-color:#fde047">onboarding copy</mark> before launch.</p><p>Jack will <ins class="Ink-tc-insert" data-ink-tc="tc-demo-1">add acceptance criteria</ins> for the comments archive.</p><p><del class="Ink-tc-delete" data-ink-tc="tc-demo-2">Remove the old purple accent tokens.</del></p>';

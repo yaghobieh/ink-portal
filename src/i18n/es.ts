@@ -93,7 +93,7 @@ export const es: Messages = {
   },
   demos: {
     title: 'Demos',
-    description: 'Hub de demos estilo CKEditor — explora Ink con datos mock locales.',
+    description: 'Hub de demos — explora Ink con datos mock locales.',
     back: 'Todas las demos',
     open: 'Abrir demo',
     mobileNote: 'La barra y los paneles laterales se apilan en pantallas estrechas.',
@@ -134,7 +134,7 @@ export const es: Messages = {
     title: 'Ink AI',
     headline: 'Escritura, revisión y traducción dentro del editor',
     description:
-      'Capa de IA inspirada en CKEditor con historial, acciones rápidas, revisión y traducción — proveedores enchufables.',
+      'Capa de IA con historial, acciones rápidas, revisión y traducción — proveedores enchufables.',
     honesty:
       'Ink incluye solo un proveedor demo local. Trae tu propio LLM. Sin IA empresarial alojada ni afirmaciones SOC2.',
     tryDemo: 'Probar demo',

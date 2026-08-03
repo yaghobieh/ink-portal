@@ -93,7 +93,7 @@ export const en: Messages = {
   },
   demos: {
     title: 'Demos',
-    description: 'CKEditor-style demo hub — explore Ink features with local mock data.',
+    description: 'Demo hub — explore Ink features with local mock data.',
     back: 'All demos',
     open: 'Open demo',
     mobileNote: 'Toolbar and side panels stack on narrow viewports for mobile-friendly editing.',
@@ -134,7 +134,7 @@ export const en: Messages = {
     title: 'Ink AI',
     headline: 'Writing, review, and translation inside the editor',
     description:
-      'A CKEditor-inspired AI layer with chat history, quick actions, review, and translate — powered by pluggable providers.',
+      'An AI layer with chat history, quick actions, review, and translate — powered by pluggable providers.',
     honesty:
       'Ink ships a local demo provider only. Bring your own LLM (Claude, Gemini, GPT, or custom). No hosted enterprise AI, SOC2, or on-prem claims.',
     tryDemo: 'Try live demo',

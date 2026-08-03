@@ -1,0 +1,26 @@
+---
+alwaysApply: true
+---
+# Ink Portal Structure
+
+```
+src/
+  pages/{Name}/
+    Name.tsx
+    Name.types.ts
+    index.ts
+    Name.const.ts      # if needed
+  components/{Name}/
+    Name.tsx
+    Name.types.ts
+    index.ts
+  constants/
+    numbers.ts
+    generals.const.ts
+    ...
+  i18n/
+  styles/
+```
+
+Routing via `@forgedevstack/forge-compass`.
+Every page/component folder has `index.ts`.
