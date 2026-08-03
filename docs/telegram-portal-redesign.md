@@ -1,6 +1,6 @@
 # Telegram / announcement paste — Ink portal redesign
 
-Ink docs + playground redesigned (light Quill-inspired) and `@forgedevstack/ink@1.0.1` shipped.
+Ink docs + playground redesigned (light paper UI) and `@forgedevstack/ink@1.0.1` shipped.
 
 - Portal: https://github.com/yaghobieh/ink-portal
 - Lib: https://github.com/yaghobieh/ink

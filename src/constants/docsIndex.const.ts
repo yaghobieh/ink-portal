@@ -113,7 +113,7 @@ export const DOCS_INDEX: DocsIndexEntry[] = [
   {
     id: 'demos',
     title: 'Demos',
-    keywords: ['demos', 'examples', 'ckeditor'],
+    keywords: ['demos', 'examples', 'editor'],
     path: ROUTES.DEMOS,
   },
   {

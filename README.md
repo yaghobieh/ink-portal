@@ -2,7 +2,7 @@
 
 Docs + playground for [`@forgedevstack/ink`](https://www.npmjs.com/package/@forgedevstack/ink).
 
-Light Quill-inspired UI: landing with live editor, sidebar docs, and Format / Modules / Theme playground.
+Light paper UI: landing with live editor, sidebar docs, and Format / Modules / Theme playground.
 
 ## Develop
 

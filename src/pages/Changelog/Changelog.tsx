@@ -43,7 +43,7 @@ export const Changelog: FC = () => {
             1.0.1
           </Typography>
           <ul className="list-disc pl-5 text-slate-600 space-y-1">
-            <li>Expanded README: props, toolbar options, CSS variables, Quill positioning</li>
+            <li>Expanded README: props, toolbar options, CSS variables</li>
             <li>Theme CSS classes documented for snow / bubble / dark / minimal</li>
             <li>Portal docs + playground ship alongside</li>
           </ul>

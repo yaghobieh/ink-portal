@@ -5,4 +5,3 @@ export const SITE_URL = 'https://inkforgejs.com';
 export const FORGESTACK_URL = 'https://github.com/yaghobieh';
 export const BEAR_URL = 'https://github.com/yaghobieh/bear';
 export const RAIL_URL = 'https://github.com/yaghobieh/rail';
-export const QUILL_URL = 'https://quilljs.com/';
