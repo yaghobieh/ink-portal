@@ -172,8 +172,16 @@ export const Home: FC = () => {
             </Typography>
             <div className="ink-home-gallery">
               {HOME_GALLERY.map((item) => (
-                <figure key={item.src} className="ink-home-gallery__item">
+                <figure
+                  key={`${item.labelKey}-${item.src}`}
+                  className={`ink-home-gallery__item${item.tall ? ' ink-home-gallery__item--tall' : ''}`}
+                >
                   <img src={item.src} alt={t.home[item.altKey]} className="ink-home-gallery__img" />
+                  <figcaption className="ink-home-gallery__label">
+                    <Badge variant="info" className="text-xs">
+                      {t.home[item.labelKey]}
+                    </Badge>
+                  </figcaption>
                 </figure>
               ))}
             </div>

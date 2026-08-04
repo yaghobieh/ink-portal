@@ -13,3 +13,4 @@ export const THEME_CLASS_BUBBLE = 'ink-theme-bubble';
 export const THEME_CLASS_DARK = 'ink-theme-dark';
 export const THEME_CLASS_MINIMAL = 'ink-theme-minimal';
 export const SEARCH_ARIA_LABEL = 'Search documentation';
+export const SEARCH_INPUT_ID = 'ink-docs-search';

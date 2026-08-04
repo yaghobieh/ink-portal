@@ -3,6 +3,7 @@ export * from './routes.const';
 export * from './strings.const';
 export * from './urls.const';
 export * from './billing.const';
+export * from './pricing.const';
 export * from './docsContent.const';
 export * from './docsContent.types';
 export * from './docsDemos.const';

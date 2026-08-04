@@ -29,9 +29,42 @@ export const HOME_HERO_TOOLBAR: ToolbarOption[] = [
 ];
 
 export const HOME_GALLERY = [
-  { src: '/ink-landing.png', altKey: 'galleryLanding' as const },
-  { src: '/ink-hero.png', altKey: 'galleryHero' as const },
-  { src: '/ink-logo.png', altKey: 'galleryLogo' as const },
+  {
+    src: '/ink-landing.png',
+    altKey: 'galleryLanding' as const,
+    labelKey: 'galleryLandingLabel' as const,
+    tall: true,
+  },
+  {
+    src: '/ink-hero.png',
+    altKey: 'galleryHero' as const,
+    labelKey: 'galleryHeroLabel' as const,
+    tall: false,
+  },
+  {
+    src: '/ink-logo.png',
+    altKey: 'galleryLogo' as const,
+    labelKey: 'galleryLogoLabel' as const,
+    tall: false,
+  },
+  {
+    src: '/ink-hero.png',
+    altKey: 'galleryBlocks' as const,
+    labelKey: 'galleryBlocksLabel' as const,
+    tall: true,
+  },
+  {
+    src: '/ink-landing.png',
+    altKey: 'galleryAi' as const,
+    labelKey: 'galleryAiLabel' as const,
+    tall: false,
+  },
+  {
+    src: '/ink-logo.png',
+    altKey: 'galleryCollab' as const,
+    labelKey: 'galleryCollabLabel' as const,
+    tall: true,
+  },
 ] as const;
 
 export const HOME_EXAMPLES = [
@@ -56,4 +89,3 @@ export const HOME_EXAMPLES = [
 ] as const;
 
 export const HOME_CUSTOMERS_SOON = ['Acme Docs', 'Northwind CMS', 'Harbor Notes'] as const;
-

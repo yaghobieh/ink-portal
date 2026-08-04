@@ -1,8 +1,8 @@
 # ink-portal
 
-Docs + playground for [`@forgedevstack/ink`](https://www.npmjs.com/package/@forgedevstack/ink) **1.1.3**.
+Docs + playground for [`@forgedevstack/ink`](https://www.npmjs.com/package/@forgedevstack/ink) (current published: **1.1.3**).
 
-Light paper UI: landing with live editor, rich docs (live Demo / Code / HTML / Payload), and Format / Modules / Theme playground.
+Sprint / release sync: work targets **`release/1.1.4`**. Do **not** bump portal or lib versions until that release merges to `main`.
 
 ## Develop
 
@@ -11,37 +11,42 @@ npm install
 npm run dev
 ```
 
-## Deploy (Vercel)
-
-Production deploys **only** from `main` / `master` (after `release/*` merges). Feature branches are skipped via `scripts/vercel-ignore.sh`.
+Optional API base for Sprint 1.1.4:
 
 ```bash
-git checkout release/1
-# … merge features into release/1 …
-git checkout main && git merge release/1 && git push origin main
+# .env
+VITE_INK_API_URL=http://localhost:4000
 ```
 
-## Routes
+## Pricing packages (portal)
 
-| Path | Purpose |
-|------|---------|
-| `/` | Landing + live `InkEditor` hero |
-| `/docs` | Documentation — steps, live demos, HTML + JSON payloads |
-| `/docs/configuration` | Prop-by-prop configuration with live editor |
-| `/docs/blocks` | Blocks & slash live demo |
-| `/playground` | Studio-like Format / Modules / Theme controls |
-| `/get-started` | Short install + sign pad sample |
-| `/changelog` | Release notes |
-| `/ai` | Ink AI marketing |
+| Plan | Price | Includes |
+|------|-------|----------|
+| **Ink** | Free | Editor core, no AI unlock |
+| **Ink Pro** | $29 once | Premium UI + BYO AI key + typo |
+| **Ink AI** | $19 / mo | Pro + hosted OpenAI, 100k tokens/mo |
 
-## Stack
+PayPal checkout UI is **removed / disabled**. Billing will go through [ink-server](https://github.com/yaghobieh/ink-server).
 
-- React + Vite
-- `@forgedevstack/bear`, `@forgedevstack/forge-compass`, `@forgedevstack/ink@^1.1.3`
+## FE ↔ BE
+
+1. Portal calls `VITE_INK_API_URL` (REST JSON).
+2. `POST /api/auth/login|register` or Google/GitHub OAuth start → JWT.
+3. Authenticated calls: `Authorization: Bearer <jwt>`.
+4. `GET /api/entitlements` + `GET /api/usage` drive plan / token meter.
+5. Audit: `GET /api/audit-logs`.
+
+## Deploy (Vercel)
+
+Production deploys **only** from `main` / `master` after `release/*` merges (`scripts/vercel-ignore.sh`).
+
+## Search
+
+`⌘K` / `Ctrl+K` focuses docs search in the navbar.
 
 ## Links
 
 - Package: https://www.npmjs.com/package/@forgedevstack/ink
 - Library: https://github.com/yaghobieh/ink
-- Backend (Sprint 2): https://github.com/yaghobieh/ink-server
+- Backend: https://github.com/yaghobieh/ink-server
 - Site: https://inkforgejs.com

@@ -2,32 +2,23 @@ import { useEffect, useState, type FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { Badge, Button, Flex, Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
-import { PREMIUM_LICENSE_QUERY, useInkPremium } from '@hooks/index';
+import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { ROUTES } from '@const/index';
 
 export const PremiumSuccess: FC = () => {
   const { t } = useI18n();
-  const { activate, licenseKey, active } = useInkPremium();
+  const { licenseKey, active } = useInkPremium();
   const [key, setKey] = useState<string | null>(licenseKey);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const fromQuery = params.get(PREMIUM_LICENSE_QUERY);
-    const next = fromQuery ? activate(fromQuery) : active && licenseKey ? licenseKey : activate();
-    setKey(next);
-    if (params.has(PREMIUM_LICENSE_QUERY) || params.has('paid')) {
-      params.delete(PREMIUM_LICENSE_QUERY);
-      params.delete('paid');
-      const search = params.toString();
-      window.history.replaceState({}, '', `${window.location.pathname}${search ? `?${search}` : ''}`);
-    }
-  }, [activate, active, licenseKey]);
+    setKey(licenseKey);
+  }, [licenseKey]);
 
   return (
     <Layout>
       <div className="fade-in max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <Badge variant="success" className="mb-4">
+        <Badge variant={active ? 'success' : 'info'} className="mb-4">
           {t.premiumSuccess.badge}
         </Badge>
         <Typography variant="h1" className="text-4xl font-bold mb-3 tracking-tight">
@@ -46,6 +37,9 @@ export const PremiumSuccess: FC = () => {
           </Link>
           <Link to={ROUTES.DEMOS}>
             <Button variant="inkOutline">{t.premiumSuccess.ctaDemos}</Button>
+          </Link>
+          <Link to={ROUTES.PRICING}>
+            <Button variant="ghost">{t.nav.pricing}</Button>
           </Link>
         </Flex>
       </div>
