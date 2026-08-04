@@ -20,7 +20,7 @@ export const GetStarted: FC = () => {
         <Typography variant="h3" className="text-lg font-semibold mb-3">
           {t.getStarted.install}
         </Typography>
-        <pre className="ink-code mb-8">{`npm install @forgedevstack/ink`}</pre>
+        <pre className="ink-code mb-8">{`npm install @forgedevstack/ink@1.1.3`}</pre>
         <pre className="ink-code mb-8">{`import { InkEditor } from '@forgedevstack/ink';
 import '@forgedevstack/ink/styles.css';
 

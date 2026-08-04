@@ -2,6 +2,7 @@ import { useEffect, type FC } from 'react';
 import { Link, useNavigate, useParams } from '@forgedevstack/forge-compass/react';
 import { Typography } from '@forgedevstack/bear';
 import { DocLayout } from '@components/DocLayout';
+import { DocDemo } from '@components/DocDemo';
 import { useI18n } from '@i18n/index';
 import {
   DEFAULT_DOCS_SLUG,
@@ -44,6 +45,42 @@ export const Docs: FC = () => {
     <DocLayout title={t.docs[page.labelKey]} description={t.docs.description}>
       <div className="fade-in ink-doc-page space-y-5">
         {page.blocks.map((block, index) => {
+          if (block.type === 'demo') {
+            return <DocDemo key={`${page.id}-demo-${block.id}`} {...block} />;
+          }
+          if (block.type === 'payload') {
+            return (
+              <div key={`${page.id}-payload-${index}`} className="space-y-2">
+                <Typography variant="body2" className="font-semibold m-0">
+                  {block.label}
+                </Typography>
+                <pre className="ink-code">{JSON.stringify(block.data, null, 2)}</pre>
+              </div>
+            );
+          }
+          if (block.type === 'steps') {
+            return (
+              <div key={`${page.id}-steps-${index}`} className="space-y-3">
+                {block.title ? (
+                  <Typography variant="h3" className="text-lg font-semibold m-0">
+                    {block.title}
+                  </Typography>
+                ) : null}
+                <ol className="list-decimal pl-5 space-y-2 ink-doc-body">
+                  {block.items.map((item) => (
+                    <li key={item.title}>
+                      <Typography variant="body1" className="font-semibold m-0">
+                        {item.title}
+                      </Typography>
+                      <Typography variant="body2" className="ink-text-muted m-0">
+                        {item.body}
+                      </Typography>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            );
+          }
           if (block.type === 'code') {
             return (
               <pre key={`${page.id}-code-${index}`} className="ink-code">

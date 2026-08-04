@@ -18,7 +18,7 @@ export const ROUTES = {
   PREMIUM_SUCCESS: '/pricing/success',
 } as const;
 
-export const INK_VERSION = '1.1.0';
+export const INK_VERSION = '1.1.3';
 
 export const NAV_LINKS = [
   { id: 'docs' as const, href: ROUTES.DOCS },

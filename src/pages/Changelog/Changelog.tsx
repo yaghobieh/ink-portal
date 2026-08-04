@@ -18,6 +18,17 @@ export const Changelog: FC = () => {
 
         <section className="mb-10">
           <Typography variant="h2" className="text-xl font-bold mb-2">
+            1.1.3
+          </Typography>
+          <ul className="list-disc pl-5 text-slate-600 space-y-1">
+            <li>Docs: live DocDemo (Demo / Code / HTML / Payload) on Configuration, Blocks, Tables, TC, Comments, Sign pad, Memory, Find/replace, AI</li>
+            <li>Pin <code>@forgedevstack/ink@1.1.3</code></li>
+            <li>Vercel deploys only from <code>main</code>/<code>master</code> (release merges)</li>
+          </ul>
+        </section>
+
+        <section className="mb-10">
+          <Typography variant="h2" className="text-xl font-bold mb-2">
             1.1.2
           </Typography>
           <ul className="list-disc pl-5 text-slate-600 space-y-1">

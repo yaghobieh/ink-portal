@@ -5,6 +5,7 @@ export const PLAYGROUND_CONTROLS_WIDTH_PX = 288;
 export const HERO_EDITOR_MIN_HEIGHT_PX = 320;
 export const HOME_HERO_EDITOR_MIN_HEIGHT_PX = 360;
 export const PLAYGROUND_EDITOR_MIN_HEIGHT_PX = 360;
+export const DOC_DEMO_MIN_HEIGHT_PX = 280;
 export const SEARCH_DEBOUNCE_MS = 120;
 export const SEARCH_MAX_RESULTS = 8;
 export const FADE_DURATION_MS = 400;

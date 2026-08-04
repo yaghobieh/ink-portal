@@ -1,45 +1,53 @@
 import { NPM_URL } from './urls.const';
+import type { DocsPageContent } from './docsContent.types';
+import {
+  DOC_DEMO_AI,
+  DOC_DEMO_BLOCKS,
+  DOC_DEMO_COMMENTS,
+  DOC_DEMO_CONFIGURATION,
+  DOC_DEMO_FIND,
+  DOC_DEMO_MEMORY,
+  DOC_DEMO_SIGN,
+  DOC_DEMO_TABLES,
+  DOC_DEMO_TRACK,
+} from './docsDemos.const';
 
-export type DocsBlock =
-  | { type: 'p'; text: string }
-  | { type: 'code'; code: string }
-  | { type: 'html'; html: string };
-
-export interface DocsPageContent {
-  id: string;
-  labelKey:
-    | 'tocInstallation'
-    | 'tocQuickstart'
-    | 'tocConfiguration'
-    | 'tocToolbar'
-    | 'tocModules'
-    | 'tocTables'
-    | 'tocTrackChanges'
-    | 'tocComments'
-    | 'tocBlocks'
-    | 'tocSignPad'
-    | 'tocMemory'
-    | 'tocFindReplace'
-    | 'tocThemes'
-    | 'tocTypo'
-    | 'tocAi'
-    | 'tocAngular'
-    | 'tocWordpress'
-    | 'tocA11y'
-    | 'tocPremium';
-  blocks: DocsBlock[];
-}
+export type { DocsBlock, DocsPageContent, DocDemoBlock } from './docsContent.types';
 
 export const DOCS_PAGES: DocsPageContent[] = [
   {
     id: 'installation',
     labelKey: 'tocInstallation',
     blocks: [
-      { type: 'p', text: 'Install from npm. Peer deps: React 18+.' },
-      { type: 'code', code: 'npm install @forgedevstack/ink' },
+      { type: 'p', text: 'Install Ink from npm. Peer dependency: React 18+.' },
+      {
+        type: 'steps',
+        title: 'Setup',
+        items: [
+          {
+            title: '1. Install package',
+            body: 'Adds the editor + CSS entry to your app.',
+          },
+          {
+            title: '2. Import styles',
+            body: 'Pull @forgedevstack/ink/styles.css once at the app root.',
+          },
+          {
+            title: '3. Mount InkEditor',
+            body: 'Controlled value/onChange is the recommended default for forms.',
+          },
+        ],
+      },
+      { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink@1.1.3' },
+      {
+        type: 'code',
+        language: 'tsx',
+        code: `import { InkEditor } from '@forgedevstack/ink';
+import '@forgedevstack/ink/styles.css';`,
+      },
       {
         type: 'html',
-        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a>`,
+        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a> · current docs target <strong>1.1.3</strong>`,
       },
     ],
   },
@@ -47,9 +55,34 @@ export const DOCS_PAGES: DocsPageContent[] = [
     id: 'quickstart',
     labelKey: 'tocQuickstart',
     blocks: [
-      { type: 'p', text: 'Minimal controlled editor with typo auto-fix and the classic shell.' },
       {
-        type: 'code',
+        type: 'p',
+        text: 'Minimal controlled editor. typoAutoFix runs on blur. This is the smallest useful payload.',
+      },
+      {
+        type: 'steps',
+        title: 'What we change',
+        items: [
+          {
+            title: 'value / onChange',
+            body: 'Parent owns HTML. Every keystroke updates React state — open the HTML / Payload tabs to see it.',
+          },
+          {
+            title: 'variant="classic"',
+            body: 'Soft card chrome for marketing and forms. Switch to document later for long-form.',
+          },
+          {
+            title: 'typoAutoFix',
+            body: 'On blur, common typos are rewritten in the HTML string.',
+          },
+        ],
+      },
+      {
+        type: 'demo',
+        id: 'quickstart-live',
+        title: 'Hello Ink',
+        description: 'Type here, then open HTML and Payload tabs.',
+        initialHtml: '<p>Hello Ink</p>',
         code: `import { useState } from 'react';
 import { InkEditor } from '@forgedevstack/ink';
 import '@forgedevstack/ink/styles.css';
@@ -65,6 +98,19 @@ export function App() {
     />
   );
 }`,
+        editor: {
+          variant: 'classic',
+          typoAutoFix: true,
+          toolbar: ['bold', 'italic', 'undo', 'redo'],
+        },
+        payload: {
+          label: 'Initial state payload',
+          data: {
+            value: '<p>Hello Ink</p>',
+            variant: 'classic',
+            typoAutoFix: true,
+          },
+        },
       },
     ],
   },
@@ -74,22 +120,63 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Controlled HTML via value / onChange. 1.1.x adds variant, features, trackChanges, comments, showCommentsPanel, ai, slashCommands, author, tableRows / tableCols, keepInMemory, memoryKey.',
+        text: 'Configuration is prop-driven. Each prop below changes editor behaviour — try the live demo, then inspect Code / HTML / Payload tabs.',
       },
       {
-        type: 'code',
-        code: `<InkEditor
-  value={html}
-  onChange={setHtml}
-  keepInMemory
-  memoryKey="my-draft"
-  features={{
-    table: true,
-    signature: true,
-    findReplace: true,
-    horizontalRule: true,
-  }}
-/>`,
+        type: 'steps',
+        title: 'What each group changes',
+        items: [
+          {
+            title: 'value / onChange',
+            body: 'Controlled HTML string. Parent owns the document; every keystroke emits HTML.',
+          },
+          {
+            title: 'features',
+            body: 'Module switches: table, trackChanges, comments, ai, blocks, slash, signature, findReplace, horizontalRule.',
+          },
+          {
+            title: 'toolbar',
+            body: 'Ordered list of ToolbarOption strings. Missing items never render — even if the feature flag is on.',
+          },
+          {
+            title: 'keepInMemory + memoryKey',
+            body: 'Writes drafts to localStorage under ink-memory:{key}. On mount (1.1.3+) restores and calls onChange so controlled apps refresh correctly.',
+          },
+          {
+            title: 'variant',
+            body: 'classic = soft card shell. document = page-like with stronger block outlines.',
+          },
+        ],
+      },
+      DOC_DEMO_CONFIGURATION,
+      {
+        type: 'payload',
+        label: 'Full props cheat-sheet (subset)',
+        data: {
+          value: 'string HTML',
+          onChange: '(html: string) => void',
+          defaultValue: 'string HTML (uncontrolled)',
+          variant: 'classic | document',
+          features: {
+            table: true,
+            trackChanges: true,
+            comments: true,
+            ai: true,
+            blocks: true,
+            slash: true,
+            signature: true,
+            findReplace: true,
+            horizontalRule: true,
+          },
+          keepInMemory: true,
+          memoryKey: 'unique-per-editor',
+          toolbar: ['bold', 'italic', 'signature'],
+          author: 'You',
+          tableRows: 3,
+          tableCols: 3,
+          showCommentsPanel: true,
+          ai: { enabled: true, placement: 'sidebar' },
+        },
       },
     ],
   },
@@ -99,21 +186,76 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Toolbar options include table, signature, findReplace, horizontalRule, undo, redo, trackChanges, comments, ai plus classic formats. Presets: INK_DEFAULT_TOOLBAR, INK_SIMPLE_TOOLBAR, INK_COLLAB_TOOLBAR.',
+        text: 'Toolbar is an ordered array. Presets: INK_DEFAULT_TOOLBAR, INK_SIMPLE_TOOLBAR, INK_COLLAB_TOOLBAR.',
+      },
+      {
+        type: 'steps',
+        items: [
+          {
+            title: 'Add an option',
+            body: 'Push a ToolbarOption into toolbar[] and enable the matching features flag when required.',
+          },
+          {
+            title: 'divider',
+            body: 'Visual separator only — no command.',
+          },
+          {
+            title: 'headingDropdown',
+            body: 'Maps to block formats h1–h6 / paragraph.',
+          },
+        ],
       },
       {
         type: 'code',
-        code: `toolbar={[
+        language: 'tsx',
+        code: `import { INK_DEFAULT_TOOLBAR, INK_COLLAB_TOOLBAR } from '@forgedevstack/ink';
+
+toolbar={[
+  'headingDropdown',
+  'divider',
   'bold',
   'italic',
-  'divider',
   'signature',
   'findReplace',
   'horizontalRule',
   'divider',
   'undo',
   'redo',
-]}`,
+]}
+
+// or
+toolbar={INK_DEFAULT_TOOLBAR}
+toolbar={INK_COLLAB_TOOLBAR}`,
+      },
+      {
+        type: 'payload',
+        label: 'ToolbarOption union (1.1.3)',
+        data: {
+          options: [
+            'headingDropdown',
+            'bold',
+            'italic',
+            'underline',
+            'strikethrough',
+            'textColor',
+            'highlightColor',
+            'bulletList',
+            'orderedList',
+            'link',
+            'image',
+            'table',
+            'signature',
+            'findReplace',
+            'horizontalRule',
+            'undo',
+            'redo',
+            'trackChanges',
+            'comments',
+            'ai',
+            'clearFormat',
+            'divider',
+          ],
+        },
       },
     ],
   },
@@ -123,7 +265,71 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Pass features={{ table, trackChanges, comments, ai, blocks, slash, signature, findReplace, horizontalRule }} to enable modules. Legacy props typoAutoFix, allowImagePaste, showCharCount still work.',
+        text: 'features={{ … }} is the module gate. Toolbar buttons still need an entry in toolbar[] — a feature flag alone never renders a control.',
+      },
+      {
+        type: 'steps',
+        title: 'What each flag changes',
+        items: [
+          {
+            title: 'table',
+            body: 'Enables table insert + cell editing. Pair with toolbar "table" and optional tableRows/tableCols.',
+          },
+          {
+            title: 'trackChanges',
+            body: 'Insert/delete marks + trackChanges[] payload. Pair with toolbar trackChanges + trackChangesEnabled.',
+          },
+          {
+            title: 'comments',
+            body: 'Selection threads + comments/onCommentsChange. Pair with toolbar comments + showCommentsPanel.',
+          },
+          {
+            title: 'blocks + slash',
+            body: 'Block handles (↑↓) and / menu. Best with variant="document".',
+          },
+          {
+            title: 'signature / findReplace / horizontalRule',
+            body: 'Sign pad canvas, find panel, and HR insert — each needs its toolbar option.',
+          },
+          {
+            title: 'ai',
+            body: 'Side panel. Pair with toolbar ai + ai={{ enabled: true }}.',
+          },
+        ],
+      },
+      DOC_DEMO_CONFIGURATION,
+      {
+        type: 'code',
+        language: 'tsx',
+        code: `features={{
+  table: true,
+  trackChanges: true,
+  comments: true,
+  ai: true,
+  blocks: true,
+  slash: true,
+  signature: true,
+  findReplace: true,
+  horizontalRule: true,
+}}`,
+      },
+      {
+        type: 'payload',
+        label: 'Default features merge',
+        data: {
+          note: 'Ink merges your features over INK_DEFAULT_FEATURES',
+          defaults: {
+            table: true,
+            trackChanges: true,
+            comments: true,
+            ai: true,
+            blocks: true,
+            slash: true,
+            signature: true,
+            findReplace: true,
+            horizontalRule: true,
+          },
+        },
       },
     ],
   },
@@ -133,8 +339,17 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Toolbar table button inserts an N×M HTML table (tableRows / tableCols). Cells are contenteditable. Helper: buildTableHtml(rows, cols).',
+        text: 'tableRows / tableCols control the insert size. Cells are contenteditable. Helper: buildTableHtml(rows, cols).',
       },
+      {
+        type: 'steps',
+        items: [
+          { title: 'Enable', body: 'features.table + toolbar includes "table".' },
+          { title: 'Insert', body: 'Toolbar table button injects HTML table markup.' },
+          { title: 'Edit', body: 'Click cells and type. HTML payload shows <table class="Ink-table">.' },
+        ],
+      },
+      DOC_DEMO_TABLES,
     ],
   },
   {
@@ -143,8 +358,17 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Enable via toolbar toggle. Inserts wrap in Ink-tc-insert, deletes in Ink-tc-delete. Parallel model: trackChanges / onTrackChangesChange with Accept/Reject strip.',
+        text: 'Parallel model: HTML marks + trackChanges[] state. Accept/Reject mutates both.',
       },
+      {
+        type: 'steps',
+        items: [
+          { title: 'Enable', body: 'features.trackChanges + toolbar trackChanges + trackChangesEnabled.' },
+          { title: 'Edit with TC on', body: 'Inserts wrap Ink-tc-insert; deletes wrap Ink-tc-delete.' },
+          { title: 'Review', body: 'Accept/Reject strip updates trackChanges payload.' },
+        ],
+      },
+      DOC_DEMO_TRACK,
     ],
   },
   {
@@ -153,8 +377,17 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Highlight selection → prompt → yellow mark + Comments archive sidebar. Props: comments, onCommentsChange, showCommentsPanel.',
+        text: 'Selection → comment thread. showCommentsPanel opens the archive sidebar.',
       },
+      {
+        type: 'steps',
+        items: [
+          { title: 'Enable', body: 'features.comments + toolbar comments.' },
+          { title: 'Annotate', body: 'Select text, click Comments, enter body.' },
+          { title: 'Sync', body: 'comments / onCommentsChange keep the thread payload in React state.' },
+        ],
+      },
+      DOC_DEMO_COMMENTS,
     ],
   },
   {
@@ -163,8 +396,26 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Document/classic variants outline the active block. Block handles move up/down. Slash menu: type / for heading, list, table, AI.',
+        text: 'Document variant outlines the active block. Block handles move sections. Slash menu inserts structures via /.',
       },
+      {
+        type: 'steps',
+        items: [
+          {
+            title: 'variant="document"',
+            body: 'Stronger block chrome — best for long-form docs.',
+          },
+          {
+            title: 'features.blocks',
+            body: 'Shows ↑↓ handles on the active block.',
+          },
+          {
+            title: 'features.slash / slashCommands',
+            body: 'Type / then choose heading, list, table, AI.',
+          },
+        ],
+      },
+      DOC_DEMO_BLOCKS,
     ],
   },
   {
@@ -173,30 +424,17 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Sign pad (1.1.2) opens a canvas from the toolbar. Draw with pointer/touch, then Insert to place a PNG image in the document.',
+        text: 'Sign pad opens a canvas. Draw, then Insert — PNG lands as an <img> in the HTML payload.',
       },
       {
-        type: 'code',
-        code: `import { useState } from 'react';
-import { InkEditor } from '@forgedevstack/ink';
-import '@forgedevstack/ink/styles.css';
-
-export function ContractEditor() {
-  const [html, setHtml] = useState('<p>Sign below.</p>');
-  return (
-    <InkEditor
-      value={html}
-      onChange={setHtml}
-      features={{ signature: true }}
-      toolbar={['bold', 'italic', 'divider', 'signature', 'undo', 'redo']}
-    />
-  );
-}`,
+        type: 'steps',
+        items: [
+          { title: 'Enable', body: 'features.signature + toolbar "signature".' },
+          { title: 'Draw', body: 'Pointer/touch strokes on the white pad.' },
+          { title: 'Insert', body: 'Confirm inserts data:image/png;base64,… into the document.' },
+        ],
       },
-      {
-        type: 'p',
-        text: 'How to test: open Playground → click ✍ → draw → Insert. The signature appears as an <img> in the HTML.',
-      },
+      DOC_DEMO_SIGN,
     ],
   },
   {
@@ -205,17 +443,17 @@ export function ContractEditor() {
     blocks: [
       {
         type: 'p',
-        text: 'keepInMemory stores draft HTML in localStorage under ink-memory:{memoryKey}. Use a unique memoryKey per editor instance. Uncontrolled mode (no value prop) restores on mount; controlled value skips restore so React stays source of truth.',
+        text: 'keepInMemory persists HTML under ink-memory:{memoryKey}. Use a unique key per editor. 1.1.3 restores on mount for controlled editors via onChange.',
       },
       {
-        type: 'code',
-        code: `<InkEditor
-  defaultValue="<p>Draft…</p>"
-  onChange={setHtml}
-  keepInMemory
-  memoryKey="contract-draft"
-/>`,
+        type: 'steps',
+        items: [
+          { title: 'Write', body: 'Every emitChange writes localStorage.' },
+          { title: 'Restore', body: 'On mount, remembered HTML is applied and onChange fires.' },
+          { title: 'Clear', body: 'clearInkMemory(memoryKey) from @forgedevstack/ink utils.' },
+        ],
       },
+      DOC_DEMO_MEMORY,
     ],
   },
   {
@@ -224,17 +462,17 @@ export function ContractEditor() {
     blocks: [
       {
         type: 'p',
-        text: 'Find & replace walks text nodes only — attribute values (class, href) are left intact. Replace one or replace all from the toolbar panel.',
+        text: 'Text-node only replace — attribute values stay untouched.',
       },
       {
-        type: 'code',
-        code: `<InkEditor
-  value={html}
-  onChange={setHtml}
-  features={{ findReplace: true }}
-  toolbar={['findReplace', 'bold', 'italic']}
-/>`,
+        type: 'steps',
+        items: [
+          { title: 'Open panel', body: 'Toolbar findReplace.' },
+          { title: 'Replace one / all', body: 'Runs replaceInHtml under the hood.' },
+          { title: 'Verify', body: 'HTML tab: class="find-me" remains while text updates.' },
+        ],
       },
+      DOC_DEMO_FIND,
     ],
   },
   {
@@ -243,7 +481,29 @@ export function ContractEditor() {
     blocks: [
       {
         type: 'p',
-        text: 'CSS variables on .Ink-Editor including --ink-shadow, --ink-radius, --ink-ai-*. Theme classes: snow / bubble / dark / minimal.',
+        text: 'Theme via CSS variables on .Ink-Editor and helper classes: snow / bubble / dark / minimal. Premium unlocks theme={{ … }} tokens.',
+      },
+      {
+        type: 'code',
+        language: 'tsx',
+        code: `<div className="ink-theme-snow">
+  <InkEditor … />
+</div>`,
+      },
+      {
+        type: 'payload',
+        label: 'CSS variables',
+        data: {
+          vars: [
+            '--ink-bg',
+            '--ink-text',
+            '--ink-border',
+            '--ink-toolbar',
+            '--ink-accent',
+            '--ink-shadow',
+            '--ink-radius',
+          ],
+        },
       },
     ],
   },
@@ -253,7 +513,20 @@ export function ContractEditor() {
     blocks: [
       {
         type: 'p',
-        text: 'typoAutoFix runs blur-time dictionary fixes. Export applyTypoAutoFix.',
+        text: 'typoAutoFix runs on blur. Export applyTypoAutoFix for custom pipelines.',
+      },
+      {
+        type: 'code',
+        language: 'tsx',
+        code: `import { applyTypoAutoFix } from '@forgedevstack/ink';
+
+const { html, fixedCount } = applyTypoAutoFix('<p>teh end</p>');
+// html → <p>the end</p>`,
+      },
+      {
+        type: 'payload',
+        label: 'applyTypoAutoFix result',
+        data: { html: '<p>the end</p>', fixedCount: 1 },
       },
     ],
   },
@@ -263,10 +536,20 @@ export function ContractEditor() {
     blocks: [
       {
         type: 'p',
-        text: 'Side panel via ai={{ enabled: true, placement: "sidebar" }}. Demo provider is built-in. Bring your own LLM:',
+        text: 'Side panel via ai={{ enabled: true }}. Demo provider is local. Register BYO LLM with inkAi.registerProvider.',
       },
       {
+        type: 'steps',
+        items: [
+          { title: 'Enable UI', body: 'features.ai + toolbar ai + ai.enabled.' },
+          { title: 'Demo provider', body: 'Works offline for marketing demos.' },
+          { title: 'BYO LLM', body: 'Register a provider; models come from INK_AI_MODEL_CATALOG.' },
+        ],
+      },
+      DOC_DEMO_AI,
+      {
         type: 'code',
+        language: 'tsx',
         code: `import { inkAi, INK_AI_MODEL_CATALOG } from '@forgedevstack/ink/plugins/ai';
 
 inkAi.registerProvider({
@@ -278,10 +561,6 @@ inkAi.registerProvider({
   },
 });`,
       },
-      {
-        type: 'p',
-        text: 'Honesty: catalog constants only — Ink does not host models or claim SOC2/enterprise hosting.',
-      },
     ],
   },
   {
@@ -290,7 +569,12 @@ inkAi.registerProvider({
     blocks: [
       {
         type: 'p',
-        text: 'Import helpers from @forgedevstack/ink/angular. Mount React InkEditor via your preferred bridge.',
+        text: 'Helpers live at @forgedevstack/ink/angular. Mount the React editor through your preferred bridge.',
+      },
+      {
+        type: 'code',
+        language: 'tsx',
+        code: `import { /* angular helpers */ } from '@forgedevstack/ink/angular';`,
       },
     ],
   },
@@ -300,7 +584,7 @@ inkAi.registerProvider({
     blocks: [
       {
         type: 'p',
-        text: 'See wordpress/ink-editor in the package for a classic meta box stub.',
+        text: 'See wordpress/ink-editor in the npm package for a classic meta box stub.',
       },
     ],
   },
@@ -320,25 +604,34 @@ inkAi.registerProvider({
     blocks: [
       {
         type: 'p',
-        text: 'Ink Premium unlocks theme tokens, custom icons, rich HTML paste, onImageUpload, and wysiwyg. Same npm package. Activate with premium={{ enabled: true }} locally or premium={{ licenseKey }} after Stripe checkout.',
+        text: 'Premium unlocks theme tokens, custom icons, rich paste, onImageUpload, wysiwyg. Same package — gate with premium prop.',
+      },
+      {
+        type: 'steps',
+        items: [
+          { title: 'Local unlock', body: 'premium={{ enabled: true }} for development.' },
+          { title: 'License unlock', body: 'premium={{ licenseKey }} after checkout.' },
+          { title: 'Israel sellers', body: 'PayPal-first path documented — see payments research (do not merge IL transition PR until BE entitlement).' },
+        ],
       },
       {
         type: 'code',
+        language: 'tsx',
         code: `<InkEditor
   premium={{ licenseKey: 'ink_prem_AB12_CD34_EF56_GH78' }}
   theme={{ accent: '#0f766e', background: '#fff', radius: '1rem' }}
-  icons={{ bold: <BoldIcon />, ai: <SparkIcon /> }}
   pasteMode="rich"
   wysiwyg
-  onImageUpload={async (file) => {
-    const url = await upload(file);
-    return url;
-  }}
 />`,
       },
       {
-        type: 'p',
-        text: 'Billing: Stripe Payment Link → webhook checkout.session.completed → mintInkPremiumLicenseKey(). See /pricing and ink/examples/stripe-webhook.mjs. Israel: full Stripe needs an entity in a supported country (e.g. Atlas).',
+        type: 'payload',
+        label: 'premium resolve shape',
+        data: {
+          enabled: true,
+          licenseKey: 'ink_prem_…',
+          features: ['theme', 'icons', 'richPaste', 'imageUpload', 'wysiwyg'],
+        },
       },
     ],
   },
