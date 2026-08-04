@@ -1,4 +1,4 @@
-import { useMemo, useState, type FC } from 'react';
+import { useEffect, useMemo, useState, type FC } from 'react';
 import { Link, useRoute } from '@forgedevstack/forge-compass/react';
 import {
   Badge,
@@ -22,6 +22,7 @@ import {
   NPM_URL,
   ROUTES,
   SEARCH_ARIA_LABEL,
+  SEARCH_INPUT_ID,
   SEARCH_MAX_RESULTS,
   docsHref,
 } from '@const/index';
@@ -41,6 +42,28 @@ export const Navbar: FC = () => {
   const [query, setQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const isDark = mode === 'dark';
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const isChord = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k';
+      if (!isChord) return;
+      event.preventDefault();
+      setSearchOpen(true);
+      window.requestAnimationFrame(() => {
+        const desktop = document.getElementById(SEARCH_INPUT_ID) as HTMLInputElement | null;
+        if (desktop) {
+          desktop.focus();
+          return;
+        }
+        setMenuOpen(true);
+        window.requestAnimationFrame(() => {
+          (document.getElementById(`${SEARCH_INPUT_ID}-mobile`) as HTMLInputElement | null)?.focus();
+        });
+      });
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -104,8 +127,9 @@ export const Navbar: FC = () => {
           ))}
         </Flex>
 
-        <div className="relative hidden lg:block w-56">
+        <div className="relative hidden lg:block w-64">
           <Input
+            id={SEARCH_INPUT_ID}
             size="sm"
             value={query}
             onChange={(e) => {
@@ -114,7 +138,7 @@ export const Navbar: FC = () => {
             }}
             onFocus={() => setSearchOpen(true)}
             onBlur={() => window.setTimeout(() => setSearchOpen(false), 150)}
-            placeholder={t.nav.searchPlaceholder}
+            placeholder={`${t.nav.searchPlaceholder} ${t.nav.searchShortcut}`}
             aria-label={SEARCH_ARIA_LABEL}
           />
           {searchOpen && query.trim() && (
@@ -194,10 +218,11 @@ export const Navbar: FC = () => {
         <div className="md:hidden px-4 pb-4 space-y-1 ink-navbar__mobile">
           <div className="py-3">
             <Input
+              id={`${SEARCH_INPUT_ID}-mobile`}
               size="sm"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={t.nav.searchPlaceholder}
+              placeholder={`${t.nav.searchPlaceholder} ${t.nav.searchShortcut}`}
               aria-label={SEARCH_ARIA_LABEL}
             />
             {query.trim() && (

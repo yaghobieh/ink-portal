@@ -5,24 +5,22 @@ import { Layout } from '@components/Layout';
 import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import {
+  INK_API_URL,
   INK_PREMIUM_LICENSE_EXAMPLE,
-  PAYPAL_BUSINESS_URL,
-  PAYPAL_BUTTONS_URL,
-  PAYPAL_PAYMENT_LINK,
-  PREMIUM_SUCCESS_URL,
+  PLAN_AI_TOKENS_MONTHLY,
+  PLAN_FEATURE_KEYS,
+  PLAN_PRICES,
   ROUTES,
-  STRIPE_PAYMENT_LINK,
 } from '@const/index';
 
 export const Pricing: FC = () => {
   const { t } = useI18n();
-  const { active, licenseKey, clear } = useInkPremium();
-  const checkoutHref = PAYPAL_PAYMENT_LINK || PAYPAL_BUTTONS_URL;
-  const stripeHref = STRIPE_PAYMENT_LINK;
+  const { active, clear } = useInkPremium();
+  const tokenLabel = PLAN_AI_TOKENS_MONTHLY.toLocaleString();
 
   return (
     <Layout>
-      <div className="fade-in max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="fade-in max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <Typography variant="h1" className="text-4xl md:text-5xl font-bold mb-3 tracking-tight">
           {t.pricing.title}
         </Typography>
@@ -41,7 +39,6 @@ export const Pricing: FC = () => {
             <Typography variant="body2" className="ink-text-muted mb-4">
               {t.pricing.activeBody}
             </Typography>
-            {licenseKey ? <pre className="ink-code mb-4">{licenseKey}</pre> : null}
             <Flex gap={2} className="flex-wrap">
               <Link to={ROUTES.PLAYGROUND}>
                 <Button variant="ink" size="sm">
@@ -57,104 +54,108 @@ export const Pricing: FC = () => {
 
         <div className="ink-pricing-grid mb-12">
           <Card className="ink-pricing-card p-6">
-            <Typography variant="h3" className="font-semibold mb-2">
+            <Typography variant="caption" className="ink-text-muted uppercase tracking-wide">
+              {t.pricing.freeBadge}
+            </Typography>
+            <Typography variant="h3" className="font-semibold mb-1 mt-1">
               {t.pricing.freeTitle}
+            </Typography>
+            <Typography variant="h2" className="text-3xl font-bold mb-2">
+              {PLAN_PRICES.free.label}
             </Typography>
             <Typography variant="body2" className="ink-text-muted mb-4">
               {t.pricing.freeBody}
             </Typography>
             <ul className="ink-pricing-list">
-              <li>{t.pricing.freeItemEditor}</li>
-              <li>{t.pricing.freeItemToolbar}</li>
-              <li>{t.pricing.freeItemCss}</li>
-              <li>{t.pricing.freeItemAiDemo}</li>
+              {PLAN_FEATURE_KEYS.free.map((key) => (
+                <li key={key}>{t.pricing[key]}</li>
+              ))}
             </ul>
-            <Badge variant="info" className="mt-4">
-              {t.pricing.freeBadge}
-            </Badge>
+            <Link to={ROUTES.GET_STARTED} className="inline-flex mt-6">
+              <Button variant="inkOutline">{t.pricing.ctaFree}</Button>
+            </Link>
           </Card>
 
-          <Card className="ink-pricing-card ink-pricing-card--premium p-6">
-            <Flex align="center" gap={2} className="mb-2">
+          <Card className="ink-pricing-card ink-pricing-card--pro p-6">
+            <Flex align="center" gap={2} className="mb-1">
               <Typography variant="h3" className="font-semibold mb-0">
-                {t.pricing.premiumTitle}
+                {t.pricing.proTitle}
               </Typography>
-              <Badge variant="success">{t.pricing.premiumBadge}</Badge>
+              <Badge variant="info">{t.pricing.proBadge}</Badge>
             </Flex>
+            <Typography variant="h2" className="text-3xl font-bold mb-1">
+              {PLAN_PRICES.pro.label}
+              <Typography variant="caption" className="ink-text-muted ml-2 font-normal">
+                {t.pricing.proPeriod}
+              </Typography>
+            </Typography>
             <Typography variant="body2" className="ink-text-muted mb-4">
-              {t.pricing.premiumBody}
+              {t.pricing.proBody}
             </Typography>
             <ul className="ink-pricing-list">
-              <li>{t.pricing.premiumItemTheme}</li>
-              <li>{t.pricing.premiumItemIcons}</li>
-              <li>{t.pricing.premiumItemPaste}</li>
-              <li>{t.pricing.premiumItemUpload}</li>
-              <li>{t.pricing.premiumItemWysiwyg}</li>
-              <li>{t.pricing.premiumItemAuto}</li>
+              {PLAN_FEATURE_KEYS.pro.map((key) => (
+                <li key={key}>{t.pricing[key]}</li>
+              ))}
             </ul>
-            <Flex gap={2} className="mt-6 flex-wrap">
-              <a href={checkoutHref} target="_blank" rel="noopener noreferrer">
-                <Button variant="ink">{t.pricing.ctaPaypal}</Button>
-              </a>
-              {stripeHref ? (
-                <a href={stripeHref} target="_blank" rel="noopener noreferrer">
-                  <Button variant="inkOutline">{t.pricing.ctaStripe}</Button>
-                </a>
-              ) : null}
-              <Link to={ROUTES.PREMIUM_SUCCESS}>
-                <Button variant="ghost">{t.pricing.ctaSimulate}</Button>
-              </Link>
-            </Flex>
-            {!PAYPAL_PAYMENT_LINK ? (
-              <Typography variant="caption" className="ink-text-muted block mt-3">
-                {t.pricing.ctaPaypalHint}
+            <Button variant="ink" className="mt-6" disabled>
+              {t.pricing.ctaCheckoutSoon}
+            </Button>
+            <Typography variant="caption" className="ink-text-muted block mt-3">
+              {t.pricing.checkoutHint}
+            </Typography>
+          </Card>
+
+          <Card className="ink-pricing-card ink-pricing-card--ai p-6">
+            <Flex align="center" gap={2} className="mb-1">
+              <Typography variant="h3" className="font-semibold mb-0">
+                {t.pricing.aiTitle}
               </Typography>
-            ) : null}
+              <Badge variant="success">{t.pricing.aiBadge}</Badge>
+            </Flex>
+            <Typography variant="h2" className="text-3xl font-bold mb-1">
+              {PLAN_PRICES.ai.label}
+              <Typography variant="caption" className="ink-text-muted ml-2 font-normal">
+                {t.pricing.aiPeriod}
+              </Typography>
+            </Typography>
+            <Typography variant="body2" className="ink-text-muted mb-4">
+              {t.pricing.aiBody.replace('{tokens}', tokenLabel)}
+            </Typography>
+            <ul className="ink-pricing-list">
+              {PLAN_FEATURE_KEYS.ai.map((key) => (
+                <li key={key}>
+                  {key === 'aiItemTokens'
+                    ? t.pricing.aiItemTokens.replace('{tokens}', tokenLabel)
+                    : t.pricing[key]}
+                </li>
+              ))}
+            </ul>
+            <Button variant="ink" className="mt-6" disabled>
+              {t.pricing.ctaCheckoutSoon}
+            </Button>
+            <Typography variant="caption" className="ink-text-muted block mt-3">
+              {t.pricing.checkoutHint}
+            </Typography>
           </Card>
         </div>
 
         <section className="ink-paper p-6 mb-8">
           <Typography variant="h4" className="font-semibold mb-3">
-            {t.pricing.autoTitle}
+            {t.pricing.apiTitle}
           </Typography>
-          <ol className="ink-pricing-steps mb-4">
-            <li>{t.pricing.autoStep1}</li>
-            <li>{t.pricing.autoStep2}</li>
-            <li>{t.pricing.autoStep3}</li>
-            <li>{t.pricing.autoStep4}</li>
-          </ol>
-          <Typography variant="caption" className="ink-text-muted block mb-2">
-            {t.pricing.autoReturnLabel}
+          <Typography variant="body2" className="ink-text-muted mb-4">
+            {t.pricing.apiBody}
           </Typography>
-          <pre className="ink-code">{PREMIUM_SUCCESS_URL}</pre>
-        </section>
-
-        <section className="ink-paper p-6 mb-8">
-          <Typography variant="h4" className="font-semibold mb-3">
-            {t.pricing.paypalTitle}
+          <pre className="ink-code mb-3">{`VITE_INK_API_URL=${INK_API_URL || 'https://api.inkforgejs.com'}
+Authorization: Bearer <jwt>`}</pre>
+          <Typography variant="caption" className="ink-text-muted block">
+            {t.pricing.apiAuthNote}
           </Typography>
-          <ol className="ink-pricing-steps mb-4">
-            <li>{t.pricing.paypalStep1}</li>
-            <li>{t.pricing.paypalStep2}</li>
-            <li>{t.pricing.paypalStep3}</li>
-            <li>{t.pricing.paypalStep4}</li>
-          </ol>
-          <Flex gap={4} className="flex-wrap">
-            <a href={PAYPAL_BUSINESS_URL} target="_blank" rel="noopener noreferrer" className="ink-doc-link">
-              {t.pricing.paypalBusiness}
-            </a>
-            <a href={PAYPAL_BUTTONS_URL} target="_blank" rel="noopener noreferrer" className="ink-doc-link">
-              {t.pricing.paypalButtons}
-            </a>
-          </Flex>
         </section>
 
         <section className="ink-paper p-6">
           <Typography variant="h4" className="font-semibold mb-3">
             {t.pricing.howTitle}
-          </Typography>
-          <Typography variant="body2" className="ink-text-muted mb-4">
-            {t.pricing.howPortalNote}
           </Typography>
           <Typography variant="body2" className="ink-text-muted mb-4">
             {t.pricing.howNpmNote}

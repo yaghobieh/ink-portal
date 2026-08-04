@@ -609,9 +609,10 @@ inkAi.registerProvider({
       {
         type: 'steps',
         items: [
-          { title: 'Local unlock', body: 'premium={{ enabled: true }} for development.' },
-          { title: 'License unlock', body: 'premium={{ licenseKey }} after checkout.' },
-          { title: 'Israel sellers', body: 'PayPal-first path documented — see payments research (do not merge IL transition PR until BE entitlement).' },
+          { title: 'Ink (free)', body: 'MIT core — no premium tokens, no hosted AI.' },
+          { title: 'Ink Pro', body: 'Theme / icons / rich paste / BYO AI key via premium + provider register.' },
+          { title: 'Ink AI', body: 'Hosted OpenAI — entitlements + token usage from ink-server (Neon).' },
+          { title: 'Portal checkout', body: 'PayPal buttons removed. Billing via ink-server when live.' },
         ],
       },
       {
