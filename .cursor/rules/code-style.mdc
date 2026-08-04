@@ -3,7 +3,13 @@ alwaysApply: true
 ---
 # Ink Portal Code Style
 
-- Types in `*.types.ts`, constants in `*.const.ts`
-- User-facing copy through `useI18n()` / Messages
-- Bear components for UI chrome
-- Path aliases: `@/*`, `@const/*`, `@pages/*`, `@components/*`, `@i18n/*`
+- Folder: `Name/Name.tsx`, `Name.types.ts`, `index.ts`; add `Name.const.ts` / `Name.utils.ts` only if needed.
+- Types in `*.types.ts`, constants in `*.const.ts`.
+- Numbers: `constants/numbers.ts` with `NUMBER_ZERO` … `NUMBER_ONE_HUNDRED`; generals: `EMPTY_STRING`.
+- No `useMemo` / `useCallback` unless needed.
+- No magic numbers/strings; no inline styling for layout.
+- User-facing copy through `useI18n()` / Messages — never hardcode UI sentences.
+- Bear components for UI chrome.
+- Path aliases: `@/*`, `@const/*`, `@pages/*`, `@components/*`, `@i18n/*`.
+- Tag work `portal` in Jira/Linear; library changes live in `ink` with tag `library`.
+- Do not name competitor products in copy.

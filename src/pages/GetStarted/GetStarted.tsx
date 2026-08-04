@@ -25,6 +25,20 @@ export const GetStarted: FC = () => {
 import '@forgedevstack/ink/styles.css';
 
 <InkEditor value={html} onChange={setHtml} typoAutoFix />`}</pre>
+        <Typography variant="h3" className="text-lg font-semibold mb-3">
+          Sign pad + draft memory
+        </Typography>
+        <pre className="ink-code mb-8">{`<InkEditor
+  defaultValue="<p>Sign below.</p>"
+  onChange={setHtml}
+  keepInMemory
+  memoryKey="getting-started"
+  features={{ signature: true, findReplace: true, horizontalRule: true }}
+  toolbar={['bold', 'italic', 'signature', 'findReplace', 'horizontalRule', 'undo', 'redo']}
+/>`}</pre>
+        <Typography variant="body2" className="ink-text-muted mb-8">
+          Test: click ✍ → draw → Insert. Refresh to confirm keepInMemory restores the draft.
+        </Typography>
         <Link to={docsPath(DEFAULT_DOCS_SLUG)}>
           <Button variant="ink">{t.getStarted.next}</Button>
         </Link>

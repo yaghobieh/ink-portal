@@ -17,6 +17,9 @@ export interface DocsPageContent {
     | 'tocTrackChanges'
     | 'tocComments'
     | 'tocBlocks'
+    | 'tocSignPad'
+    | 'tocMemory'
+    | 'tocFindReplace'
     | 'tocThemes'
     | 'tocTypo'
     | 'tocAi'
@@ -71,7 +74,22 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Controlled HTML via value / onChange. New in 1.1: variant, features, trackChanges, comments, showCommentsPanel, ai, slashCommands, author, tableRows / tableCols.',
+        text: 'Controlled HTML via value / onChange. 1.1.x adds variant, features, trackChanges, comments, showCommentsPanel, ai, slashCommands, author, tableRows / tableCols, keepInMemory, memoryKey.',
+      },
+      {
+        type: 'code',
+        code: `<InkEditor
+  value={html}
+  onChange={setHtml}
+  keepInMemory
+  memoryKey="my-draft"
+  features={{
+    table: true,
+    signature: true,
+    findReplace: true,
+    horizontalRule: true,
+  }}
+/>`,
       },
     ],
   },
@@ -81,7 +99,21 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Toolbar options include table, undo, redo, trackChanges, comments, ai plus classic formats. Presets: INK_DEFAULT_TOOLBAR, INK_SIMPLE_TOOLBAR, INK_COLLAB_TOOLBAR.',
+        text: 'Toolbar options include table, signature, findReplace, horizontalRule, undo, redo, trackChanges, comments, ai plus classic formats. Presets: INK_DEFAULT_TOOLBAR, INK_SIMPLE_TOOLBAR, INK_COLLAB_TOOLBAR.',
+      },
+      {
+        type: 'code',
+        code: `toolbar={[
+  'bold',
+  'italic',
+  'divider',
+  'signature',
+  'findReplace',
+  'horizontalRule',
+  'divider',
+  'undo',
+  'redo',
+]}`,
       },
     ],
   },
@@ -91,7 +123,7 @@ export function App() {
     blocks: [
       {
         type: 'p',
-        text: 'Pass features={{ table, trackChanges, comments, ai, blocks, slash }} to enable modules. Legacy props typoAutoFix, allowImagePaste, showCharCount still work.',
+        text: 'Pass features={{ table, trackChanges, comments, ai, blocks, slash, signature, findReplace, horizontalRule }} to enable modules. Legacy props typoAutoFix, allowImagePaste, showCharCount still work.',
       },
     ],
   },
@@ -132,6 +164,76 @@ export function App() {
       {
         type: 'p',
         text: 'Document/classic variants outline the active block. Block handles move up/down. Slash menu: type / for heading, list, table, AI.',
+      },
+    ],
+  },
+  {
+    id: 'sign-pad',
+    labelKey: 'tocSignPad',
+    blocks: [
+      {
+        type: 'p',
+        text: 'Sign pad (1.1.2) opens a canvas from the toolbar. Draw with pointer/touch, then Insert to place a PNG image in the document.',
+      },
+      {
+        type: 'code',
+        code: `import { useState } from 'react';
+import { InkEditor } from '@forgedevstack/ink';
+import '@forgedevstack/ink/styles.css';
+
+export function ContractEditor() {
+  const [html, setHtml] = useState('<p>Sign below.</p>');
+  return (
+    <InkEditor
+      value={html}
+      onChange={setHtml}
+      features={{ signature: true }}
+      toolbar={['bold', 'italic', 'divider', 'signature', 'undo', 'redo']}
+    />
+  );
+}`,
+      },
+      {
+        type: 'p',
+        text: 'How to test: open Playground → click ✍ → draw → Insert. The signature appears as an <img> in the HTML.',
+      },
+    ],
+  },
+  {
+    id: 'keep-in-memory',
+    labelKey: 'tocMemory',
+    blocks: [
+      {
+        type: 'p',
+        text: 'keepInMemory stores draft HTML in localStorage under ink-memory:{memoryKey}. Use a unique memoryKey per editor instance. Uncontrolled mode (no value prop) restores on mount; controlled value skips restore so React stays source of truth.',
+      },
+      {
+        type: 'code',
+        code: `<InkEditor
+  defaultValue="<p>Draft…</p>"
+  onChange={setHtml}
+  keepInMemory
+  memoryKey="contract-draft"
+/>`,
+      },
+    ],
+  },
+  {
+    id: 'find-replace',
+    labelKey: 'tocFindReplace',
+    blocks: [
+      {
+        type: 'p',
+        text: 'Find & replace walks text nodes only — attribute values (class, href) are left intact. Replace one or replace all from the toolbar panel.',
+      },
+      {
+        type: 'code',
+        code: `<InkEditor
+  value={html}
+  onChange={setHtml}
+  features={{ findReplace: true }}
+  toolbar={['findReplace', 'bold', 'italic']}
+/>`,
       },
     ],
   },
