@@ -22,6 +22,10 @@ export const HOME_HERO_TOOLBAR: ToolbarOption[] = [
   'blockquote',
   'link',
   'code',
+  'divider',
+  'signature',
+  'findReplace',
+  'horizontalRule',
 ];
 
 export const HOME_GALLERY = [

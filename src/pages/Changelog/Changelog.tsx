@@ -21,7 +21,8 @@ export const Changelog: FC = () => {
             1.1.2
           </Typography>
           <ul className="list-disc pl-5 text-slate-600 space-y-1">
-            <li>Sign pad, keep-in-memory drafts, find and replace</li>
+            <li>Sign pad, keep-in-memory drafts, find and replace, horizontal rule</li>
+            <li>Docs pages + code examples for sign pad / memory / find-replace</li>
             <li>Product copy cleanup — Ink-only voice</li>
           </ul>
         </section>

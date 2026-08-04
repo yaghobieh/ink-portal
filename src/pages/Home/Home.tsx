@@ -138,6 +138,9 @@ export const Home: FC = () => {
                     ai: false,
                     blocks: true,
                     slash: true,
+                    signature: true,
+                    findReplace: true,
+                    horizontalRule: true,
                   }}
                   placeholder="Start writing…"
                 />

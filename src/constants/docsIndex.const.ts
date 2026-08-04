@@ -69,6 +69,24 @@ export const DOCS_INDEX: DocsIndexEntry[] = [
     path: `${ROUTES.DOCS}/blocks`,
   },
   {
+    id: 'sign-pad',
+    title: 'Sign pad',
+    keywords: ['signature', 'sign', 'pad', 'canvas', 'png', 'image'],
+    path: `${ROUTES.DOCS}/sign-pad`,
+  },
+  {
+    id: 'keep-in-memory',
+    title: 'Keep in memory',
+    keywords: ['memory', 'localstorage', 'draft', 'persist', 'keepInMemory'],
+    path: `${ROUTES.DOCS}/keep-in-memory`,
+  },
+  {
+    id: 'find-replace',
+    title: 'Find & replace',
+    keywords: ['find', 'replace', 'search', 'text'],
+    path: `${ROUTES.DOCS}/find-replace`,
+  },
+  {
     id: 'themes',
     title: 'Themes',
     keywords: ['theme', 'css', 'variables', 'snow', 'dark', 'minimal'],

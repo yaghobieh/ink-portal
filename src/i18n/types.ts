@@ -47,6 +47,9 @@ export interface Messages {
     tocTrackChanges: string;
     tocComments: string;
     tocBlocks: string;
+    tocSignPad: string;
+    tocMemory: string;
+    tocFindReplace: string;
     tocAngular: string;
     tocWordpress: string;
     tocA11y: string;
