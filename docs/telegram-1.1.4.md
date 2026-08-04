@@ -5,9 +5,7 @@ Sprint and release are synced on `release/1.1.4` (no npm bump until merge to mai
 Portal
 - PayPal checkout UI removed/disabled
 - Packages: Ink (free) · Pro ($29 once, BYO AI) · AI ($19/mo, 100k tokens, hosted OpenAI)
-- Masonry gallery + �
-- Packages: Ink (free) · Pro ($29 once, BYO AI) · AI ($19/mo, 100k tokens, hosted OpenAI)
-- Masonry gallery + ⌘K / Ctrl+K search
+- Masonry gallery + Cmd/Ctrl+K search
 - PR merged: https://github.com/yaghobieh/ink-portal/pull/8
 
 Backend
