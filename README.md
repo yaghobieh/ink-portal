@@ -1,8 +1,8 @@
 # ink-portal
 
-Docs + playground for [`@forgedevstack/ink`](https://www.npmjs.com/package/@forgedevstack/ink) (current published: **1.1.3**).
+Docs + playground for [`@forgedevstack/ink`](https://www.npmjs.com/package/@forgedevstack/ink) (lib **1.1.3**, portal **1.1.4**).
 
-Sprint / release sync: work targets **`release/1.1.4`**. Do **not** bump portal or lib versions until that release merges to `main`.
+Sprint / release sync: work targets **`release/1.1.4`**. Keep `@forgedevstack/ink` at `^1.1.3` until the lib release merges to `main`.
 
 ## Develop
 
