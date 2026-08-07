@@ -254,4 +254,11 @@ export const en: Messages = {
     ctaPlayground: 'Open playground',
     ctaDemos: 'Browse demos',
   },
+  login: {
+    title: 'Sign in',
+    description: 'Sign in with Google to access your Ink account, entitlements, and AI usage.',
+    google: 'Continue with Google',
+    googleLoading: 'Redirecting…',
+    error: 'Could not start Google sign-in. Check the API URL and try again.',
+  },
 };

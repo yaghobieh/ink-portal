@@ -222,4 +222,11 @@ export interface Messages {
     ctaPlayground: string;
     ctaDemos: string;
   };
+  login: {
+    title: string;
+    description: string;
+    google: string;
+    googleLoading: string;
+    error: string;
+  };
 }

@@ -253,4 +253,11 @@ export const es: Messages = {
     ctaPlayground: 'Abrir playground',
     ctaDemos: 'Ver demos',
   },
+  login: {
+    title: 'Iniciar sesión',
+    description: 'Inicia sesión con Google para acceder a tu cuenta Ink, entitlements y uso de IA.',
+    google: 'Continuar con Google',
+    googleLoading: 'Redirigiendo…',
+    error: 'No se pudo iniciar el acceso con Google. Revisa la URL de la API e inténtalo de nuevo.',
+  },
 };

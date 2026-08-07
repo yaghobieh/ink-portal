@@ -11,6 +11,7 @@ import { Ai } from '@pages/Ai';
 import { DemoPage, Demos } from '@pages/Demos';
 import { Pricing } from '@pages/Pricing';
 import { PremiumSuccess } from '@pages/PremiumSuccess';
+import { Login } from '@pages/Login';
 
 const routes = [
   { path: ROUTES.HOME, name: 'home', component: Home },
@@ -30,6 +31,7 @@ const routes = [
   { path: ROUTES.AI, name: 'ai', component: Ai },
   { path: ROUTES.PREMIUM_SUCCESS, name: 'premium-success', component: PremiumSuccess },
   { path: ROUTES.PRICING, name: 'pricing', component: Pricing },
+  { path: ROUTES.LOGIN, name: 'login', component: Login },
 ];
 
 export const App = () => (
