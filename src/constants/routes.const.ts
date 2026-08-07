@@ -17,9 +17,11 @@ export const ROUTES = {
   PRICING: '/pricing',
   PREMIUM_SUCCESS: '/pricing/success',
   LOGIN: '/login',
+  LAB: '/lab',
 } as const;
 
 export const INK_VERSION = '1.1.3';
+export const PORTAL_VERSION = '1.1.4';
 
 export const NAV_LINKS = [
   { id: 'docs' as const, href: ROUTES.DOCS },
@@ -29,4 +31,5 @@ export const NAV_LINKS = [
   { id: 'pricing' as const, href: ROUTES.PRICING },
   { id: 'getStarted' as const, href: ROUTES.GET_STARTED },
   { id: 'changelog' as const, href: ROUTES.CHANGELOG },
+  { id: 'lab' as const, href: ROUTES.LAB },
 ];

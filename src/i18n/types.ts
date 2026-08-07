@@ -19,6 +19,7 @@ export interface Messages {
     pricing: string;
     getStarted: string;
     changelog: string;
+    lab: string;
     premium: string;
     toggleTheme: string;
     searchPlaceholder: string;
@@ -228,5 +229,21 @@ export interface Messages {
     google: string;
     googleLoading: string;
     error: string;
+    statsTitle: string;
+    statsDescription: string;
+    statsLoading: string;
+    statsError: string;
+    email: string;
+    name: string;
+    plan: string;
+    tokens: string;
+    period: string;
+    signOut: string;
+  };
+  lab: {
+    title: string;
+    description: string;
+    note: string;
+    placeholder: string;
   };
 }
