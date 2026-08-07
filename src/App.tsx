@@ -1,7 +1,7 @@
 import { CompassProvider, Routes } from '@forgedevstack/forge-compass/react';
 import { ThemeSync } from '@components/ThemeSync';
 import { InkPremiumProvider } from '@hooks/index';
-import { ROUTES } from '@const/index';
+import { ENABLE_LAB, ROUTES } from '@const/index';
 import { Home } from '@pages/Home';
 import { Docs } from '@pages/Docs';
 import { Playground } from '@pages/Playground';
@@ -33,7 +33,7 @@ const routes = [
   { path: ROUTES.PREMIUM_SUCCESS, name: 'premium-success', component: PremiumSuccess },
   { path: ROUTES.PRICING, name: 'pricing', component: Pricing },
   { path: ROUTES.LOGIN, name: 'login', component: Login },
-  { path: ROUTES.LAB, name: 'lab', component: Lab },
+  ...(ENABLE_LAB ? [{ path: ROUTES.LAB, name: 'lab', component: Lab }] : []),
 ];
 
 export const App = () => (
