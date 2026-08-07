@@ -2,6 +2,8 @@ import type { FC } from 'react';
 import { Flex, Typography } from '@forgedevstack/bear';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { useI18n } from '@i18n/index';
+import { useAccountUsage, useAuth } from '@hooks/index';
+import { formatTokenUsage, formatTokensRemaining } from '@/utils';
 import {
   BEAR_URL,
   FORGESTACK_URL,
@@ -20,6 +22,8 @@ const ECOSYSTEM = [
 
 export const Footer: FC = () => {
   const { t } = useI18n();
+  const { isAuthenticated } = useAuth();
+  const { loading, error, usage } = useAccountUsage();
 
   return (
     <footer className="ink-footer mt-auto">
@@ -71,13 +75,48 @@ export const Footer: FC = () => {
           </div>
         </div>
 
-        <div className="ink-footer__bottom mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <Typography variant="caption" className="ink-text-muted">
-            {t.footer.mitLicense} · {t.footer.builtWith} ForgeStack
-          </Typography>
-          <Typography variant="caption" className="ink-text-muted">
-            {t.footer.domainNote}
-          </Typography>
+        <div className="ink-footer__bottom mt-8 pt-6 flex flex-col gap-3">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+            <Typography variant="caption" className="ink-text-muted">
+              {t.footer.mitLicense} · {t.footer.builtWith} ForgeStack
+            </Typography>
+            <Typography variant="caption" className="ink-text-muted">
+              {t.footer.domainNote}
+            </Typography>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+            {!isAuthenticated ? (
+              <Typography variant="caption" className="ink-text-muted">
+                <Link to={ROUTES.LOGIN} className="ink-footer-link">
+                  {t.footer.tokensSignIn}
+                </Link>
+              </Typography>
+            ) : null}
+            {isAuthenticated && loading ? (
+              <Typography variant="caption" className="ink-text-muted">
+                {t.footer.tokensLoading}
+              </Typography>
+            ) : null}
+            {isAuthenticated && error && !usage ? (
+              <Typography variant="caption" className="ink-text-muted">
+                {t.footer.tokensError}
+              </Typography>
+            ) : null}
+            {isAuthenticated && usage ? (
+              <Flex direction="column" gap={0} className="w-full sm:w-auto">
+                <Typography variant="caption" className="ink-text-muted mb-0">
+                  {t.footer.tokensUsed}: {formatTokenUsage(usage.tokensUsed, usage.tokensLimit)}
+                </Typography>
+                <Typography variant="caption" className="ink-text-muted mb-0">
+                  {t.footer.tokensRemaining}:{' '}
+                  {formatTokensRemaining(usage.tokensUsed, usage.tokensLimit).toLocaleString()}
+                </Typography>
+                <Typography variant="caption" className="ink-text-muted mb-0">
+                  {t.footer.tokensLimit}: {usage.tokensLimit.toLocaleString()}
+                </Typography>
+              </Flex>
+            ) : null}
+          </div>
         </div>
       </div>
     </footer>

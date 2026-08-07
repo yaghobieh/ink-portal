@@ -32,6 +32,12 @@ export interface Messages {
     ecosystem: string;
     resources: string;
     domainNote: string;
+    tokensUsed: string;
+    tokensRemaining: string;
+    tokensLimit: string;
+    tokensSignIn: string;
+    tokensLoading: string;
+    tokensError: string;
   };
   docs: {
     title: string;
@@ -214,6 +220,14 @@ export interface Messages {
     apiAuthNote: string;
     howTitle: string;
     howNpmNote: string;
+    usageTitle: string;
+    usageBody: string;
+    usageUsed: string;
+    usageRemaining: string;
+    usageLimit: string;
+    usageSignIn: string;
+    usageLoading: string;
+    usageError: string;
   };
   premiumSuccess: {
     badge: string;

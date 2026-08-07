@@ -1,6 +1,7 @@
 export { InkPremiumProvider, useInkPremium } from './InkPremiumProvider';
 export { PREMIUM_LICENSE_QUERY, PREMIUM_PAID_QUERY } from './premium.const';
 export { useAuth } from './useAuth';
+export { useAccountUsage } from './useAccountUsage';
 export {
   AUTH_TOKEN_STORAGE_KEY,
   AUTH_GOOGLE_PATH,
@@ -16,3 +17,4 @@ export type {
   UsageResponse,
   UseAuthResult,
 } from './auth.types';
+export type { AccountUsageState } from './useAccountUsage.types';

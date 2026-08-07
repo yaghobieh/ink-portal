@@ -2,8 +2,9 @@ import type { FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { Badge, Button, Card, Flex, Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
-import { useInkPremium } from '@hooks/index';
+import { useAccountUsage, useAuth, useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
+import { formatTokenUsage, formatTokensRemaining } from '@/utils';
 import {
   INK_API_URL,
   INK_PREMIUM_LICENSE_EXAMPLE,
@@ -16,6 +17,8 @@ import {
 export const Pricing: FC = () => {
   const { t } = useI18n();
   const { active, clear } = useInkPremium();
+  const { isAuthenticated } = useAuth();
+  const { loading: usageLoading, error: usageError, usage } = useAccountUsage();
   const tokenLabel = PLAN_AI_TOKENS_MONTHLY.toLocaleString();
 
   return (
@@ -27,6 +30,51 @@ export const Pricing: FC = () => {
         <Typography variant="body1" className="ink-text-muted mb-10 max-w-2xl text-lg">
           {t.pricing.description}
         </Typography>
+
+        <section className="ink-paper p-6 mb-10">
+          <Typography variant="h4" className="font-semibold mb-2">
+            {t.pricing.usageTitle}
+          </Typography>
+          <Typography variant="body2" className="ink-text-muted mb-4">
+            {t.pricing.usageBody}
+          </Typography>
+          {!isAuthenticated ? (
+            <Flex direction="column" gap={2}>
+              <Typography variant="body2" className="mb-0">
+                {t.pricing.usageSignIn}
+              </Typography>
+              <Link to={ROUTES.LOGIN}>
+                <Button variant="ink" size="sm">
+                  {t.login.title}
+                </Button>
+              </Link>
+            </Flex>
+          ) : null}
+          {isAuthenticated && usageLoading ? (
+            <Typography variant="body2" className="mb-0">
+              {t.pricing.usageLoading}
+            </Typography>
+          ) : null}
+          {isAuthenticated && usageError && !usage ? (
+            <Typography variant="body2" className="text-red-600 mb-0">
+              {t.pricing.usageError}
+            </Typography>
+          ) : null}
+          {isAuthenticated && usage ? (
+            <Flex direction="column" gap={1}>
+              <Typography variant="body2" className="mb-0">
+                {t.pricing.usageUsed}: {formatTokenUsage(usage.tokensUsed, usage.tokensLimit)}
+              </Typography>
+              <Typography variant="body2" className="mb-0">
+                {t.pricing.usageRemaining}:{' '}
+                {formatTokensRemaining(usage.tokensUsed, usage.tokensLimit).toLocaleString()}
+              </Typography>
+              <Typography variant="body2" className="mb-0">
+                {t.pricing.usageLimit}: {usage.tokensLimit.toLocaleString()}
+              </Typography>
+            </Flex>
+          ) : null}
+        </section>
 
         {active ? (
           <section className="ink-paper p-6 mb-10">

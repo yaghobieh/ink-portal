@@ -33,6 +33,12 @@ export const es: Messages = {
     ecosystem: 'Ecosistema ForgeStack',
     resources: 'Recursos',
     domainNote: 'inkforgejs.com — regístralo en tu registrador si aún no está activo.',
+    tokensUsed: 'Tokens usados',
+    tokensRemaining: 'Restantes',
+    tokensLimit: 'Máximo del plan',
+    tokensSignIn: 'Inicia sesión para ver tu saldo de tokens de IA.',
+    tokensLoading: 'Cargando uso de tokens…',
+    tokensError: 'No se pudo cargar el uso de tokens.',
   },
   docs: {
     title: 'Documentación',
@@ -245,6 +251,15 @@ export const es: Messages = {
     howTitle: 'Tus propias apps (npm)',
     howNpmNote:
       'Apps con @forgedevstack/ink pasan la license una vez (env o backend). Ejemplo:',
+    usageTitle: 'Tu saldo de tokens de IA',
+    usageBody:
+      'Ink AI hospedado mide tokens en ink-server (JWT → GET /api/usage). El máximo es el techo mensual de tu cuenta.',
+    usageUsed: 'Usados en el periodo',
+    usageRemaining: 'Restantes',
+    usageLimit: 'Máximo del plan',
+    usageSignIn: 'Inicia sesión para ver líneas de usados / restantes / máximo de tu plan.',
+    usageLoading: 'Cargando uso…',
+    usageError: 'No se pudo cargar el uso desde la API.',
   },
   premiumSuccess: {
     badge: 'Cuenta',
