@@ -58,9 +58,6 @@ export const Footer: FC = () => {
               <Link to={ROUTES.DOCS} className="ink-footer-link">
                 <Typography variant="caption">{t.ctaDocs}</Typography>
               </Link>
-              <Link to={ROUTES.PLAYGROUND} className="ink-footer-link">
-                <Typography variant="caption">{t.ctaPlayground}</Typography>
-              </Link>
               <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="ink-footer-link">
                 <Typography variant="caption">npm</Typography>
               </a>

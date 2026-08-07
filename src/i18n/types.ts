@@ -94,6 +94,9 @@ export interface Messages {
   changelog: {
     title: string;
     description: string;
+    roadmapTitle: string;
+    roadmapBody: string;
+    toggleHint: string;
   };
   demos: {
     title: string;

@@ -94,7 +94,10 @@ export const es: Messages = {
   },
   changelog: {
     title: 'Changelog',
-    description: 'Notas de versión de @forgedevstack/ink.',
+    description: 'Notas de versión de @forgedevstack/ink. Expande una versión para ver detalles.',
+    roadmapTitle: 'Próximo en 1.1.5',
+    roadmapBody: 'Atajos, agente IA real, tablas avanzadas, MCP Excel y docs con GIFs.',
+    toggleHint: 'Expandir / colapsar',
   },
   demos: {
     title: 'Demos',

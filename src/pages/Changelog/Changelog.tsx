@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
 import { useI18n } from '@i18n/index';
+import { CHANGELOG_ENTRIES, ROADMAP_1_1_5 } from '@const/index';
 
 export const Changelog: FC = () => {
   const { t } = useI18n();
@@ -16,60 +17,42 @@ export const Changelog: FC = () => {
           {t.changelog.description}
         </Typography>
 
-        <section className="mb-10">
-          <Typography variant="h2" className="text-xl font-bold mb-2">
-            1.1.3
+        <section className="mb-12">
+          <Typography variant="h2" className="text-xl font-bold mb-4">
+            {t.changelog.roadmapTitle}
           </Typography>
-          <ul className="list-disc pl-5 text-slate-600 space-y-1">
-            <li>Docs: live DocDemo (Demo / Code / HTML / Payload) on Configuration, Blocks, Tables, TC, Comments, Sign pad, Memory, Find/replace, AI</li>
-            <li>Pin <code>@forgedevstack/ink@1.1.3</code></li>
-            <li>Vercel deploys only from <code>main</code>/<code>master</code> (release merges)</li>
+          <Typography variant="body2" className="text-slate-500 mb-4">
+            {t.changelog.roadmapBody}
+          </Typography>
+          <ul className="space-y-3">
+            {ROADMAP_1_1_5.map((item) => (
+              <li key={item.id} className="ink-paper p-4">
+                <Typography variant="body2" className="font-semibold mb-1">
+                  {item.title}
+                </Typography>
+                <Typography variant="caption" className="text-slate-500 mb-0">
+                  {item.body}
+                </Typography>
+              </li>
+            ))}
           </ul>
         </section>
 
-        <section className="mb-10">
-          <Typography variant="h2" className="text-xl font-bold mb-2">
-            1.1.2
-          </Typography>
-          <ul className="list-disc pl-5 text-slate-600 space-y-1">
-            <li>Sign pad, keep-in-memory drafts, find and replace, horizontal rule</li>
-            <li>Docs pages + code examples for sign pad / memory / find-replace</li>
-            <li>Product copy cleanup — Ink-only voice</li>
-          </ul>
-        </section>
-
-        <section className="mb-10">
-          <Typography variant="h2" className="text-xl font-bold mb-2">
-            1.1.0
-          </Typography>
-          <ul className="list-disc pl-5 text-slate-600 space-y-1">
-            <li>Document shell, document variant, block handles, slash commands</li>
-            <li>Tables, track changes, comments archive, undo/redo toolbar</li>
-            <li>Ink AI suite — chat, quick actions, review, translate, demo provider, model catalog</li>
-            <li>Portal demos hub, AI marketing page, playground module toggles</li>
-          </ul>
-        </section>
-
-        <section className="mb-10">
-          <Typography variant="h2" className="text-xl font-bold mb-2">
-            1.0.1
-          </Typography>
-          <ul className="list-disc pl-5 text-slate-600 space-y-1">
-            <li>Expanded README: props, toolbar options, CSS variables</li>
-            <li>Theme CSS classes documented for snow / bubble / dark / minimal</li>
-            <li>Portal docs + playground ship alongside</li>
-          </ul>
-        </section>
-
-        <section>
-          <Typography variant="h2" className="text-xl font-bold mb-2">
-            1.0.0
-          </Typography>
-          <ul className="list-disc pl-5 text-slate-600 space-y-1">
-            <li>Initial InkEditor release with toolbar, typo auto-fix MVP, AI stub</li>
-            <li>Angular helpers and WordPress plugin stub</li>
-          </ul>
-        </section>
+        <div className="space-y-3">
+          {CHANGELOG_ENTRIES.map((entry) => (
+            <details key={entry.version} className="ink-paper p-4" open={entry.defaultOpen}>
+              <summary className="cursor-pointer list-none font-semibold text-lg flex items-center justify-between">
+                <span>{entry.version}</span>
+                <span className="text-slate-400 text-sm font-normal">{t.changelog.toggleHint}</span>
+              </summary>
+              <ul className="list-disc pl-5 text-slate-600 space-y-1 mt-3">
+                {entry.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </details>
+          ))}
+        </div>
       </div>
     </Layout>
   );

@@ -1,3 +1,5 @@
+import { ENABLE_LAB } from './env.const';
+
 export const ROUTES = {
   HOME: '/',
   DOCS: '/docs',
@@ -23,13 +25,15 @@ export const ROUTES = {
 export const INK_VERSION = '1.1.3';
 export const PORTAL_VERSION = '1.1.4';
 
-export const NAV_LINKS = [
+const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },
   { id: 'demos' as const, href: ROUTES.DEMOS },
   { id: 'ai' as const, href: ROUTES.AI },
-  { id: 'playground' as const, href: ROUTES.PLAYGROUND },
   { id: 'pricing' as const, href: ROUTES.PRICING },
   { id: 'getStarted' as const, href: ROUTES.GET_STARTED },
   { id: 'changelog' as const, href: ROUTES.CHANGELOG },
-  { id: 'lab' as const, href: ROUTES.LAB },
 ];
+
+export const NAV_LINKS = ENABLE_LAB
+  ? [...NAV_LINKS_BASE, { id: 'lab' as const, href: ROUTES.LAB }]
+  : NAV_LINKS_BASE;
