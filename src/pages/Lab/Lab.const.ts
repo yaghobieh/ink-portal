@@ -5,7 +5,10 @@ export const LAB_EDITOR_HTML =
 
 export const LAB_INITIAL_STATE: LabPageState = {
   value: LAB_EDITOR_HTML,
+  colorMode: 'light',
 };
+
+export const LAB_COLOR_MODES = ['light', 'dark'] as const;
 
 export const LAB_FEATURES = {
   table: true,

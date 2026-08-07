@@ -290,7 +290,10 @@ export const en: Messages = {
   lab: {
     title: 'Lab',
     description: 'Private sandbox to try new Ink features before they ship in docs.',
-    note: 'Internal testing only — not public documentation.',
+    note: 'Internal testing only — not public documentation. Dev uses local ../ink/dist when built.',
     placeholder: 'Try new features…',
+    colorMode: 'Editor theme',
+    colorLight: 'Light',
+    colorDark: 'Dark',
   },
 };

@@ -259,5 +259,8 @@ export interface Messages {
     description: string;
     note: string;
     placeholder: string;
+    colorMode: string;
+    colorLight: string;
+    colorDark: string;
   };
 }
