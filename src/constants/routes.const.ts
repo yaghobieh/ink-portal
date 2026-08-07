@@ -22,16 +22,14 @@ export const ROUTES = {
   LAB: '/lab',
 } as const;
 
-export const INK_VERSION = '1.1.3';
+export const INK_VERSION = '1.1.4';
 export const PORTAL_VERSION = '1.1.4';
 
 const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },
   { id: 'demos' as const, href: ROUTES.DEMOS },
-  { id: 'ai' as const, href: ROUTES.AI },
+  { id: 'plugins' as const, href: `${ROUTES.DOCS}/plugins` },
   { id: 'pricing' as const, href: ROUTES.PRICING },
-  { id: 'getStarted' as const, href: ROUTES.GET_STARTED },
-  { id: 'changelog' as const, href: ROUTES.CHANGELOG },
 ];
 
 export const NAV_LINKS = ENABLE_LAB

@@ -5,3 +5,6 @@ export const SITE_URL = 'https://inkforgejs.com';
 export const FORGESTACK_URL = 'https://github.com/yaghobieh';
 export const BEAR_URL = 'https://github.com/yaghobieh/bear';
 export const RAIL_URL = 'https://github.com/yaghobieh/rail';
+export const INK_EXCEL_NPM_URL = 'https://www.npmjs.com/package/@forgedevstack/ink-excel';
+export const INK_EXCEL_GITHUB_URL = 'https://github.com/yaghobieh/ink-excel';
+export const INK_EXCEL_PACKAGE_NAME = '@forgedevstack/ink-excel';

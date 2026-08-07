@@ -16,6 +16,7 @@ export interface Messages {
     demos: string;
     playground: string;
     ai: string;
+    plugins: string;
     pricing: string;
     getStarted: string;
     changelog: string;
@@ -25,6 +26,10 @@ export interface Messages {
     searchPlaceholder: string;
     searchEmpty: string;
     searchShortcut: string;
+    pluginNpm: string;
+    pluginGit: string;
+    pluginPackInk: string;
+    pluginInstallDocs: string;
   };
   footer: {
     mitLicense: string;
@@ -45,6 +50,7 @@ export interface Messages {
     tocThemes: string;
     tocTypo: string;
     tocAi: string;
+    tocPlugins: string;
     tocTables: string;
     tocTrackChanges: string;
     tocComments: string;
@@ -160,6 +166,8 @@ export interface Messages {
     galleryAiLabel: string;
     galleryCollab: string;
     galleryCollabLabel: string;
+    galleryDemo: string;
+    galleryDemoLabel: string;
     examplesTitle: string;
     examplesBody: string;
     exampleFeatureTitle: string;
@@ -248,5 +256,7 @@ export interface Messages {
     description: string;
     note: string;
     placeholder: string;
+    aiOpenAiReady: string;
+    aiOpenAiMissing: string;
   };
 }

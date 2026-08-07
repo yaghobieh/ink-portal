@@ -59,6 +59,7 @@ export interface DocsPageContent {
     | 'tocThemes'
     | 'tocTypo'
     | 'tocAi'
+    | 'tocPlugins'
     | 'tocAngular'
     | 'tocWordpress'
     | 'tocA11y'

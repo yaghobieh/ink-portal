@@ -13,4 +13,5 @@ export * from './demos.const';
 export * from './home.const';
 export * from './changelog.const';
 export * from './roadmap.const';
+export * from './plugins.const';
 

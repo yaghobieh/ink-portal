@@ -6,28 +6,48 @@ export type RoadmapItem = {
 
 export const ROADMAP_1_1_5: RoadmapItem[] = [
   {
-    id: 'shortcuts',
-    title: 'Configurable shortcuts',
-    body: 'User-overridable key map for bold, lists, headings, find, and custom commands (closes GitHub #30).',
+    id: 'docs-gif-guid',
+    title: 'GIF + GUID on every doc',
+    body: 'Each docs page gets a short GIF and a stable GUID for CMS / deep links.',
   },
   {
-    id: 'real-agent',
-    title: 'Real AI agent',
-    body: 'Hosted OpenAI via ink-server with live autocomplete, rewrite suggestions, and usage metering — not demo stubs.',
+    id: 'nav-no-ai',
+    title: 'Remove AI from top bar',
+    body: 'AI stays in the editor sidebar / Lab — not a primary marketing nav item.',
+  },
+  {
+    id: 'translation',
+    title: 'Translation',
+    body: 'Real translate flows (editor + portal copy) beyond the AI panel stub.',
+  },
+  {
+    id: 'real-login',
+    title: 'Real login + connect',
+    body: 'Google/GitHub OAuth end-to-end; entitlements from ink-server drive the editor.',
+  },
+  {
+    id: 'ink-package',
+    title: '.ink plugin packages',
+    body: 'Drag-drop .ink (like .vsix): loading UI → install → plugin active. npm/CMS remain first-class paths.',
+  },
+  {
+    id: 'new-plugins',
+    title: 'New plugins',
+    body: 'Expand catalog beyond ink-excel (MCP Excel block, more BYO handlers).',
+  },
+  {
+    id: 'cms-token',
+    title: 'CMS site control by token',
+    body: 'Register user → org + plan → token. That token scopes the full editor (features + plugins) per site.',
+  },
+  {
+    id: 'shortcuts',
+    title: 'Configurable shortcuts',
+    body: 'User-overridable key map for bold, lists, headings, find, and custom commands.',
   },
   {
     id: 'tables',
     title: 'Table power tools',
-    body: 'Split cells, Tab-advance, row/col inserts polished for CMS documents (#24, #29).',
-  },
-  {
-    id: 'mcp-excel',
-    title: 'MCP Excel plugin',
-    body: 'First-class block that syncs table/list data through MCP into Excel.',
-  },
-  {
-    id: 'docs-gifs',
-    title: 'Docs with GIFs',
-    body: 'Editor.js-style animated guides for inline toolbar, block +, and tunes.',
+    body: 'Tab auto-advance between cells; polish row/col UX after 1.1.4 context menu.',
   },
 ];

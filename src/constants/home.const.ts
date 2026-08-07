@@ -28,44 +28,39 @@ export const HOME_HERO_TOOLBAR: ToolbarOption[] = [
   'horizontalRule',
 ];
 
-export const HOME_GALLERY = [
+export const HOME_GALLERY: Array<{
+  src: string;
+  altKey: 'galleryDemo' | 'galleryHero' | 'galleryLanding' | 'galleryBlocks';
+  labelKey: 'galleryDemoLabel' | 'galleryHeroLabel' | 'galleryLandingLabel' | 'galleryBlocksLabel';
+  tall: boolean;
+  wide?: boolean;
+}> = [
   {
-    src: '/ink-landing.png',
-    altKey: 'galleryLanding' as const,
-    labelKey: 'galleryLandingLabel' as const,
+    src: '/ink-editor-demo.svg',
+    altKey: 'galleryDemo',
+    labelKey: 'galleryDemoLabel',
     tall: true,
+    wide: true,
   },
   {
-    src: '/ink-hero.png',
-    altKey: 'galleryHero' as const,
-    labelKey: 'galleryHeroLabel' as const,
+    src: '/ink-editor-demo.png',
+    altKey: 'galleryHero',
+    labelKey: 'galleryHeroLabel',
     tall: false,
-  },
-  {
-    src: '/ink-logo.png',
-    altKey: 'galleryLogo' as const,
-    labelKey: 'galleryLogoLabel' as const,
-    tall: false,
-  },
-  {
-    src: '/ink-hero.png',
-    altKey: 'galleryBlocks' as const,
-    labelKey: 'galleryBlocksLabel' as const,
-    tall: true,
   },
   {
     src: '/ink-landing.png',
-    altKey: 'galleryAi' as const,
-    labelKey: 'galleryAiLabel' as const,
+    altKey: 'galleryLanding',
+    labelKey: 'galleryLandingLabel',
     tall: false,
   },
   {
-    src: '/ink-logo.png',
-    altKey: 'galleryCollab' as const,
-    labelKey: 'galleryCollabLabel' as const,
+    src: '/ink-hero.png',
+    altKey: 'galleryBlocks',
+    labelKey: 'galleryBlocksLabel',
     tall: true,
   },
-] as const;
+];
 
 export const HOME_EXAMPLES = [
   {

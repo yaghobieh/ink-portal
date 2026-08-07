@@ -8,29 +8,29 @@ export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
   {
     version: '1.1.5 (planned)',
     items: [
-      'Configurable keyboard shortcuts (GitHub #30)',
-      'Real AI agent path (hosted OpenAI + live autocomplete / suggestions)',
-      'Table split cells + Tab row/col flows (#24, #29)',
-      'MCP Excel plugin block',
-      'Docs GIF walkthroughs (Editor.js-style)',
+      'GIF + GUID on every docs page',
+      '.ink plugin packages (drag-drop install)',
+      'CMS org / plan / token editor control',
+      'Real login + connect',
+      'Translation',
+      'Remove AI from marketing top bar (portal)',
     ],
   },
   {
-    version: '1.1.4 (in progress)',
+    version: '1.1.4',
     defaultOpen: true,
     items: [
-      'Editor.js-inspired inline toolbar, borderless chrome, colorMode light/dark',
-      'Toolbar customize / hide via right-click; opaque context menus',
-      'Font / list / find-replace dropdowns; LTR/RTL; block grip DnD',
-      'Portal: Lab local-only, token usage meter, Google login path',
-      'Common components + SCSS theming',
+      'OpenAI provider + ghost autocomplete (Tab accept)',
+      'Table dark header + right-click row/col insert & delete',
+      'Toolbar heading / font / list / find-replace dropdowns',
+      'Portal plugins nav + ink-excel catalog links',
+      '@forgedevstack/ink@1.1.4 on npm',
     ],
   },
   {
     version: '1.1.3',
-    defaultOpen: true,
     items: [
-      'Docs: live DocDemo (Demo / Code / HTML / Payload) on Configuration, Blocks, Tables, TC, Comments, Sign pad, Memory, Find/replace, AI',
+      'Docs: live DocDemo (Demo / Code / HTML / Payload)',
       'Pin @forgedevstack/ink@1.1.3',
       'Vercel deploys only from main/master (release merges)',
     ],
@@ -48,7 +48,7 @@ export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
     items: [
       'Document shell, document variant, block handles, slash commands',
       'Tables, track changes, comments archive, undo/redo toolbar',
-      'Ink AI suite — chat, quick actions, review, translate, demo provider, model catalog',
+      'Ink AI suite — chat, quick actions, review, translate, demo provider',
       'Portal demos hub, AI marketing page, playground module toggles',
     ],
   },
@@ -58,13 +58,6 @@ export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
       'Expanded README: props, toolbar options, CSS variables',
       'Theme CSS classes documented for snow / bubble / dark / minimal',
       'Portal docs + playground ship alongside',
-    ],
-  },
-  {
-    version: '1.0.0',
-    items: [
-      'Initial InkEditor release with toolbar, typo auto-fix MVP, AI stub',
-      'Angular helpers and WordPress plugin stub',
     ],
   },
 ];

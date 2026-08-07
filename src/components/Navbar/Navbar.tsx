@@ -10,12 +10,15 @@ import {
   Typography,
   useBear,
 } from '@forgedevstack/bear';
+import { PluginCatalogRow } from '@components/PluginCatalogRow';
 import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import type { Locale } from '@i18n/types';
 import {
+  CHANGELOG_ENTRIES,
   DOCS_INDEX,
   GITHUB_URL,
+  INK_PLUGIN_CATALOG,
   INK_VERSION,
   LOGO_SRC,
   NAV_LINKS,
@@ -25,7 +28,12 @@ import {
   SEARCH_INPUT_ID,
   SEARCH_MAX_RESULTS,
   docsHref,
+  docsPath,
 } from '@const/index';
+
+const PLUGINS_NAV_ID = 'plugins';
+const PLUGINS_DOCS_HREF = `${ROUTES.DOCS}/plugins`;
+const CHANGELOG_PREVIEW_COUNT = 4;
 
 const LOCALE_META: Record<Locale, { flag: string; label: string }> = {
   en: { flag: '\u{1F1FA}\u{1F1F8}', label: 'English' },
@@ -80,6 +88,36 @@ export const Navbar: FC = () => {
     onClick: () => setLocale(loc),
   }));
 
+  const latestChangelog = CHANGELOG_ENTRIES.find((entry) => entry.version.startsWith(INK_VERSION))
+    ?? CHANGELOG_ENTRIES[0];
+  const changelogItems = [
+    ...(latestChangelog?.items.slice(0, CHANGELOG_PREVIEW_COUNT).map((item, index) => ({
+      key: `cl-${index}`,
+      label: item,
+      disabled: true,
+    })) ?? []),
+    {
+      key: 'changelog-full',
+      label: t.nav.changelog,
+      onClick: () => window.location.assign(ROUTES.CHANGELOG),
+    },
+  ];
+
+  const pluginItems = [
+    ...INK_PLUGIN_CATALOG.map((plugin) => ({
+      key: plugin.id,
+      label: plugin.packageName,
+      description: t.nav.pluginPackInk,
+      onClick: () => window.location.assign(docsPath('plugins')),
+    })),
+    {
+      key: 'plugins-docs',
+      label: t.docs.tocPlugins,
+      description: t.nav.pluginInstallDocs,
+      onClick: () => window.location.assign(docsPath('plugins')),
+    },
+  ];
+
   const goToResult = (path: string) => {
     setQuery('');
     setSearchOpen(false);
@@ -90,7 +128,7 @@ export const Navbar: FC = () => {
   const navActive = (href: string) =>
     href === ROUTES.DOCS
       ? activePath === ROUTES.DOCS || activePath.startsWith(`${ROUTES.DOCS}/`)
-      : activePath === href;
+      : activePath === href || (href === PLUGINS_DOCS_HREF && activePath.startsWith(PLUGINS_DOCS_HREF));
 
   return (
     <nav className="ink-navbar sticky top-0 z-50 backdrop-blur-md">
@@ -102,9 +140,27 @@ export const Navbar: FC = () => {
               {t.brand}
             </Typography>
           </Link>
-          <Badge variant="info" className="hidden md:inline-flex text-xs font-mono">
-            v{INK_VERSION}
-          </Badge>
+          <Dropdown
+            placement="bottom-start"
+            size="sm"
+            minWidth={320}
+            closeOnSelect
+            trigger={
+              <button type="button" className="ink-version-trigger hidden md:inline-flex">
+                <Badge variant="info" className="text-xs font-mono">
+                  v{INK_VERSION}
+                </Badge>
+              </button>
+            }
+            header={
+              <div className="ink-plugins-dropdown__header">
+                <Typography variant="caption" className="ink-text-muted m-0">
+                  {t.nav.changelog}
+                </Typography>
+              </div>
+            }
+            items={changelogItems}
+          />
           {premiumActive ? (
             <Badge variant="success" className="hidden md:inline-flex text-xs">
               {t.nav.premium}
@@ -113,18 +169,58 @@ export const Navbar: FC = () => {
         </Flex>
 
         <Flex align="center" gap={5} className="hidden md:flex flex-1 justify-center">
-          {NAV_LINKS.map((item) => (
-            <Link
-              key={item.id}
-              to={item.href}
-              className="ink-nav-link"
-              data-active={navActive(item.href) ? 'true' : 'false'}
-            >
-              <Typography variant="body2" className="whitespace-nowrap">
-                {t.nav[item.id]}
-              </Typography>
-            </Link>
-          ))}
+          {NAV_LINKS.map((item) => {
+            if (item.id === PLUGINS_NAV_ID) {
+              return (
+                <Dropdown
+                  key={item.id}
+                  placement="bottom-start"
+                  size="sm"
+                  minWidth={300}
+                  closeOnSelect
+                  trigger={
+                    <button
+                      type="button"
+                      className="ink-nav-link ink-nav-link--btn"
+                      data-active={navActive(PLUGINS_DOCS_HREF) ? 'true' : 'false'}
+                    >
+                      <Typography variant="body2" className="whitespace-nowrap">
+                        {t.nav.plugins}
+                      </Typography>
+                    </button>
+                  }
+                  header={
+                    <div className="ink-plugins-dropdown__header ink-plugins-dropdown__stack">
+                      {INK_PLUGIN_CATALOG.map((plugin) => (
+                        <PluginCatalogRow
+                          key={plugin.id}
+                          name={plugin.packageName}
+                          npmUrl={plugin.npmUrl}
+                          gitUrl={plugin.gitUrl}
+                          npmLabel={t.nav.pluginNpm}
+                          gitLabel={t.nav.pluginGit}
+                        />
+                      ))}
+                    </div>
+                  }
+                  items={pluginItems}
+                />
+              );
+            }
+
+            return (
+              <Link
+                key={item.id}
+                to={item.href}
+                className="ink-nav-link"
+                data-active={navActive(item.href) ? 'true' : 'false'}
+              >
+                <Typography variant="body2" className="whitespace-nowrap">
+                  {t.nav[item.id]}
+                </Typography>
+              </Link>
+            );
+          })}
         </Flex>
 
         <div className="relative hidden lg:block w-64">

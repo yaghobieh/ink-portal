@@ -105,6 +105,12 @@ export const DOCS_INDEX: DocsIndexEntry[] = [
     path: `${ROUTES.DOCS}/ai`,
   },
   {
+    id: 'plugins',
+    title: 'Plugins',
+    keywords: ['plugin', 'excel', 'ink-excel', 'csv', 'npm', 'git', '.ink'],
+    path: `${ROUTES.DOCS}/plugins`,
+  },
+  {
     id: 'angular',
     title: 'Angular',
     keywords: ['angular', 'adapter', 'bridge'],
