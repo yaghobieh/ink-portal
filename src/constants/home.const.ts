@@ -36,14 +36,14 @@ export const HOME_GALLERY: Array<{
   wide?: boolean;
 }> = [
   {
-    src: '/ink-editor-demo.svg',
+    src: '/ink-editor-demo.gif',
     altKey: 'galleryDemo',
     labelKey: 'galleryDemoLabel',
     tall: true,
     wide: true,
   },
   {
-    src: '/ink-editor-demo.png',
+    src: '/ink-drag-drop-install.gif',
     altKey: 'galleryHero',
     labelKey: 'galleryHeroLabel',
     tall: false,

@@ -1,7 +1,7 @@
 import { useState, type FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { BearIcons, Button, Flex, Typography } from '@forgedevstack/bear';
-import { InkEditor } from '@forgedevstack/ink';
+import { InkEditor, type InkEditorVariant } from '@forgedevstack/ink';
 import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { PLAYGROUND_EDITOR_MIN_HEIGHT_PX, ROUTES } from '@const/index';
@@ -9,8 +9,13 @@ import { usePlaygroundConfig } from './hooks/usePlaygroundConfig';
 import { SectionTitle } from './components/SectionTitle';
 import { SelectRow } from './components/SelectRow';
 import { ToggleRow } from './components/ToggleRow';
-import { THEME_OPTIONS, TOOLBAR_OPTIONS } from './Playground.const';
-import type { PlaygroundTheme, PlaygroundView, ToolbarPreset } from './Playground.types';
+import { THEME_OPTIONS, TOOLBAR_OPTIONS, VARIANT_OPTIONS } from './Playground.const';
+import type {
+  PlaygroundTheme,
+  PlaygroundVariant,
+  PlaygroundView,
+  ToolbarPreset,
+} from './Playground.types';
 
 export const Playground: FC = () => {
   const { t } = useI18n();
@@ -81,6 +86,15 @@ export const Playground: FC = () => {
           className={`${showControls ? 'block' : 'hidden'} md:block w-72 lg:w-80 flex-shrink-0 overflow-y-auto p-4 bg-slate-50 border-r border-slate-200`}
         >
           <SectionTitle>{t.playground.formats}</SectionTitle>
+          <SelectRow
+            label={t.playground.variant}
+            value={config.variant}
+            options={VARIANT_OPTIONS.map((o) => ({
+              value: o.value,
+              label: t.playground[o.labelKey],
+            }))}
+            onChange={(v) => set('variant', v as PlaygroundVariant)}
+          />
           <SelectRow
             label={t.playground.formats}
             value={config.toolbarPreset}
@@ -157,11 +171,13 @@ export const Playground: FC = () => {
                 <InkEditor
                   value={html}
                   onChange={setHtml}
+                  variant={config.variant as InkEditorVariant}
                   toolbar={toolbar}
                   typoAutoFix={config.typoAutoFix}
                   allowImagePaste={config.allowImagePaste}
                   showCharCount={config.showCharCount}
                   readOnly={config.readOnly}
+                  colorMode="light"
                   minHeight={PLAYGROUND_EDITOR_MIN_HEIGHT_PX}
                   premium={premium}
                   pasteMode={active ? 'rich' : 'plain'}
@@ -177,7 +193,13 @@ export const Playground: FC = () => {
                   showCommentsPanel={config.comments}
                   ai={
                     config.ai
-                      ? { enabled: true, placement: 'sidebar', openOnInit: true, showHistory: true }
+                      ? {
+                          enabled: true,
+                          autocomplete: true,
+                          placement: 'sidebar',
+                          openOnInit: true,
+                          showHistory: true,
+                        }
                       : undefined
                   }
                 />

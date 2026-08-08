@@ -1,0 +1,1 @@
+export { MediaPages } from './MediaPages';

@@ -1,0 +1,32 @@
+name: Version check (no deploy)
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read portal version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Portal package.json version: $VERSION"
+          if ! grep -q "INK_VERSION = '$VERSION'" src/constants/routes.const.ts; then
+            echo "Warning: INK_VERSION in routes.const.ts may not match package.json ($VERSION)"
+          fi
+          if ! grep -q "PORTAL_VERSION = '$VERSION'" src/constants/routes.const.ts; then
+            echo "Warning: PORTAL_VERSION in routes.const.ts may not match package.json ($VERSION)"
+          fi
+          echo "Version check complete — no npm publish, no Vercel deploy."

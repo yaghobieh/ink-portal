@@ -652,7 +652,7 @@ setHtml(result.html);`,
       },
       {
         type: 'html',
-        html: `<figure class="ink-doc-media"><img src="/ink-drag-drop-install.svg" alt="Drag a .ink plugin onto the editor drop zone" width="720" height="400" class="ink-doc-media__img" /><figcaption class="ink-doc-media__caption">Drag &amp; drop a .ink package</figcaption></figure>`,
+        html: `<figure class="ink-doc-media"><img src="/ink-drag-drop-install.gif" alt="Drag a .ink plugin onto the editor drop zone" width="720" height="400" class="ink-doc-media__img" /><figcaption class="ink-doc-media__caption">Drag &amp; drop a .ink package</figcaption></figure>`,
       },
       {
         type: 'steps',

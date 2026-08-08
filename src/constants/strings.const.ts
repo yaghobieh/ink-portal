@@ -6,10 +6,12 @@ export const LOGO_SRC = '/ink-logo.png';
 export const HERO_IMG_SRC = '/ink-hero.png';
 export const LANDING_BG_SRC = '/ink-landing.png';
 export const ICON_SRC = '/ink-icon.svg';
-export const EDITOR_DEMO_SRC = '/ink-editor-demo.svg';
+export const EDITOR_DEMO_SRC = '/ink-editor-demo.gif';
 export const EDITOR_DEMO_STILL_SRC = '/ink-editor-demo.png';
-export const DRAG_DROP_INSTALL_SRC = '/ink-drag-drop-install.svg';
+export const DRAG_DROP_INSTALL_SRC = '/ink-drag-drop-install.gif';
 export const DRAG_DROP_INSTALL_STILL_SRC = '/ink-drag-drop-install.png';
+export const EDITOR_DEMO_ANIM_SRC = '/ink-editor-demo.svg';
+export const DRAG_DROP_INSTALL_ANIM_SRC = '/ink-drag-drop-install.svg';
 export const CTA_GITHUB = 'View on GitHub';
 
 export const THEME_CLASS_SNOW = 'ink-theme-snow';

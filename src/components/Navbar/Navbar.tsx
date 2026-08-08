@@ -11,7 +11,7 @@ import {
   useBear,
 } from '@forgedevstack/bear';
 import { PluginCatalogRow } from '@components/PluginCatalogRow';
-import { useInkPremium } from '@hooks/index';
+import { useAuth, useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import type { Locale } from '@i18n/types';
 import {
@@ -44,7 +44,9 @@ export const Navbar: FC = () => {
   const { mode, toggleMode } = useBear();
   const { t, locale, setLocale } = useI18n();
   const { active: premiumActive } = useInkPremium();
+  const { isAuthenticated, user } = useAuth();
   const route = useRoute();
+  const accountLabel = user?.name || user?.username || t.nav.account;
   const activePath = route?.path ?? ROUTES.HOME;
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -294,6 +296,13 @@ export const Navbar: FC = () => {
             aria-label={t.nav.toggleTheme}
             icon={isDark ? <BearIcons.SunIcon size="xs" /> : <BearIcons.MoonIcon size="xs" />}
           />
+          {isAuthenticated ? (
+            <Link to={ROUTES.CMS} className="hidden sm:inline-flex">
+              <Button size="sm" variant="inkOutline">
+                {accountLabel}
+              </Button>
+            </Link>
+          ) : null}
           <Link to={ROUTES.PLAYGROUND} className="hidden sm:inline-flex">
             <Button size="sm" variant="ink">
               {t.ctaPlayground}
@@ -349,6 +358,13 @@ export const Navbar: FC = () => {
               </Typography>
             </Link>
           ))}
+          {isAuthenticated ? (
+            <Link to={ROUTES.CMS} onClick={() => setMenuOpen(false)}>
+              <Typography variant="body2" className="block px-3 py-2 rounded-lg ink-nav-mobile-link">
+                {accountLabel}
+              </Typography>
+            </Link>
+          ) : null}
         </div>
       )}
     </nav>

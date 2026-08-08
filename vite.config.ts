@@ -21,6 +21,7 @@ export default defineConfig(({ command, mode }) => {
         '@': resolve(__dirname, 'src'),
         '@config': resolve(__dirname, 'src/config'),
         '@hooks': resolve(__dirname, 'src/hooks'),
+        '@sdk': resolve(__dirname, 'src/sdk'),
         '@forgedevstack/anvil': resolve(__dirname, 'src/shims/forgedevstack-anvil.ts'),
         ...(aliasLocalInk
           ? {

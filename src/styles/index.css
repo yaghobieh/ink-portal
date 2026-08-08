@@ -127,6 +127,75 @@ a {
   color: var(--ink-portal-ink) !important;
 }
 
+.ink-login-card {
+  background: #111827;
+  border: 1px solid rgba(248, 250, 252, 0.14);
+  border-radius: 0.75rem;
+  color: #f8fafc;
+  box-shadow: 0 18px 40px -28px rgb(15 118 110 / 0.45);
+}
+
+.ink-cms-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.ink-cms-pages {
+  display: grid;
+  gap: 0.75rem;
+}
+
+html:not(.dark) .ink-login-card,
+body:not(.dark) .ink-login-card {
+  background: #ffffff;
+  border-color: rgba(15, 23, 42, 0.1);
+  color: #1a1a1a;
+}
+
+.ink-login-card__title {
+  color: #f8fafc !important;
+}
+
+html:not(.dark) .ink-login-card__title,
+body:not(.dark) .ink-login-card__title {
+  color: #1a1a1a !important;
+}
+
+.ink-login-card__body {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) .ink-login-card__body,
+body:not(.dark) .ink-login-card__body {
+  color: #71717a !important;
+}
+
+.ink-login-card label,
+.ink-login-card [class*='label'] {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) .ink-login-card label,
+html:not(.dark) .ink-login-card [class*='label'],
+body:not(.dark) .ink-login-card label,
+body:not(.dark) .ink-login-card [class*='label'] {
+  color: #71717a !important;
+}
+
+.ink-login-card input {
+  background: #0b1220 !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(248, 250, 252, 0.18) !important;
+}
+
+html:not(.dark) .ink-login-card input,
+body:not(.dark) .ink-login-card input {
+  background: #f7f7f5 !important;
+  color: #1a1a1a !important;
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
 .ink-muted-label {
   color: var(--ink-portal-muted) !important;
 }

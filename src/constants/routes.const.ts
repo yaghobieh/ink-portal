@@ -18,12 +18,19 @@ export const ROUTES = {
   AI: '/ai',
   PRICING: '/pricing',
   PREMIUM_SUCCESS: '/pricing/success',
-  LOGIN: '/login',
+  TERMS: '/terms',
+  LOGIN: '/cms/login',
+  CMS: '/cms',
+  CMS_LOGIN: '/cms/login',
+  CMS_CONTENT: '/cms/content',
+  CMS_MEDIA: '/cms/media',
+  CMS_EDITORS: '/cms/editors',
+  CMS_PLANS: '/cms/plans',
   LAB: '/lab',
 } as const;
 
-export const INK_VERSION = '1.1.4';
-export const PORTAL_VERSION = '1.1.4';
+export const INK_VERSION = '1.1.5';
+export const PORTAL_VERSION = '1.1.5';
 
 const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },

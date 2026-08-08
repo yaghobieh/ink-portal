@@ -1,26 +1,52 @@
-import { useEffect, useState, type FC } from 'react';
-import { Button, Card, Flex, Spinner, Typography } from '@forgedevstack/bear';
+import { useEffect, useState, type FC, type FormEvent } from 'react';
+import { useNavigate } from '@forgedevstack/forge-compass/react';
+import { Button, Flex, Input, Spinner, Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
 import {
   AUTH_BEARER_PREFIX,
   AUTH_GOOGLE_PATH,
   AUTH_HEADER_AUTHORIZATION,
+  AUTH_LOGIN_PATH,
   AUTH_ME_PATH,
   AUTH_USAGE_PATH,
 } from '@hooks/auth.const';
-import type { GoogleAuthStartResponse, MeResponse, UsageResponse } from '@hooks/auth.types';
+import type {
+  GoogleAuthStartResponse,
+  MeResponse,
+  MeUser,
+  UsageResponse,
+} from '@hooks/auth.types';
 import { useAuth } from '@hooks/useAuth';
 import { useI18n } from '@i18n/index';
-import { INK_API_URL } from '@const/index';
-import { LOGIN_INITIAL_STATE, LOGIN_STATS_INITIAL_STATE } from './Login.const';
+import { INK_API_URL, ROUTES } from '@const/index';
+import {
+  LOGIN_INITIAL_STATE,
+  LOGIN_PASSWORD_INITIAL,
+  LOGIN_STATS_INITIAL_STATE,
+  LOGIN_USERNAME_INITIAL,
+} from './Login.const';
 import { formatTokenUsage, formatUsagePeriod } from './Login.utils';
 import type { LoginStatsState } from './Login.types';
 
 export const Login: FC = () => {
   const { t } = useI18n();
-  const { token, isAuthenticated, clearToken } = useAuth();
+  const { token, isAuthenticated, setToken, clearToken, setUserFromLogin } = useAuth();
+  const { navigate } = useNavigate();
   const [state, setState] = useState(LOGIN_INITIAL_STATE);
+  const [username, setUsername] = useState(LOGIN_USERNAME_INITIAL);
+  const [password, setPassword] = useState(LOGIN_PASSWORD_INITIAL);
   const [stats, setStats] = useState<LoginStatsState>(LOGIN_STATS_INITIAL_STATE);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthToken = params.get('token');
+    if (oauthToken) {
+      setToken(oauthToken);
+      params.delete('token');
+      const next = `${window.location.pathname}${params.toString() ? `?${params}` : ''}`;
+      window.history.replaceState({}, '', next);
+    }
+  }, [setToken]);
 
   useEffect(() => {
     if (!isAuthenticated || !token) {
@@ -87,6 +113,38 @@ export const Login: FC = () => {
     };
   }, [isAuthenticated, token]);
 
+  const onPasswordLogin = async (event: FormEvent) => {
+    event.preventDefault();
+    setState({ loading: true, error: false });
+    try {
+      if (!INK_API_URL) {
+        setState({ loading: false, error: true });
+        return;
+      }
+      const response = await fetch(`${INK_API_URL}${AUTH_LOGIN_PATH}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!response.ok) {
+        setState({ loading: false, error: true });
+        return;
+      }
+      const data = (await response.json()) as { token?: string; user?: MeUser };
+      if (!data.token) {
+        setState({ loading: false, error: true });
+        return;
+      }
+      if (data.user) setUserFromLogin(data.user);
+      setToken(data.token);
+      setPassword(LOGIN_PASSWORD_INITIAL);
+      setState({ loading: false, error: false });
+      navigate(ROUTES.CMS);
+    } catch {
+      setState({ loading: false, error: true });
+    }
+  };
+
   const onGoogleLogin = async () => {
     setState({ loading: true, error: false });
     try {
@@ -113,12 +171,12 @@ export const Login: FC = () => {
   return (
     <Layout>
       <div className="fade-in max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <Card className="p-8">
+        <div className="ink-login-card p-8">
           <Flex direction="column" gap={4}>
-            <Typography variant="h1" className="text-3xl font-bold tracking-tight mb-0">
+            <Typography variant="h1" className="ink-login-card__title text-3xl font-bold tracking-tight mb-0">
               {isAuthenticated ? t.login.statsTitle : t.login.title}
             </Typography>
-            <Typography variant="body1" className="ink-text-muted mb-0">
+            <Typography variant="body1" className="ink-login-card__body mb-0">
               {isAuthenticated ? t.login.statsDescription : t.login.description}
             </Typography>
 
@@ -166,17 +224,40 @@ export const Login: FC = () => {
                   </Flex>
                 ) : null}
 
+                <Button variant="ink" onClick={() => navigate(ROUTES.CMS)}>
+                  {t.login.openCms}
+                </Button>
                 <Button variant="outline" onClick={clearToken}>
                   {t.login.signOut}
                 </Button>
               </>
             ) : (
               <>
-                <Button
-                  variant="ink"
-                  onClick={onGoogleLogin}
-                  disabled={state.loading}
-                >
+                <form className="ink-login-form" onSubmit={onPasswordLogin}>
+                  <Flex direction="column" gap={3}>
+                    <Input
+                      id="ink-login-username"
+                      label={t.login.username}
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      autoComplete="username"
+                      required
+                    />
+                    <Input
+                      id="ink-login-password"
+                      type="password"
+                      label={t.login.password}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      autoComplete="current-password"
+                      required
+                    />
+                    <Button type="submit" variant="ink" disabled={state.loading}>
+                      {state.loading ? t.login.signingIn : t.login.signIn}
+                    </Button>
+                  </Flex>
+                </form>
+                <Button variant="inkOutline" onClick={onGoogleLogin} disabled={state.loading}>
                   {state.loading ? t.login.googleLoading : t.login.google}
                 </Button>
                 {state.error ? (
@@ -187,7 +268,7 @@ export const Login: FC = () => {
               </>
             )}
           </Flex>
-        </Card>
+        </div>
       </div>
     </Layout>
   );
