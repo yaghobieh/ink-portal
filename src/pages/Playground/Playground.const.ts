@@ -12,6 +12,7 @@ export const DEFAULT_PLAYGROUND_HTML =
 
 export const DEFAULT_CONFIG: PlaygroundConfig = {
   toolbarPreset: 'full',
+  variant: 'classic',
   typoAutoFix: true,
   allowImagePaste: true,
   showCharCount: true,
@@ -19,7 +20,7 @@ export const DEFAULT_CONFIG: PlaygroundConfig = {
   table: true,
   trackChanges: false,
   comments: false,
-  ai: false,
+  ai: true,
   blocks: true,
   theme: 'snow',
 };
@@ -80,6 +81,24 @@ export const THEME_OPTIONS: {
   { value: 'bubble', labelKey: 'themeBubble' },
   { value: 'dark', labelKey: 'themeDark' },
   { value: 'minimal', labelKey: 'themeMinimal' },
+];
+
+export const VARIANT_OPTIONS: {
+  value: PlaygroundConfig['variant'];
+  labelKey:
+    | 'variantClassic'
+    | 'variantDocument'
+    | 'variantSimple'
+    | 'variantAgent'
+    | 'variantDocx'
+    | 'variantNotion';
+}[] = [
+  { value: 'classic', labelKey: 'variantClassic' },
+  { value: 'document', labelKey: 'variantDocument' },
+  { value: 'simple', labelKey: 'variantSimple' },
+  { value: 'agent', labelKey: 'variantAgent' },
+  { value: 'docx', labelKey: 'variantDocx' },
+  { value: 'notion-like', labelKey: 'variantNotion' },
 ];
 
 export const resolveToolbar = (preset: PlaygroundConfig['toolbarPreset']): ToolbarOption[] =>

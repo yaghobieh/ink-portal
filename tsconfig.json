@@ -22,7 +22,9 @@
       "@hooks/*": ["src/hooks/*"],
       "@i18n/*": ["src/i18n/*"],
       "@config": ["src/config"],
-      "@config/*": ["src/config/*"]
+      "@config/*": ["src/config/*"],
+      "@sdk": ["src/sdk"],
+      "@sdk/*": ["src/sdk/*"]
     }
   },
   "include": ["src"]

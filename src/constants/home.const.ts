@@ -1,5 +1,6 @@
 import type { ToolbarOption } from '@forgedevstack/ink';
 import { INK_SIMPLE_TOOLBAR } from '@forgedevstack/ink';
+import { EDITOR_DEMO_SRC } from './strings.const';
 
 export const HERO_EDITOR_HTML = `<h1>Ink Editor</h1>
 <p>A modern rich text editor built for <strong>performance</strong> and <em>simplicity</em>. Nestable blocks, slash commands, and a clean API — so writing just feels right.</p>
@@ -13,6 +14,47 @@ export const HERO_EDITOR_HTML = `<h1>Ink Editor</h1>
 export const STACK_LABELS = ['React', 'Vue', 'Svelte', 'Next.js', 'Angular'] as const;
 
 export const HOME_FEATURE_IDS = ['lightweight', 'extensible', 'developer'] as const;
+
+export const HOME_AI_MEDIA_SRC = EDITOR_DEMO_SRC;
+
+export type HomeAiFeatureKey =
+  | 'aiAutocompleteTitle'
+  | 'aiGenerateTitle'
+  | 'aiHostedTitle'
+  | 'aiByoTitle';
+
+export type HomeAiFeatureBodyKey =
+  | 'aiAutocompleteBody'
+  | 'aiGenerateBody'
+  | 'aiHostedBody'
+  | 'aiByoBody';
+
+export const HOME_AI_FEATURES: Array<{
+  id: string;
+  titleKey: HomeAiFeatureKey;
+  bodyKey: HomeAiFeatureBodyKey;
+}> = [
+  {
+    id: 'autocomplete',
+    titleKey: 'aiAutocompleteTitle',
+    bodyKey: 'aiAutocompleteBody',
+  },
+  {
+    id: 'generate',
+    titleKey: 'aiGenerateTitle',
+    bodyKey: 'aiGenerateBody',
+  },
+  {
+    id: 'hosted',
+    titleKey: 'aiHostedTitle',
+    bodyKey: 'aiHostedBody',
+  },
+  {
+    id: 'byo',
+    titleKey: 'aiByoTitle',
+    bodyKey: 'aiByoBody',
+  },
+];
 
 export const HOME_HERO_TOOLBAR: ToolbarOption[] = [
   'headingDropdown',
@@ -36,14 +78,14 @@ export const HOME_GALLERY: Array<{
   wide?: boolean;
 }> = [
   {
-    src: '/ink-editor-demo.svg',
+    src: '/ink-editor-demo.gif',
     altKey: 'galleryDemo',
     labelKey: 'galleryDemoLabel',
     tall: true,
     wide: true,
   },
   {
-    src: '/ink-editor-demo.png',
+    src: '/ink-drag-drop-install.gif',
     altKey: 'galleryHero',
     labelKey: 'galleryHeroLabel',
     tall: false,
@@ -82,5 +124,3 @@ export const HOME_EXAMPLES = [
     bodyKey: 'exampleCollabBody' as const,
   },
 ] as const;
-
-export const HOME_CUSTOMERS_SOON = ['Acme Docs', 'Northwind CMS', 'Harbor Notes'] as const;

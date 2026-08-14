@@ -9,6 +9,7 @@ export * from './docsContent.const';
 export * from './docsContent.types';
 export * from './docsDemos.const';
 export * from './docsIndex.const';
+export * from './docsMedia.const';
 export * from './demos.const';
 export * from './home.const';
 export * from './changelog.const';

@@ -1,4 +1,5 @@
 export const NAV_HEIGHT_PX = 64;
+export const NAV_LOGO_SIZE_PX = 32;
 export const MAX_CONTENT_WIDTH_PX = 1280;
 export const DOCS_SIDEBAR_WIDTH_PX = 224;
 export const PLAYGROUND_CONTROLS_WIDTH_PX = 288;
@@ -11,3 +12,11 @@ export const SEARCH_MAX_RESULTS = 8;
 export const FADE_DURATION_MS = 400;
 export const CHAR_COUNT_DEFAULT_MAX = 2000;
 export const MOBILE_BREAKPOINT_PX = 768;
+export const CMS_SIDEBAR_WIDTH_PX = 256;
+export const CMS_ICON_SIZE = 18;
+export const CMS_AVATAR_INITIALS_LENGTH = 2;
+export const CMS_LOGO_SIZE_PX = 32;
+export const CMS_BAR_MAX_HEIGHT_PX = 120;
+export const CMS_RING_SIZE_PX = 96;
+export const CMS_SALES_STACK_COUNT = 3;
+export const CMS_PERCENT_BASE = 100;

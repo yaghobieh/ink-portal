@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { Badge, Button, Card, Flex, Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
+import { PlanCompareTable } from '@components/PlanCompareTable';
 import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import {
@@ -140,6 +141,10 @@ export const Pricing: FC = () => {
         </div>
 
         <section className="ink-paper p-6 mb-8">
+          <PlanCompareTable />
+        </section>
+
+        <section className="ink-paper p-6 mb-8">
           <Typography variant="h4" className="font-semibold mb-3">
             {t.pricing.apiTitle}
           </Typography>
@@ -169,6 +174,12 @@ Authorization: Bearer <jwt>`}</pre>
   wysiwyg
 />`}</pre>
         </section>
+
+        <Typography variant="caption" className="ink-text-muted block mt-10 text-center">
+          <Link to={ROUTES.TERMS} className="ink-doc-link">
+            {t.pricing.termsLink}
+          </Link>
+        </Typography>
       </div>
     </Layout>
   );

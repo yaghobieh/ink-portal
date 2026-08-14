@@ -1,0 +1,33 @@
+import {
+  DOC_DEMO_AI,
+  DOC_DEMO_BLOCKS,
+  DOC_DEMO_COMMENTS,
+  DOC_DEMO_CONFIGURATION,
+  DOC_DEMO_FIND,
+  DOC_DEMO_MEMORY,
+  DOC_DEMO_SIGN,
+  DOC_DEMO_TABLES,
+  DOC_DEMO_TRACK,
+} from '@const/docsDemos.const';
+import type { DocDemoBlock } from '@const/docsContent.types';
+import { NUMBER_TWO, NUMBER_THREE, NUMBER_FOUR } from '@const/numbers';
+
+export const DOCS_JSON_INDENT = NUMBER_TWO;
+
+export const DOCS_HEADER_LEVEL_H2 = NUMBER_TWO;
+export const DOCS_HEADER_LEVEL_H3 = NUMBER_THREE;
+export const DOCS_HEADER_LEVEL_H4 = NUMBER_FOUR;
+
+export const DOC_DEMO_BY_ID: Record<string, DocDemoBlock> = {
+  [DOC_DEMO_CONFIGURATION.id]: DOC_DEMO_CONFIGURATION,
+  [DOC_DEMO_BLOCKS.id]: DOC_DEMO_BLOCKS,
+  [DOC_DEMO_TABLES.id]: DOC_DEMO_TABLES,
+  [DOC_DEMO_TRACK.id]: DOC_DEMO_TRACK,
+  [DOC_DEMO_COMMENTS.id]: DOC_DEMO_COMMENTS,
+  [DOC_DEMO_SIGN.id]: DOC_DEMO_SIGN,
+  [DOC_DEMO_MEMORY.id]: DOC_DEMO_MEMORY,
+  [DOC_DEMO_FIND.id]: DOC_DEMO_FIND,
+  [DOC_DEMO_AI.id]: DOC_DEMO_AI,
+};
+
+export const EMPTY_DOC_HTML = '<p></p>';

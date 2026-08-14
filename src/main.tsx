@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '@forgedevstack/bear/styles.css';
 import '@forgedevstack/ink/styles.css';
+import '@forgedevstack/grid-table/grid-table.css';
 import { BearProvider } from '@forgedevstack/bear';
 import { I18nProvider } from './i18n';
 import { App } from './App';
 import { THEME_STORAGE_KEY } from '@const/index';
 import { inkTheme, inkVariants } from './config';
 import './styles/index.css';
+import './styles/cms.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

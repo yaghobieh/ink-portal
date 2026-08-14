@@ -8,7 +8,8 @@ import { useI18n } from '@i18n/index';
 import {
   GITHUB_URL,
   HERO_EDITOR_HTML,
-  HOME_CUSTOMERS_SOON,
+  HOME_AI_FEATURES,
+  HOME_AI_MEDIA_SRC,
   HOME_EXAMPLES,
   HOME_FEATURE_IDS,
   HOME_GALLERY,
@@ -226,29 +227,38 @@ export const Home: FC = () => {
 
         <section className="ink-home-section">
           <div className="ink-home-section__inner">
-            <Flex align="center" gap={2} className="mb-2">
-              <Typography variant="h2" className="ink-home-section__title mb-0">
-                {t.home.customersTitle}
-              </Typography>
-              <Badge variant="warning" className="text-xs">
-                {t.home.customersSoon}
-              </Badge>
-            </Flex>
-            <Typography variant="body1" className="ink-home-section__body">
-              {t.home.customersBody}
+            <Typography variant="h2" className="ink-home-section__title">
+              {t.home.aiSectionTitle}
             </Typography>
-            <div className="ink-home-customers">
-              {HOME_CUSTOMERS_SOON.map((name) => (
-                <div key={name} className="ink-home-customers__card">
-                  <Typography variant="body2" className="font-semibold ink-text-muted">
-                    {name}
+            <Typography variant="body1" className="ink-home-section__body">
+              {t.home.aiSectionBody}
+            </Typography>
+            <figure className="ink-home-ai__media">
+              <img
+                src={HOME_AI_MEDIA_SRC}
+                alt={t.home.aiMediaAlt}
+                className="ink-home-ai__img"
+                width={720}
+                height={400}
+              />
+            </figure>
+            <div className="ink-home-ai__grid">
+              {HOME_AI_FEATURES.map((feature) => (
+                <article key={feature.id} className="ink-home-ai__card">
+                  <Typography variant="h5" className="font-semibold mb-2">
+                    {t.home[feature.titleKey]}
                   </Typography>
-                  <Typography variant="caption" className="ink-text-muted">
-                    {t.home.customersSoon}
+                  <Typography variant="body2" className="ink-text-muted mb-0">
+                    {t.home[feature.bodyKey]}
                   </Typography>
-                </div>
+                </article>
               ))}
             </div>
+            <Flex className="mt-6">
+              <Link to={ROUTES.AI}>
+                <Button variant="ink">{t.home.aiCta}</Button>
+              </Link>
+            </Flex>
           </div>
         </section>
       </div>

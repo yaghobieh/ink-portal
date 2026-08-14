@@ -19,6 +19,4 @@ export const LAB_FEATURES = {
   horizontalRule: true,
 } as const;
 
-export const LAB_OPENAI_KEY = import.meta.env.VITE_OPENAI_API_KEY?.trim() ?? '';
-
-export const LAB_OPENAI_PROXY_BASE_URL = '/openai-proxy/v1';
+export { PORTAL_OPENAI_KEY as LAB_OPENAI_KEY, PORTAL_OPENAI_PROXY_BASE_URL as LAB_OPENAI_PROXY_BASE_URL } from '@/ai/index';

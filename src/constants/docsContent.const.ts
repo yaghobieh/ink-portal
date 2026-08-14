@@ -652,7 +652,7 @@ setHtml(result.html);`,
       },
       {
         type: 'html',
-        html: `<figure class="ink-doc-media"><img src="/ink-drag-drop-install.svg" alt="Drag a .ink plugin onto the editor drop zone" width="720" height="400" class="ink-doc-media__img" /><figcaption class="ink-doc-media__caption">Drag &amp; drop a .ink package</figcaption></figure>`,
+        html: `<figure class="ink-doc-media"><img src="/ink-drag-drop-install.gif" alt="Drag a .ink plugin onto the editor drop zone" width="720" height="400" class="ink-doc-media__img" /><figcaption class="ink-doc-media__caption">Drag &amp; drop a .ink package</figcaption></figure>`,
       },
       {
         type: 'steps',
@@ -814,21 +814,78 @@ inkAi.registerProvider({
     ],
   },
   {
+    id: 'collaboration',
+    labelKey: 'tocCollaboration',
+    blocks: [
+      {
+        type: 'p',
+        text: 'Ink ships comments, track changes, and a Collaborative MVP demo today. Realtime multiplayer presence (live cursors) is scoped as a Yjs/CRDT extension — not an opaque mock. This page documents what is production-ready versus what competes with Tiptap/Hocuspocus next.',
+      },
+      {
+        type: 'steps',
+        title: 'What ships now',
+        items: [
+          {
+            title: 'Comments',
+            body: 'Thread side-channel JSON — pure decorations over HTML, no document mutation on highlight alone.',
+          },
+          {
+            title: 'Track changes',
+            body: 'Accept / reject flow with author metadata for review workflows.',
+          },
+          {
+            title: 'Collaborative MVP demo',
+            body: 'Presence stubs for product UX; not a claimed CRDT engine.',
+          },
+          {
+            title: 'Yjs extension (roadmap)',
+            body: 'CRDT document sync + live cursors as an installable Extension — parity path vs Tiptap cloud.',
+          },
+        ],
+      },
+      {
+        type: 'p',
+        text: 'Architecture note: Ink keeps HTML as the persisted document. Collaboration decorations must stay pure (presence / cursors / comments) so they do not rewrite the core HTML until a merge step. That is the opposite of bolting OT onto contenteditable without a CRDT store.',
+      },
+      {
+        type: 'code',
+        language: 'tsx',
+        code: `<InkEditor
+  features={{ comments: true, trackChanges: true }}
+  comments={threads}
+  trackChanges={changes}
+  showCommentsPanel
+/>`,
+      },
+      {
+        type: 'p',
+        text: 'Tip: for CMS multiplayer, install the Realtime Collab (Yjs) extension from Ink CMS → Extensions when it moves from Coming to Available. Until then, use comments + revisions for review.',
+      },
+    ],
+  },
+  {
     id: 'premium',
     labelKey: 'tocPremium',
     blocks: [
       {
         type: 'p',
-        text: 'Premium unlocks theme tokens, custom icons, rich paste, onImageUpload, and wysiwyg behaviour. Same package — gate with the premium prop so free and paid surfaces share one editor binary.',
+        text: 'Monetization is explicit: MIT core stays free forever; Pro and AI are paid entitlements that fund maintenance — the failure mode Gemini flagged for Quill-style abandonware. Same package binary; gate with premium + ink-server licenses.',
       },
       {
         type: 'steps',
         title: 'What you get',
         items: [
-          { title: 'Ink (free)', body: 'MIT core — no premium tokens, no hosted AI.' },
+          { title: 'Ink (free / MIT)', body: 'Core editor — no premium tokens, no hosted AI. Safe for OSS and demos.' },
           { title: 'Ink Pro', body: 'Theme / icons / rich paste / BYO AI key via premium + provider register.' },
           { title: 'Ink AI', body: 'Hosted OpenAI — entitlements + token usage from ink-server (Neon).' },
-          { title: 'Portal checkout', body: 'PayPal buttons removed. Billing via ink-server when live.' },
+          {
+            title: 'Billing posture',
+            body: 'Global SaaS: prefer MoR (Paddle / Lemon) for tax; Israel B2B: local PSP (PayMe / Tranzila). Portal checkout wires to ink-server.',
+          },
+          {
+            title: 'Social proof',
+            body: 'Ink CMS (this portal) is the first production host. Design-partner logos replace “Coming soon” placeholders as they go live.',
+          },
         ],
       },
       {
@@ -848,6 +905,7 @@ inkAi.registerProvider({
           enabled: true,
           licenseKey: 'ink_prem_…',
           features: ['theme', 'icons', 'richPaste', 'imageUpload', 'wysiwyg'],
+          monetization: ['mit-core', 'pro-license', 'ai-usage'],
         },
       },
       {

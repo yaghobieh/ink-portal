@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="400" viewBox="0 0 720 400">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6d28d9" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#6d28d9" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="400" rx="24" fill="#f8fafc"/>
+  <rect width="720" height="400" rx="24" fill="url(#g)"/>
+  <rect x="40" y="48" width="640" height="304" rx="16" fill="#fff" stroke="#6d28d9" stroke-opacity="0.35" stroke-width="2"/>
+  <circle cx="72" cy="84" r="8" fill="#6d28d9">
+    <animate attributeName="opacity" values="1;0.4;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="96" y="90" font-family="ui-sans-serif,system-ui" font-size="18" font-weight="700" fill="#6d28d9">Collab</text>
+  <text x="72" y="140" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="22" fill="#0f172a">live co-edit</text>
+  <rect x="72" y="170" width="420" height="14" rx="7" fill="#6d28d9" fill-opacity="0.15">
+    <animate attributeName="width" values="120;420;280;420" dur="3.5s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="72" y="200" width="320" height="12" rx="6" fill="#cbd5e1"/>
+  <rect x="72" y="228" width="360" height="12" rx="6" fill="#e2e8f0"/>
+  <rect x="72" y="256" width="240" height="12" rx="6" fill="#e2e8f0"/>
+  <text x="72" y="320" font-family="ui-sans-serif,system-ui" font-size="13" fill="#64748b">Ink docs · collaboration</text>
+</svg>

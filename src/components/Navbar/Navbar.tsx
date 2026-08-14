@@ -11,12 +11,13 @@ import {
   useBear,
 } from '@forgedevstack/bear';
 import { PluginCatalogRow } from '@components/PluginCatalogRow';
-import { useInkPremium } from '@hooks/index';
+import { useAuth, useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import type { Locale } from '@i18n/types';
 import {
   CHANGELOG_ENTRIES,
   DOCS_INDEX,
+  ENABLE_PUBLIC_LOGIN,
   GITHUB_URL,
   INK_PLUGIN_CATALOG,
   INK_VERSION,
@@ -27,6 +28,7 @@ import {
   SEARCH_ARIA_LABEL,
   SEARCH_INPUT_ID,
   SEARCH_MAX_RESULTS,
+  NAV_LOGO_SIZE_PX,
   docsHref,
   docsPath,
 } from '@const/index';
@@ -44,7 +46,9 @@ export const Navbar: FC = () => {
   const { mode, toggleMode } = useBear();
   const { t, locale, setLocale } = useI18n();
   const { active: premiumActive } = useInkPremium();
+  const { isAuthenticated, user } = useAuth();
   const route = useRoute();
+  const accountLabel = user?.name || user?.username || t.nav.account;
   const activePath = route?.path ?? ROUTES.HOME;
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -131,11 +135,17 @@ export const Navbar: FC = () => {
       : activePath === href || (href === PLUGINS_DOCS_HREF && activePath.startsWith(PLUGINS_DOCS_HREF));
 
   return (
-    <nav className="ink-navbar sticky top-0 z-50 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
-        <Flex align="center" gap={3} className="flex-shrink-0">
-          <Link to={ROUTES.HOME} className="flex items-center gap-2.5">
-            <img src={LOGO_SRC} alt={t.brand} width={32} height={32} className="w-8 h-8 rounded-lg object-cover" />
+    <nav className="ink-navbar sticky top-0 z-50">
+      <div className="ink-navbar__inner max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
+        <Flex align="center" gap={3} className="ink-navbar__brand flex-shrink-0">
+          <Link to={ROUTES.HOME} className="ink-navbar__brand-link flex items-center gap-2.5">
+            <img
+              src={LOGO_SRC}
+              alt={t.brand}
+              width={NAV_LOGO_SIZE_PX}
+              height={NAV_LOGO_SIZE_PX}
+              className="ink-navbar__logo"
+            />
             <Typography variant="h5" className="font-bold tracking-tight">
               {t.brand}
             </Typography>
@@ -265,20 +275,20 @@ export const Navbar: FC = () => {
           )}
         </div>
 
-        <Flex align="center" gap={2} className="flex-shrink-0 ml-auto">
-          <a href={NPM_URL} target="_blank" rel="noopener noreferrer">
-            <Button variant="ghost" size="sm" icon={<BearIcons.PackageIcon size="xs" />} aria-label="npm" />
+        <Flex align="center" gap={2} className="ink-navbar__actions flex-shrink-0 ml-auto">
+          <a href={NPM_URL} target="_blank" rel="noopener noreferrer" className="ink-navbar__icon-link">
+            <Button variant="ghost" size="sm" icon={<BearIcons.PackageIcon size="sm" />} aria-label="npm" />
           </a>
-          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-            <Button variant="ghost" size="sm" icon={<BearIcons.GithubIcon size="xs" />} aria-label="GitHub" />
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="ink-navbar__icon-link">
+            <Button variant="ghost" size="sm" icon={<BearIcons.GithubIcon size="sm" />} aria-label="GitHub" />
           </a>
           <Dropdown
             trigger={
               <Button
                 variant="ghost"
                 size="sm"
-                leftIcon={<BearIcons.GlobeIcon size="xs" />}
-                className="font-mono text-xs"
+                leftIcon={<BearIcons.GlobeIcon size="sm" />}
+                className="font-mono text-xs ink-navbar__icon-btn"
               >
                 {LOCALE_META[locale].flag}
               </Button>
@@ -292,8 +302,16 @@ export const Navbar: FC = () => {
             size="sm"
             onClick={toggleMode}
             aria-label={t.nav.toggleTheme}
-            icon={isDark ? <BearIcons.SunIcon size="xs" /> : <BearIcons.MoonIcon size="xs" />}
+            className="ink-navbar__icon-btn"
+            icon={isDark ? <BearIcons.SunIcon size="sm" /> : <BearIcons.MoonIcon size="sm" />}
           />
+          {ENABLE_PUBLIC_LOGIN && isAuthenticated ? (
+            <Link to={ROUTES.CMS} className="hidden sm:inline-flex">
+              <Button size="sm" variant="inkOutline">
+                {accountLabel}
+              </Button>
+            </Link>
+          ) : null}
           <Link to={ROUTES.PLAYGROUND} className="hidden sm:inline-flex">
             <Button size="sm" variant="ink">
               {t.ctaPlayground}
@@ -342,13 +360,48 @@ export const Navbar: FC = () => {
               </div>
             )}
           </div>
-          {NAV_LINKS.map((item) => (
-            <Link key={item.id} to={item.href} onClick={() => setMenuOpen(false)}>
+          {NAV_LINKS.map((item) => {
+            if (item.id === PLUGINS_NAV_ID) {
+              return (
+                <div key={item.id} className="ink-navbar__mobile-plugins">
+                  <Typography variant="body2" className="block px-3 py-2 font-semibold">
+                    {t.nav.plugins}
+                  </Typography>
+                  {INK_PLUGIN_CATALOG.map((plugin) => (
+                    <div key={plugin.id} className="px-3 py-2">
+                      <PluginCatalogRow
+                        name={plugin.packageName}
+                        npmUrl={plugin.npmUrl}
+                        gitUrl={plugin.gitUrl}
+                        npmLabel={t.nav.pluginNpm}
+                        gitLabel={t.nav.pluginGit}
+                      />
+                    </div>
+                  ))}
+                  <Link to={item.href} onClick={() => setMenuOpen(false)}>
+                    <Typography variant="body2" className="block px-3 py-2 rounded-lg ink-nav-mobile-link">
+                      {t.nav.pluginInstallDocs}
+                    </Typography>
+                  </Link>
+                </div>
+              );
+            }
+
+            return (
+              <Link key={item.id} to={item.href} onClick={() => setMenuOpen(false)}>
+                <Typography variant="body2" className="block px-3 py-2 rounded-lg ink-nav-mobile-link">
+                  {t.nav[item.id]}
+                </Typography>
+              </Link>
+            );
+          })}
+          {ENABLE_PUBLIC_LOGIN && isAuthenticated ? (
+            <Link to={ROUTES.CMS} onClick={() => setMenuOpen(false)}>
               <Typography variant="body2" className="block px-3 py-2 rounded-lg ink-nav-mobile-link">
-                {t.nav[item.id]}
+                {accountLabel}
               </Typography>
             </Link>
-          ))}
+          ) : null}
         </div>
       )}
     </nav>

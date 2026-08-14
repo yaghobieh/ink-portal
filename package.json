@@ -1,6 +1,6 @@
 {
   "name": "ink-portal",
-  "version": "1.1.4",
+  "version": "1.1.6",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,9 @@
   "dependencies": {
     "@forgedevstack/bear": "^1.2.7",
     "@forgedevstack/forge-compass": "^1.0.0",
-    "@forgedevstack/ink": "^1.1.4",
+    "@forgedevstack/grid-table": "^1.1.2",
+    "@forgedevstack/ink": "^1.1.6",
+    "@forgedevstack/synapse": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

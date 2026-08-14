@@ -1,6 +1,6 @@
 import { CompassProvider, Routes } from '@forgedevstack/forge-compass/react';
 import { ThemeSync } from '@components/ThemeSync';
-import { InkPremiumProvider } from '@hooks/index';
+import { AuthProvider, InkPremiumProvider } from '@hooks/index';
 import { ENABLE_LAB, ROUTES } from '@const/index';
 import { Home } from '@pages/Home';
 import { Docs } from '@pages/Docs';
@@ -11,7 +11,20 @@ import { Ai } from '@pages/Ai';
 import { DemoPage, Demos } from '@pages/Demos';
 import { Pricing } from '@pages/Pricing';
 import { PremiumSuccess } from '@pages/PremiumSuccess';
-import { Login } from '@pages/Login';
+import { Terms } from '@pages/Terms';
+import {
+  CmsLogin,
+  ContentEdit,
+  ContentPages,
+  CrewPages,
+  Dashboard,
+  EditorsPages,
+  ExtensionsPages,
+  LiveEditPages,
+  MediaPages,
+  PlansPages,
+  SettingsPages,
+} from '@pages/Cms';
 import { Lab } from '@pages/Lab';
 
 const routes = [
@@ -32,16 +45,29 @@ const routes = [
   { path: ROUTES.AI, name: 'ai', component: Ai },
   { path: ROUTES.PREMIUM_SUCCESS, name: 'premium-success', component: PremiumSuccess },
   { path: ROUTES.PRICING, name: 'pricing', component: Pricing },
-  { path: ROUTES.LOGIN, name: 'login', component: Login },
+  { path: ROUTES.TERMS, name: 'terms', component: Terms },
+  { path: ROUTES.CMS_LOGIN, name: 'cms-login', component: CmsLogin },
+  { path: ROUTES.CMS, name: 'cms', component: Dashboard },
+  { path: ROUTES.CMS_CONTENT, name: 'cms-content', component: ContentPages },
+  { path: ROUTES.CMS_EDIT, name: 'cms-edit', component: ContentEdit },
+  { path: ROUTES.CMS_MEDIA, name: 'cms-media', component: MediaPages },
+  { path: ROUTES.CMS_EDITORS, name: 'cms-editors', component: EditorsPages },
+  { path: ROUTES.CMS_CREW, name: 'cms-crew', component: CrewPages },
+  { path: ROUTES.CMS_LIVE_EDIT, name: 'cms-live-edit', component: LiveEditPages },
+  { path: ROUTES.CMS_EXTENSIONS, name: 'cms-extensions', component: ExtensionsPages },
+  { path: ROUTES.CMS_PLANS, name: 'cms-plans', component: PlansPages },
+  { path: ROUTES.CMS_SETTINGS, name: 'cms-settings', component: SettingsPages },
   ...(ENABLE_LAB ? [{ path: ROUTES.LAB, name: 'lab', component: Lab }] : []),
 ];
 
 export const App = () => (
   <ThemeSync>
-    <InkPremiumProvider>
-      <CompassProvider routes={routes}>
-        <Routes />
-      </CompassProvider>
-    </InkPremiumProvider>
+    <AuthProvider>
+      <InkPremiumProvider>
+        <CompassProvider routes={routes}>
+          <Routes />
+        </CompassProvider>
+      </InkPremiumProvider>
+    </AuthProvider>
   </ThemeSync>
 );

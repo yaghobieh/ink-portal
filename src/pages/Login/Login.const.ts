@@ -13,3 +13,5 @@ export const LOGIN_STATS_INITIAL_STATE: LoginStatsState = {
 };
 
 export const LOGIN_PERIOD_SEPARATOR = ' – ';
+export const LOGIN_USERNAME_INITIAL = '';
+export const LOGIN_PASSWORD_INITIAL = '';

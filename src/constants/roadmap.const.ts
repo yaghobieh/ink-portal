@@ -6,6 +6,11 @@ export type RoadmapItem = {
 
 export const ROADMAP_1_1_5: RoadmapItem[] = [
   {
+    id: 'yjs-collab',
+    title: 'Yjs / CRDT realtime collab',
+    body: 'Ship Realtime Collab extension with live cursors — competitive parity with Tiptap/Hocuspocus.',
+  },
+  {
     id: 'docs-gif-guid',
     title: 'GIF + GUID on every doc',
     body: 'Each docs page gets a short GIF and a stable GUID for CMS / deep links.',
