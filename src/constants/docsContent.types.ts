@@ -63,6 +63,7 @@ export interface DocsPageContent {
     | 'tocAngular'
     | 'tocWordpress'
     | 'tocA11y'
-    | 'tocPremium';
+    | 'tocPremium'
+    | 'tocCollaboration';
   blocks: DocsBlock[];
 }

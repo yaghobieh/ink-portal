@@ -14,11 +14,16 @@ import { PremiumSuccess } from '@pages/PremiumSuccess';
 import { Terms } from '@pages/Terms';
 import {
   CmsLogin,
+  ContentEdit,
   ContentPages,
+  CrewPages,
   Dashboard,
   EditorsPages,
+  ExtensionsPages,
+  LiveEditPages,
   MediaPages,
   PlansPages,
+  SettingsPages,
 } from '@pages/Cms';
 import { Lab } from '@pages/Lab';
 
@@ -44,9 +49,14 @@ const routes = [
   { path: ROUTES.CMS_LOGIN, name: 'cms-login', component: CmsLogin },
   { path: ROUTES.CMS, name: 'cms', component: Dashboard },
   { path: ROUTES.CMS_CONTENT, name: 'cms-content', component: ContentPages },
+  { path: ROUTES.CMS_EDIT, name: 'cms-edit', component: ContentEdit },
   { path: ROUTES.CMS_MEDIA, name: 'cms-media', component: MediaPages },
   { path: ROUTES.CMS_EDITORS, name: 'cms-editors', component: EditorsPages },
+  { path: ROUTES.CMS_CREW, name: 'cms-crew', component: CrewPages },
+  { path: ROUTES.CMS_LIVE_EDIT, name: 'cms-live-edit', component: LiveEditPages },
+  { path: ROUTES.CMS_EXTENSIONS, name: 'cms-extensions', component: ExtensionsPages },
   { path: ROUTES.CMS_PLANS, name: 'cms-plans', component: PlansPages },
+  { path: ROUTES.CMS_SETTINGS, name: 'cms-settings', component: SettingsPages },
   ...(ENABLE_LAB ? [{ path: ROUTES.LAB, name: 'lab', component: Lab }] : []),
 ];
 

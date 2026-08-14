@@ -1,5 +1,3 @@
-export const CONTENT_EDITOR_MIN_HEIGHT_PX = 280;
-
 export const CONTENT_KIND_PAGE = 'page';
 export const CONTENT_KIND_ITEM = 'item';
 
@@ -14,6 +12,7 @@ export const CONTENT_COLUMN_IDS = {
   COLLECTION: 'collection',
   STATUS: 'status',
   UPDATED: 'updated',
+  ACTIONS: 'actions',
 } as const;
 
 export const CONTENT_DATE_LOCALE = 'en-CA';

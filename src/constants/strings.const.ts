@@ -1,7 +1,10 @@
 export const EMPTY_STRING = '';
 export const HASH_PREFIX = '#';
 export const THEME_STORAGE_KEY = 'ink-theme';
+export const CMS_THEME_STORAGE_KEY = 'ink-cms-theme';
 export const LOCALE_STORAGE_KEY = 'ink-locale';
+export const DATA_BEAR_WIDGET_ATTR = 'data-bear-widget';
+export const DRAG_WIDGET_MIME = 'application/x-ink-cms-widget';
 export const LOGO_SRC = '/ink-logo.png';
 export const HERO_IMG_SRC = '/ink-hero.png';
 export const LANDING_BG_SRC = '/ink-landing.png';

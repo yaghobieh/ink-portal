@@ -23,20 +23,28 @@ export const ROUTES = {
   CMS: '/cms',
   CMS_LOGIN: '/cms/login',
   CMS_CONTENT: '/cms/content',
+  CMS_EDIT: '/cms/edit/:id',
   CMS_MEDIA: '/cms/media',
   CMS_EDITORS: '/cms/editors',
+  CMS_CREW: '/cms/crew',
+  CMS_LIVE_EDIT: '/cms/live-edit',
+  CMS_EXTENSIONS: '/cms/extensions',
   CMS_PLANS: '/cms/plans',
+  CMS_SETTINGS: '/cms/settings',
   LAB: '/lab',
 } as const;
 
-export const INK_VERSION = '1.1.5';
-export const PORTAL_VERSION = '1.1.5';
+export const cmsEditPath = (id: string): string =>
+  `/cms/edit/${encodeURIComponent(id)}`;
+
+export const INK_VERSION = '1.1.6';
+export const PORTAL_VERSION = '1.1.6';
 
 const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },
   { id: 'demos' as const, href: ROUTES.DEMOS },
-  { id: 'plugins' as const, href: `${ROUTES.DOCS}/plugins` },
   { id: 'pricing' as const, href: ROUTES.PRICING },
+  { id: 'plugins' as const, href: `${ROUTES.DOCS}/plugins` },
 ];
 
 export const NAV_LINKS = ENABLE_LAB

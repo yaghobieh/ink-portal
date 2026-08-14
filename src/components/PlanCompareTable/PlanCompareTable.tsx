@@ -8,6 +8,7 @@ import {
   PLAN_COMPARE_MATRIX,
 } from './PlanCompareTable.const';
 import type { PlanCompareTableProps, PlanCompareTableRow } from './PlanCompareTable.types';
+import { planCellDiffers, renderPlanCell } from './PlanCompareTable.utils';
 
 export const PlanCompareTable: FC<PlanCompareTableProps> = (props) => {
   const { className } = props;
@@ -53,18 +54,24 @@ export const PlanCompareTable: FC<PlanCompareTableProps> = (props) => {
       accessor: 'free',
       header: t.pricing.freeTitle,
       sortable: false,
+      render: (value, row) =>
+        renderPlanCell(String(value ?? ''), planCellDiffers(row as PlanCompareTableRow)),
     },
     {
       id: PLAN_COMPARE_COLUMN_IDS.PRO,
       accessor: 'pro',
       header: t.pricing.proTitle,
       sortable: false,
+      render: (value, row) =>
+        renderPlanCell(String(value ?? ''), planCellDiffers(row as PlanCompareTableRow)),
     },
     {
       id: PLAN_COMPARE_COLUMN_IDS.AI,
       accessor: 'ai',
       header: t.pricing.aiTitle,
       sortable: false,
+      render: (value, row) =>
+        renderPlanCell(String(value ?? ''), planCellDiffers(row as PlanCompareTableRow)),
     },
   ];
 
@@ -77,14 +84,19 @@ export const PlanCompareTable: FC<PlanCompareTableProps> = (props) => {
         <Typography variant="body2" className="ink-text-muted mb-0">
           {t.pricing.compareSubtitle}
         </Typography>
+        <Typography variant="caption" className="ink-text-muted block mt-2 mb-0">
+          {t.pricing.compareDiffHint}
+        </Typography>
       </div>
-      <GridTable
-        data={data}
-        columns={columns}
-        showPagination={false}
-        showFilter={false}
-        tableEffects={{ hover: true, sort: true, row: true }}
-      />
+      <div className="ink-plan-compare">
+        <GridTable
+          data={data}
+          columns={columns}
+          showPagination={false}
+          showFilter={false}
+          tableEffects={{ hover: true, sort: true, row: true }}
+        />
+      </div>
     </Flex>
   );
 };

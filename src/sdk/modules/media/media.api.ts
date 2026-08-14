@@ -1,5 +1,6 @@
 import { INK_API_URL } from '@const/billing.const';
 import { EMPTY_STRING } from '@const/index';
+import { requestWithError } from '../../http';
 import { authHeaders } from '../auth/auth.api';
 import {
   CLOUDINARY_API_BASE,
@@ -24,9 +25,11 @@ export const fetchMediaRequest = async (
   token: string,
 ): Promise<{ items: MediaItem[]; source: string | null }> => {
   if (!INK_API_URL || !token) return { items: [], source: null };
-  const response = await fetch(`${INK_API_URL}${CMS_MEDIA_PATH}`, {
-    headers: authHeaders(token),
-  });
+  const response = await requestWithError(
+    `${INK_API_URL}${CMS_MEDIA_PATH}`,
+    { headers: authHeaders(token) },
+    { message: 'Failed to load media' },
+  );
   if (!response.ok) return { items: [], source: null };
   const data = (await response.json()) as MediaListResponse;
   return { items: data.items ?? [], source: data.source ?? null };
@@ -36,9 +39,11 @@ export const fetchSign = async (
   token: string,
 ): Promise<CloudinarySignResponse | null> => {
   if (!INK_API_URL || !token) return null;
-  const response = await fetch(`${INK_API_URL}${CMS_MEDIA_SIGN_PATH}`, {
-    headers: authHeaders(token),
-  });
+  const response = await requestWithError(
+    `${INK_API_URL}${CMS_MEDIA_SIGN_PATH}`,
+    { headers: authHeaders(token) },
+    { message: 'Failed to sign media upload' },
+  );
   if (!response.ok) return null;
   return (await response.json()) as CloudinarySignResponse;
 };
@@ -67,7 +72,11 @@ export const uploadToCloudinary = async (
     form.append(CLOUDINARY_FORM_KEYS.FOLDER, folder);
   }
 
-  const response = await fetch(endpoint, { method: 'POST', body: form });
+  const response = await requestWithError(
+    endpoint,
+    { method: 'POST', body: form },
+    { mode: 'modal', message: 'Cloudinary upload failed' },
+  );
   if (!response.ok) return null;
   return (await response.json()) as CloudinaryUploadResult;
 };
@@ -77,24 +86,28 @@ export const registerMedia = async (
   input: RegisterMediaInput,
 ): Promise<MediaItem | null> => {
   if (!INK_API_URL || !token) return null;
-  const response = await fetch(`${INK_API_URL}${CMS_MEDIA_PATH}`, {
-    method: 'POST',
-    headers: {
-      ...authHeaders(token),
-      'Content-Type': 'application/json',
+  const response = await requestWithError(
+    `${INK_API_URL}${CMS_MEDIA_PATH}`,
+    {
+      method: 'POST',
+      headers: {
+        ...authHeaders(token),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        publicId: input.publicId,
+        url: input.url || input.secureUrl,
+        secureUrl: input.secureUrl,
+        resourceType: input.resourceType || DEFAULT_MEDIA_RESOURCE_TYPE,
+        format: input.format ?? null,
+        bytes: input.bytes ?? 0,
+        width: input.width ?? null,
+        height: input.height ?? null,
+        folder: input.folder || DEFAULT_MEDIA_FOLDER,
+      }),
     },
-    body: JSON.stringify({
-      publicId: input.publicId,
-      url: input.url || input.secureUrl,
-      secureUrl: input.secureUrl,
-      resourceType: input.resourceType || DEFAULT_MEDIA_RESOURCE_TYPE,
-      format: input.format ?? null,
-      bytes: input.bytes ?? 0,
-      width: input.width ?? null,
-      height: input.height ?? null,
-      folder: input.folder || DEFAULT_MEDIA_FOLDER,
-    }),
-  });
+    { mode: 'modal', message: 'Failed to register media' },
+  );
   if (!response.ok) return null;
   const data = (await response.json()) as { item?: MediaItem };
   return data.item ?? null;

@@ -6,19 +6,27 @@ export type ChangelogEntry = {
 
 export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
   {
-    version: '1.1.5 (planned)',
+    version: '1.1.6',
+    defaultOpen: true,
     items: [
-      'GIF + GUID on every docs page',
-      '.ink plugin packages (drag-drop install)',
-      'CMS org / plan / token editor control',
-      'Real login + connect',
-      'Translation',
-      'Remove AI from marketing top bar (portal)',
+      'Ship as portal release line (closes 1.1.5 track as 1.1.6)',
+      'OpenAI ghost autocomplete on /ai + Playground (no demo stub)',
+      'Lab + public login chrome hidden for marketing build',
+      'Docs media per slug + mobile TOC',
+      'Ink CMS shell: Crew, Live edit, Extensions, Content edit polish',
+      'Pricing GridTable plan diffs + Bifrost Install CMS CTA',
+    ],
+  },
+  {
+    version: '1.1.5',
+    items: [
+      'CMS dashboard / docs API / Cloudinary / plans (merged into 1.1.6)',
+      'Editor variants chrome',
+      'GIF + GUID docs scaffolding',
     ],
   },
   {
     version: '1.1.4',
-    defaultOpen: true,
     items: [
       'OpenAI provider + ghost autocomplete (Tab accept)',
       'Table dark header + right-click row/col insert & delete',

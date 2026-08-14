@@ -1,4 +1,4 @@
-import { useEffect, type FC } from 'react';
+import { useEffect, useRef, type FC } from 'react';
 import { useNavigate, useRoute } from '@forgedevstack/forge-compass/react';
 import { useNucleus } from '@forgedevstack/synapse';
 import {
@@ -15,9 +15,13 @@ import {
 } from '@forgedevstack/bear';
 import { useAuth } from '@hooks/index';
 import { useI18n } from '@i18n/index';
-import { EMPTY_STRING, LOGO_SRC, ROUTES } from '@const/index';
+import { EMPTY_STRING, LOGO_SRC, ROUTES, BIFROST_INSTALLMENT_URL } from '@const/index';
 import { CMS_LOGO_SIZE_PX } from '@const/numbers.const';
 import { authNucleus } from '@sdk/index';
+import {
+  applyCmsThemeColors,
+  loadCmsThemeColors,
+} from '../SettingsPages';
 import {
   CMS_AVATAR_INITIALS_LENGTH,
   CMS_ICON_SIZE,
@@ -27,6 +31,7 @@ import {
   CMS_SIDEBAR_WIDTH_PX,
 } from './CmsShell.const';
 import type { CmsShellProps, CmsSidebarNavItem } from './CmsShell.types';
+import { ErrorHost } from './ErrorHost';
 
 const initialsFromName = (name: string): string => {
   const trimmed = name.trim();
@@ -39,6 +44,7 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
   const { t } = useI18n();
   const { navigate } = useNavigate();
   const route = useRoute();
+  const shellRef = useRef<HTMLDivElement>(null);
   const { mode, setMode } = useBearMode();
   const { token: providerToken, user: providerUser, isAuthenticated, clearToken, setToken } =
     useAuth();
@@ -55,6 +61,10 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
       navigate(ROUTES.CMS_LOGIN, { replace: true });
     }
   }, [isAuthenticated, token, navigate]);
+
+  useEffect(() => {
+    applyCmsThemeColors(shellRef.current, loadCmsThemeColors());
+  }, [isAuthenticated, token]);
 
   useEffect(() => {
     if (providerToken && providerToken !== token) {
@@ -105,7 +115,22 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
     {
       id: CMS_NAV_IDS.EDITORS,
       label: t.cmsShell.editors,
+      icon: <BearIcons.FileTextIcon size={CMS_ICON_SIZE} />,
+    },
+    {
+      id: CMS_NAV_IDS.CREW,
+      label: t.cmsShell.crew,
       icon: <BearIcons.UsersIcon size={CMS_ICON_SIZE} />,
+    },
+    {
+      id: CMS_NAV_IDS.LIVE_EDIT,
+      label: t.cmsShell.liveEdit,
+      icon: <BearIcons.BellIcon size={CMS_ICON_SIZE} />,
+    },
+    {
+      id: CMS_NAV_IDS.EXTENSIONS,
+      label: t.cmsShell.extensions,
+      icon: <BearIcons.PackageIcon size={CMS_ICON_SIZE} />,
     },
     {
       id: CMS_NAV_IDS.PLANS,
@@ -137,7 +162,6 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
       id: CMS_NAV_IDS.SETTINGS,
       label: t.cmsShell.settings,
       icon: <BearIcons.SettingsIcon size={CMS_ICON_SIZE} />,
-      disabled: true,
     },
   ];
 
@@ -155,12 +179,16 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
     navigate(ROUTES.CMS_LOGIN);
   };
 
+  const onOpenInstallment = () => {
+    window.open(BIFROST_INSTALLMENT_URL, '_blank', 'noopener,noreferrer');
+  };
+
   if (!isAuthenticated && !token) {
     return null;
   }
 
   return (
-    <div className="ink-cms ink-cms--light" data-color-mode="light">
+    <div ref={shellRef} className="ink-cms ink-cms--light" data-color-mode="light">
       <Sidebar
         items={sidebarItems}
         activeItemId={activeNavId}
@@ -224,6 +252,9 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
           }
           rightContent={
             <Flex align="center" gap={3}>
+              <Button variant="inkOutline" size="sm" onClick={onOpenInstallment}>
+                {t.cmsShell.installment}
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"
@@ -245,6 +276,7 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
           }
         />
         <main className="ink-cms__content fade-in">{children}</main>
+        <ErrorHost />
       </div>
     </div>
   );

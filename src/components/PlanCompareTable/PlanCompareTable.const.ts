@@ -19,6 +19,9 @@ export const PLAN_COMPARE_ROW_KEYS = [
   'compareHostedAi',
   'compareAiTokens',
   'compareAutocomplete',
+  'compareSiteToken',
+  'compareCreditsPool',
+  'compareUsageDashboard',
   'compareNpmAccess',
   'compareLicensePath',
 ] as const;
@@ -81,6 +84,24 @@ export const PLAN_COMPARE_MATRIX: PlanCompareMatrixRow[] = [
     id: 'compareAutocomplete',
     free: COMPARE_NO,
     pro: COMPARE_NO,
+    ai: COMPARE_YES,
+  },
+  {
+    id: 'compareSiteToken',
+    free: COMPARE_NO,
+    pro: COMPARE_YES,
+    ai: COMPARE_YES,
+  },
+  {
+    id: 'compareCreditsPool',
+    free: COMPARE_NO,
+    pro: COMPARE_NO,
+    ai: COMPARE_YES,
+  },
+  {
+    id: 'compareUsageDashboard',
+    free: COMPARE_NO,
+    pro: COMPARE_YES,
     ai: COMPARE_YES,
   },
   {

@@ -46,6 +46,8 @@ export interface Messages {
     loading: string;
     notFound: string;
     fromCms: string;
+    topics: string;
+    guidLabel: string;
     onThisPage: string;
     tocInstallation: string;
     tocQuickstart: string;
@@ -67,6 +69,7 @@ export interface Messages {
     tocWordpress: string;
     tocA11y: string;
     tocPremium: string;
+    tocCollaboration: string;
   };
   playground: {
     title: string;
@@ -189,9 +192,18 @@ export interface Messages {
     exampleCollabTitle: string;
     exampleCollabBody: string;
     exampleOpen: string;
-    customersTitle: string;
-    customersBody: string;
-    customersSoon: string;
+    aiSectionTitle: string;
+    aiSectionBody: string;
+    aiAutocompleteTitle: string;
+    aiAutocompleteBody: string;
+    aiGenerateTitle: string;
+    aiGenerateBody: string;
+    aiHostedTitle: string;
+    aiHostedBody: string;
+    aiByoTitle: string;
+    aiByoBody: string;
+    aiMediaAlt: string;
+    aiCta: string;
   };
   pricing: {
     title: string;
@@ -256,6 +268,10 @@ export interface Messages {
     compareFreeNpm: string;
     compareProNpm: string;
     compareAiNpm: string;
+    compareSiteToken: string;
+    compareCreditsPool: string;
+    compareUsageDashboard: string;
+    compareDiffHint: string;
     termsLink: string;
   };
   terms: {
@@ -323,6 +339,7 @@ export interface Messages {
     brand: string;
     search: string;
     notifications: string;
+    installment: string;
     general: string;
     tools: string;
     support: string;
@@ -330,6 +347,9 @@ export interface Messages {
     content: string;
     media: string;
     editors: string;
+    crew: string;
+    liveEdit: string;
+    extensions: string;
     plans: string;
     analytics: string;
     settings: string;
@@ -368,6 +388,8 @@ export interface Messages {
     contentColStatus: string;
     contentColUpdated: string;
     contentOpenHint: string;
+    contentColActions: string;
+    contentOpenDocs: string;
     save: string;
     saving: string;
     saved: string;
@@ -421,5 +443,84 @@ export interface Messages {
     placeholder: string;
     aiOpenAiReady: string;
     aiOpenAiMissing: string;
+  };
+  contentEdit: {
+    title: string;
+    backToContent: string;
+    preview: string;
+    editMode: string;
+    loading: string;
+    loadError: string;
+    notFound: string;
+    widgetsTitle: string;
+    widgetsHint: string;
+    publishTitle: string;
+    statusLabel: string;
+    seoTitle: string;
+    seoDescription: string;
+    scheduleAt: string;
+    revisionsTitle: string;
+    revisionsHint: string;
+    revisionsEmpty: string;
+    collabHint: string;
+  };
+  cmsCrew: {
+    title: string;
+    subtitle: string;
+    usersTitle: string;
+    rolesTitle: string;
+    userName: string;
+    userEmail: string;
+    userUsername: string;
+    userRole: string;
+    createUser: string;
+    roleName: string;
+    roleDescription: string;
+    roleCustomHint: string;
+    permissions: string;
+    permissionsCount: string;
+    createRole: string;
+    systemRole: string;
+  };
+  cmsLiveEdit: {
+    title: string;
+    subtitle: string;
+    sessionTitle: string;
+    sessionBody: string;
+    siteUrl: string;
+    pageId: string;
+    generatedLink: string;
+    invalidUrl: string;
+    copyLink: string;
+    copied: string;
+    openSite: string;
+    howTitle: string;
+    step1: string;
+    step2: string;
+    step3: string;
+    step4: string;
+  };
+  cmsExtensions: {
+    title: string;
+    subtitle: string;
+    install: string;
+    statusInstalled: string;
+    statusAvailable: string;
+    statusComing: string;
+    comingHint: string;
+  };
+  settings: {
+    title: string;
+    subtitle: string;
+    themeTitle: string;
+    primaryColor: string;
+    accentColor: string;
+    backgroundColor: string;
+    saveTheme: string;
+    themeSaved: string;
+  };
+  cmsErrors: {
+    toastTitle: string;
+    modalTitle: string;
   };
 }

@@ -3,17 +3,19 @@ import { Link, useNavigate, useParams } from '@forgedevstack/forge-compass/react
 import { Flex, Spinner, Typography } from '@forgedevstack/bear';
 import { DocLayout } from '@components/DocLayout';
 import { DocDemo } from '@components/DocDemo';
+import { DocHeroMedia } from '@components/DocHeroMedia';
 import { useI18n } from '@i18n/index';
 import {
   DEFAULT_DOCS_SLUG,
   DOCS_PAGE_BY_ID,
   docsPath,
   EMPTY_STRING,
+  getDocsPageMedia,
   ROUTES,
 } from '@const/index';
 import type { DocsBlock } from '@const/docsContent.types';
 import { fetchPublicDocBySlugRequest, PUBLIC_DOCS_BLOCK_TYPES } from '@sdk/modules/docs';
-import type { PublicDocBlock } from '@sdk/modules/docs';
+import type { PublicDocBlock, PublicDocStepsBlock } from '@sdk/modules/docs';
 import {
   DOCS_HEADER_LEVEL_H2,
   DOCS_HEADER_LEVEL_H3,
@@ -22,6 +24,9 @@ import {
 } from './Docs.const';
 import { resolveDemoBlock, resolveDocsPage } from './Docs.utils';
 import type { DocsResolvedPage } from './Docs.types';
+
+const cmsBlocksHaveImage = (blocks: PublicDocBlock[]): boolean =>
+  blocks.some((block) => block.type === PUBLIC_DOCS_BLOCK_TYPES.IMAGE);
 
 const headerVariant = (level?: number): 'h2' | 'h3' | 'h4' => {
   if (level === DOCS_HEADER_LEVEL_H4) return 'h4';
@@ -50,19 +55,17 @@ const renderStaticBlock = (
   }
   if (block.type === 'steps') {
     return (
-      <div key={`${pageId}-steps-${index}`} className="space-y-3">
-        {block.title ? (
-          <Typography variant="h3" className="text-lg font-semibold m-0">
-            {block.title}
-          </Typography>
-        ) : null}
-        <ol className="list-decimal pl-5 space-y-2 ink-doc-body">
+      <div key={`${pageId}-steps-${index}`} className="ink-doc-page__topics space-y-3">
+        <Typography variant="h3" className="ink-doc-page__topics-title">
+          {block.title || 'Topics'}
+        </Typography>
+        <ol className="ink-doc-page__topics-list">
           {block.items.map((item) => (
-            <li key={item.title}>
-              <Typography variant="body1" className="font-semibold m-0">
+            <li key={item.title} className="ink-doc-page__topic">
+              <Typography variant="body1" className="ink-doc-page__topic-title">
                 {item.title}
               </Typography>
-              <Typography variant="body2" className="ink-text-muted m-0">
+              <Typography variant="body2" className="ink-doc-page__topic-body">
                 {item.body}
               </Typography>
             </li>
@@ -88,13 +91,43 @@ const renderStaticBlock = (
     );
   }
   return (
-    <Typography key={`${pageId}-p-${index}`} variant="body1" className="ink-doc-body">
+    <Typography key={`${pageId}-p-${index}`} variant="body1" className="ink-doc-body ink-doc-page__paragraph">
       {block.text}
     </Typography>
   );
 };
 
-const renderCmsBlock = (pageId: string, block: PublicDocBlock, index: number): ReactNode => {
+const renderTopicsBlock = (
+  pageId: string,
+  block: PublicDocStepsBlock,
+  index: number,
+  topicsLabel: string,
+): ReactNode => (
+  <div key={`${pageId}-topics-${index}`} className="ink-doc-page__topics space-y-3">
+    <Typography variant="h3" className="ink-doc-page__topics-title">
+      {block.title || topicsLabel}
+    </Typography>
+    <ol className="ink-doc-page__topics-list">
+      {block.items.map((item) => (
+        <li key={item.title} className="ink-doc-page__topic">
+          <Typography variant="body1" className="ink-doc-page__topic-title">
+            {item.title}
+          </Typography>
+          <Typography variant="body2" className="ink-doc-page__topic-body">
+            {item.body}
+          </Typography>
+        </li>
+      ))}
+    </ol>
+  </div>
+);
+
+const renderCmsBlock = (
+  pageId: string,
+  block: PublicDocBlock,
+  index: number,
+  topicsLabel: string,
+): ReactNode => {
   if (block.type === PUBLIC_DOCS_BLOCK_TYPES.DEMO) {
     const demo = resolveDemoBlock(block);
     if (!demo) return null;
@@ -140,7 +173,11 @@ const renderCmsBlock = (pageId: string, block: PublicDocBlock, index: number): R
   }
   if (block.type === PUBLIC_DOCS_BLOCK_TYPES.PARAGRAPH || block.type === PUBLIC_DOCS_BLOCK_TYPES.P) {
     return (
-      <Typography key={`${pageId}-para-${index}`} variant="body1" className="ink-doc-body">
+      <Typography
+        key={`${pageId}-para-${index}`}
+        variant="body1"
+        className="ink-doc-body ink-doc-page__paragraph"
+      >
         {block.text}
       </Typography>
     );
@@ -162,7 +199,7 @@ const renderCmsBlock = (pageId: string, block: PublicDocBlock, index: number): R
     );
   }
   if (block.type === PUBLIC_DOCS_BLOCK_TYPES.STEPS) {
-    return renderStaticBlock(pageId, block, index);
+    return renderTopicsBlock(pageId, block, index, topicsLabel);
   }
   if (block.type === PUBLIC_DOCS_BLOCK_TYPES.PAYLOAD) {
     return renderStaticBlock(pageId, block, index);
@@ -176,7 +213,7 @@ export const Docs: FC = () => {
   const { navigate } = useNavigate();
   const slug = params.slug;
   const [resolved, setResolved] = useState<DocsResolvedPage | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!slug) {
@@ -191,11 +228,14 @@ export const Docs: FC = () => {
     setLoading(true);
     setResolved(resolveDocsPage(slug, null, staticPage));
 
-    void fetchPublicDocBySlugRequest(slug).then((apiPage) => {
-      if (cancelled) return;
-      setResolved(resolveDocsPage(slug, apiPage, staticPage));
-      setLoading(false);
-    });
+    void fetchPublicDocBySlugRequest(slug)
+      .then((apiPage) => {
+        if (cancelled) return;
+        setResolved(resolveDocsPage(slug, apiPage, staticPage));
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
 
     return () => {
       cancelled = true;
@@ -204,6 +244,19 @@ export const Docs: FC = () => {
 
   if (!slug) {
     return null;
+  }
+
+  if (loading && (!resolved || resolved.source === 'none')) {
+    return (
+      <DocLayout title={t.docs.title} description={t.docs.description}>
+        <Flex align="center" gap={2} className="mb-4">
+          <Spinner size="sm" />
+          <Typography variant="body2" className="mb-0">
+            {t.docs.loading}
+          </Typography>
+        </Flex>
+      </DocLayout>
+    );
   }
 
   if (!resolved || resolved.source === 'none') {
@@ -232,9 +285,17 @@ export const Docs: FC = () => {
       ? t.docs[resolved.labelKey as keyof typeof t.docs]
       : resolved.title;
 
+  const isCms = resolved.source === 'api';
+  const pageClassName = isCms
+    ? 'fade-in ink-doc-page ink-doc-page--cms space-y-6'
+    : 'fade-in ink-doc-page space-y-5';
+  const showHeroGif =
+    Boolean(getDocsPageMedia(resolved.slug)) &&
+    !(isCms && cmsBlocksHaveImage(resolved.blocks as PublicDocBlock[]));
+
   return (
     <DocLayout title={title} description={t.docs.description}>
-      <div className="fade-in ink-doc-page space-y-5">
+      <div className={pageClassName}>
         {loading ? (
           <Flex align="center" gap={2}>
             <Spinner size="sm" />
@@ -243,15 +304,23 @@ export const Docs: FC = () => {
             </Typography>
           </Flex>
         ) : null}
+        {showHeroGif ? (
+          <DocHeroMedia slug={resolved.slug} guidLabel={t.docs.guidLabel} />
+        ) : null}
         {resolved.blocks.map((block, index) => {
           if (resolved.source === 'api') {
-            return renderCmsBlock(resolved.slug, block as PublicDocBlock, index);
+            return renderCmsBlock(
+              resolved.slug,
+              block as PublicDocBlock,
+              index,
+              t.docs.topics,
+            );
           }
           return renderStaticBlock(resolved.slug, block as DocsBlock, index);
         })}
-        <Typography variant="caption" className="ink-text-muted block pt-6">
+        <Typography variant="caption" className="ink-doc-page__footer">
           {t.docs.title} · {ROUTES.DOCS}/{resolved.slug}
-          {resolved.source === 'api' ? ` · ${t.docs.fromCms}` : EMPTY_STRING}
+          {isCms ? ` · ${t.docs.fromCms}` : EMPTY_STRING}
         </Typography>
       </div>
     </DocLayout>

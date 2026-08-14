@@ -1,7 +1,12 @@
 import { useState, type FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { BearIcons, Button, Flex, Typography } from '@forgedevstack/bear';
-import { InkEditor, type InkEditorVariant } from '@forgedevstack/ink';
+import {
+  InkEditor,
+  INK_AI_OPENAI_MODEL_GPT_4_1_MINI,
+  type InkEditorVariant,
+} from '@forgedevstack/ink';
+import { registerPortalAiProviders, resolvePortalAiProviderId } from '@/ai/index';
 import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { PLAYGROUND_EDITOR_MIN_HEIGHT_PX, ROUTES } from '@const/index';
@@ -17,6 +22,8 @@ import type {
   ToolbarPreset,
 } from './Playground.types';
 
+registerPortalAiProviders();
+
 export const Playground: FC = () => {
   const { t } = useI18n();
   const { premium, active } = useInkPremium();
@@ -25,6 +32,7 @@ export const Playground: FC = () => {
   const [view, setView] = useState<PlaygroundView>('preview');
   const [copied, setCopied] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const providerId = resolvePortalAiProviderId();
 
   const copyCode = async () => {
     await navigator.clipboard.writeText(generatedCode);
@@ -199,6 +207,8 @@ export const Playground: FC = () => {
                           placement: 'sidebar',
                           openOnInit: true,
                           showHistory: true,
+                          providerId,
+                          modelId: INK_AI_OPENAI_MODEL_GPT_4_1_MINI,
                         }
                       : undefined
                   }

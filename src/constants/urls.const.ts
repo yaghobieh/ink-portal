@@ -10,3 +10,5 @@ export const RAIL_URL = 'https://github.com/yaghobieh/rail';
 export const INK_EXCEL_NPM_URL = 'https://www.npmjs.com/package/@forgedevstack/ink-excel';
 export const INK_EXCEL_GITHUB_URL = 'https://github.com/yaghobieh/ink-excel';
 export const INK_EXCEL_PACKAGE_NAME = '@forgedevstack/ink-excel';
+export const BIFROST_INSTALLMENT_URL =
+  import.meta.env.VITE_BIFROST_INSTALLMENT_URL || 'http://localhost:5180/installment';

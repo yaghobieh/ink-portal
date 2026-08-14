@@ -4,19 +4,24 @@ import { Button, Flex, Typography } from '@forgedevstack/bear';
 import {
   InkEditor,
   INK_AI_MODEL_CATALOG,
+  INK_AI_OPENAI_MODEL_GPT_4_1_MINI,
   INK_COLLAB_TOOLBAR,
   type InkAiModelCatalogEntry,
 } from '@forgedevstack/ink';
+import { registerPortalAiProviders, resolvePortalAiProviderId } from '@/ai/index';
 import { Layout } from '@components/Layout';
 import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { DEMO_HTML_AI, HERO_EDITOR_MIN_HEIGHT_PX, ROUTES, THEME_CLASS_SNOW } from '@const/index';
+
+registerPortalAiProviders();
 
 export const Ai: FC = () => {
   const { t } = useI18n();
   const { premium, active } = useInkPremium();
   const [value, setValue] = useState(DEMO_HTML_AI);
   const modelCatalog: InkAiModelCatalogEntry[] = INK_AI_MODEL_CATALOG;
+  const providerId = resolvePortalAiProviderId();
 
   const features = [
     { title: t.ai.chatTitle, body: t.ai.chatBody },
@@ -107,7 +112,15 @@ export const Ai: FC = () => {
                   blocks: true,
                   slash: true,
                 }}
-                ai={{ enabled: true, placement: 'sidebar', openOnInit: true, showHistory: true }}
+                ai={{
+                  enabled: true,
+                  placement: 'sidebar',
+                  openOnInit: true,
+                  showHistory: true,
+                  autocomplete: true,
+                  providerId,
+                  modelId: INK_AI_OPENAI_MODEL_GPT_4_1_MINI,
+                }}
                 typoAutoFix
               />
             </div>

@@ -1,4 +1,5 @@
 import { INK_API_URL } from '@const/billing.const';
+import { requestWithError } from '../../http';
 import { PUBLIC_DOCS_PATH } from './docs.const';
 import type {
   PublicDocBySlugResponse,
@@ -18,7 +19,11 @@ const normalizePage = (raw: PublicDocPage | undefined | null): PublicDocPage | n
 export const fetchPublicDocsRequest = async (): Promise<PublicDocPage[]> => {
   if (!INK_API_URL) return [];
   try {
-    const response = await fetch(`${INK_API_URL}${PUBLIC_DOCS_PATH}`);
+    const response = await requestWithError(
+      `${INK_API_URL}${PUBLIC_DOCS_PATH}`,
+      undefined,
+      { message: 'Failed to load docs list' },
+    );
     if (!response.ok) return [];
     const data = (await response.json()) as PublicDocsListResponse;
     const list = data.pages ?? data.items ?? [];
@@ -33,7 +38,11 @@ export const fetchPublicDocBySlugRequest = async (
 ): Promise<PublicDocPage | null> => {
   if (!INK_API_URL || !slug) return null;
   try {
-    const response = await fetch(`${INK_API_URL}${PUBLIC_DOCS_PATH}/${encodeURIComponent(slug)}`);
+    const response = await requestWithError(
+      `${INK_API_URL}${PUBLIC_DOCS_PATH}/${encodeURIComponent(slug)}`,
+      undefined,
+      { message: 'Failed to load doc page' },
+    );
     if (!response.ok) return null;
     const data = (await response.json()) as PublicDocBySlugResponse;
     return normalizePage(data.page ?? data.item ?? null);
