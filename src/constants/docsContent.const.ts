@@ -41,7 +41,7 @@ export const DOCS_PAGES: DocsPageContent[] = [
           },
         ],
       },
-      { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink@1.1.4' },
+      { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink@1.1.6' },
       {
         type: 'code',
         language: 'tsx',
@@ -50,7 +50,7 @@ import '@forgedevstack/ink/styles.css';`,
       },
       {
         type: 'html',
-        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a> · current docs target <strong>1.1.4</strong>`,
+        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a> · current docs target <strong>1.1.6</strong>`,
       },
     ],
   },
