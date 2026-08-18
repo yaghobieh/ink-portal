@@ -10,3 +10,6 @@ export { LiveEditPages } from './LiveEditPages';
 export { ExtensionsPages } from './ExtensionsPages';
 export { PlansPages } from './PlansPages';
 export { SettingsPages } from './SettingsPages';
+export { DatabasePages } from './DatabasePages';
+export { TemplatesPages } from './TemplatesPages';
+export { BuilderPages } from './BuilderPages';

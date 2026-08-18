@@ -18,19 +18,28 @@ import {
   ContentPages,
   CrewPages,
   Dashboard,
+  DatabasePages,
   EditorsPages,
   ExtensionsPages,
   LiveEditPages,
   MediaPages,
   PlansPages,
   SettingsPages,
+  TemplatesPages,
+  BuilderPages,
 } from '@pages/Cms';
 import { Lab } from '@pages/Lab';
+import { NotFound } from '@pages/NotFound';
+import { Sensors } from '@pages/Sensors';
+import { CmsPagesRoute } from '@pages/CmsPagesRoute';
 
 const routes = [
   { path: ROUTES.HOME, name: 'home', component: Home },
   { path: ROUTES.DOC_PAGE, name: 'doc-page', component: Docs },
   { path: ROUTES.DOCS, name: 'docs', component: Docs },
+  { path: ROUTES.PAGES, name: 'pages', component: CmsPagesRoute },
+  { path: ROUTES.SENSORS, name: 'sensors', component: Sensors },
+  { path: ROUTES.NOT_FOUND, name: 'not-found', component: NotFound },
   { path: ROUTES.DEMOS, name: 'demos', component: Demos },
   { path: ROUTES.DEMO_FEATURE, name: 'demo-feature', component: DemoPage },
   { path: ROUTES.DEMO_AI, name: 'demo-ai', component: DemoPage },
@@ -56,8 +65,12 @@ const routes = [
   { path: ROUTES.CMS_LIVE_EDIT, name: 'cms-live-edit', component: LiveEditPages },
   { path: ROUTES.CMS_EXTENSIONS, name: 'cms-extensions', component: ExtensionsPages },
   { path: ROUTES.CMS_PLANS, name: 'cms-plans', component: PlansPages },
+  { path: ROUTES.CMS_DATABASE, name: 'cms-database', component: DatabasePages },
+  { path: ROUTES.CMS_TEMPLATES, name: 'cms-templates', component: TemplatesPages },
+  { path: ROUTES.CMS_BUILDER, name: 'cms-builder', component: BuilderPages },
   { path: ROUTES.CMS_SETTINGS, name: 'cms-settings', component: SettingsPages },
   ...(ENABLE_LAB ? [{ path: ROUTES.LAB, name: 'lab', component: Lab }] : []),
+  { path: '*', name: 'catch-all', component: NotFound },
 ];
 
 export const App = () => (

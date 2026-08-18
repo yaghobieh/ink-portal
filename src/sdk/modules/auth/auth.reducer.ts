@@ -1,7 +1,7 @@
 import { createNucleus } from '@forgedevstack/synapse';
 import { AUTH_TOKEN_STORAGE_KEY } from '@hooks/auth.const';
-import { fetchMeRequest, loginRequest } from './auth.api';
-import type { AuthState } from './auth.types';
+import { fetchMeRequest, loginRequest, registerRequest } from './auth.api';
+import type { AuthRegisterRequest, AuthState } from './auth.types';
 
 const readToken = (): string | null => {
   try {
@@ -34,6 +34,28 @@ export const authNucleus = createNucleus<AuthState>((set, get) => ({
   logout: () => {
     writeToken(null);
     set({ token: null, user: null, loading: false, error: false });
+  },
+
+  register: async (input: AuthRegisterRequest) => {
+    set({ loading: true, error: false });
+    try {
+      const result = await registerRequest(input);
+      if (!result) {
+        set({ loading: false, error: true });
+        return false;
+      }
+      writeToken(result.token);
+      set({
+        token: result.token,
+        user: result.user,
+        loading: false,
+        error: false,
+      });
+      return true;
+    } catch {
+      set({ loading: false, error: true });
+      return false;
+    }
   },
 
   login: async (username: string, password: string) => {

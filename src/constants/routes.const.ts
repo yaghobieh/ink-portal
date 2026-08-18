@@ -30,12 +30,29 @@ export const ROUTES = {
   CMS_LIVE_EDIT: '/cms/live-edit',
   CMS_EXTENSIONS: '/cms/extensions',
   CMS_PLANS: '/cms/plans',
+  CMS_DATABASE: '/cms/database',
   CMS_SETTINGS: '/cms/settings',
+  CMS_TEMPLATES: '/cms/templates',
+  CMS_BUILDER: '/cms/builder',
+  SENSORS: '/sensors',
+  PAGES: '/pages',
+  NOT_FOUND: '/404',
   LAB: '/lab',
 } as const;
 
 export const cmsEditPath = (id: string): string =>
   `/cms/edit/${encodeURIComponent(id)}`;
+
+export const BUILDER_QUERY_DOC = 'doc';
+export const BUILDER_QUERY_LAYOUT = 'layout';
+
+export const cmsBuilderPath = (query?: { doc?: string; layout?: string }): string => {
+  const params = new URLSearchParams();
+  if (query?.doc) params.set(BUILDER_QUERY_DOC, query.doc);
+  if (query?.layout) params.set(BUILDER_QUERY_LAYOUT, query.layout);
+  const search = params.toString();
+  return search ? `${ROUTES.CMS_BUILDER}?${search}` : ROUTES.CMS_BUILDER;
+};
 
 export const INK_VERSION = '1.1.6';
 export const PORTAL_VERSION = '1.1.6';

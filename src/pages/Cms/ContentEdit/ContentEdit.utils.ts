@@ -1,4 +1,4 @@
-import { EMPTY_STRING } from '@const/index';
+import { CMS_FALSE, CMS_SEO_COLLAPSED_KEY, CMS_TRUE, EMPTY_STRING } from '@const/index';
 import type { ContentItem, CmsPageItem } from '@sdk/modules/content';
 import { CONTENT_EDIT_KIND } from './ContentEdit.const';
 import type { ContentEditTarget } from './ContentEdit.types';
@@ -39,6 +39,13 @@ const sectionToHtml = (section: unknown): string => {
   }
   if (typeof entry.text === 'string') {
     return `<p>${escapeHtml(entry.text)}</p>`;
+  }
+  if (entry.type === 'image' && typeof entry.src === 'string' && entry.src) {
+    const alt = typeof entry.alt === 'string' ? escapeHtml(entry.alt) : EMPTY_STRING;
+    return `<img src="${escapeHtml(entry.src)}" alt="${alt}" />`;
+  }
+  if (entry.type === 'code' && typeof entry.code === 'string') {
+    return `<pre>${escapeHtml(entry.code)}</pre>`;
   }
   if (entry.type === 'steps' && Array.isArray(entry.items)) {
     const title =
@@ -93,6 +100,18 @@ export const htmlFromPayload = (payload: Record<string, unknown>): string => {
 export const appendWidgetHtml = (bodyHtml: string, widgetHtml: string): string => {
   if (!bodyHtml) return widgetHtml;
   return `${bodyHtml}\n${widgetHtml}`;
+};
+
+export const loadSeoCollapsed = (): boolean => {
+  try {
+    return localStorage.getItem(CMS_SEO_COLLAPSED_KEY) === CMS_TRUE;
+  } catch {
+    return false;
+  }
+};
+
+export const saveSeoCollapsed = (collapsed: boolean): void => {
+  localStorage.setItem(CMS_SEO_COLLAPSED_KEY, collapsed ? CMS_TRUE : CMS_FALSE);
 };
 
 export const resolveEditTarget = (

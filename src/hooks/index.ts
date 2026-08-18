@@ -4,6 +4,7 @@ export { AuthProvider, useAuth } from './AuthProvider';
 export {
   AUTH_TOKEN_STORAGE_KEY,
   AUTH_GOOGLE_PATH,
+  AUTH_GITHUB_PATH,
   AUTH_ME_PATH,
   AUTH_USAGE_PATH,
   AUTH_HEADER_AUTHORIZATION,

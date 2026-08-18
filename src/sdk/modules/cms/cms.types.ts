@@ -33,6 +33,17 @@ export type CmsIntegrationRow = {
 };
 
 export type CmsAnalytics = {
+  documents: number;
+  published: number;
+  drafts: number;
+  templates: number;
+  media: number;
+  tables: number;
+  tokensUsed: number;
+  tokensLimit: number;
+  documentsDelta: number;
+  publishedDelta: number;
+  draftsDelta: number;
   pageViews: number;
   pageViewsDelta: number;
   totalRevenue: number;

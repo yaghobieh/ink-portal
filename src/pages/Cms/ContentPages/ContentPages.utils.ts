@@ -1,4 +1,4 @@
-import { docsPath, SITE_URL } from '@const/index';
+import { docsPath, EMPTY_STRING, SITE_URL } from '@const/index';
 import { CONTENT_COLLECTION_DOCS } from './ContentPages.const';
 import type { ContentTableRow } from './ContentPages.types';
 
@@ -15,6 +15,9 @@ export const resolveDocsPublicUrl = (slug: string): string => {
   }
   return `${SITE_URL}${docsPath(slug)}`;
 };
+
+export const templateFromPayload = (payload: Record<string, unknown>): string =>
+  typeof payload.template === 'string' ? payload.template : EMPTY_STRING;
 
 export const openContentRowTarget = (row: ContentTableRow): void => {
   if (row.collection !== CONTENT_COLLECTION_DOCS) return;

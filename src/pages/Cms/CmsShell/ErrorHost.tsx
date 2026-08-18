@@ -29,6 +29,7 @@ export const ErrorHost: FC = () => {
         <div className="ink-cms-error-toast">
           <Alert
             severity="error"
+            variant="filled"
             closable
             onClose={() => setToast(null)}
             title={t.cmsErrors.toastTitle}

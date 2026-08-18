@@ -2,7 +2,7 @@ import { DATA_BEAR_WIDGET_ATTR } from '@const/strings.const';
 import type { BearWidgetDef } from './ContentEdit.types';
 
 export const CONTENT_EDIT_EDITOR_MIN_HEIGHT_PX = 420;
-export const CONTENT_EDIT_DRAWER_WIDTH_PX = 280;
+export const CONTENT_EDIT_DRAWER_WIDTH_PX = 380;
 export const CONTENT_EDIT_PREVIEW_MIN_HEIGHT_PX = 320;
 
 export const BEAR_WIDGET_CATALOG: readonly BearWidgetDef[] = [
@@ -34,7 +34,7 @@ export const BEAR_WIDGET_CATALOG: readonly BearWidgetDef[] = [
     id: 'alert',
     label: 'Alert',
     bearComponent: 'Alert',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Alert" class="ink-cms-widget-alert"><p><strong>Alert</strong> — important notice.</p></div>`,
+    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Alert" class="ink-cms-widget-alert" role="alert"><strong class="ink-cms-widget-alert__title">Alert</strong><p class="ink-cms-widget-alert__body">Important notice — this is a working Bear Alert block.</p></div>`,
   },
   {
     id: 'badge',

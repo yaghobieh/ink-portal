@@ -2,12 +2,14 @@ import { ROUTES } from '@const/routes.const';
 import {
   CMS_AVATAR_INITIALS_LENGTH,
   CMS_ICON_SIZE,
+  CMS_SIDEBAR_COLLAPSED_WIDTH_PX,
   CMS_SIDEBAR_WIDTH_PX,
 } from '@const/numbers.const';
 
 export {
   CMS_AVATAR_INITIALS_LENGTH,
   CMS_ICON_SIZE,
+  CMS_SIDEBAR_COLLAPSED_WIDTH_PX,
   CMS_SIDEBAR_WIDTH_PX,
 };
 
@@ -20,6 +22,9 @@ export const CMS_NAV_IDS = {
   LIVE_EDIT: 'live-edit',
   EXTENSIONS: 'extensions',
   PLANS: 'plans',
+  DATABASE: 'database',
+  TEMPLATES: 'templates',
+  BUILDER: 'builder',
   ANALYTICS: 'analytics',
   SETTINGS: 'settings',
 } as const;
@@ -33,7 +38,21 @@ export const CMS_NAV_ROUTES: Record<string, string> = {
   [CMS_NAV_IDS.LIVE_EDIT]: ROUTES.CMS_LIVE_EDIT,
   [CMS_NAV_IDS.EXTENSIONS]: ROUTES.CMS_EXTENSIONS,
   [CMS_NAV_IDS.PLANS]: ROUTES.CMS_PLANS,
+  [CMS_NAV_IDS.DATABASE]: ROUTES.CMS_DATABASE,
+  [CMS_NAV_IDS.TEMPLATES]: ROUTES.CMS_TEMPLATES,
+  [CMS_NAV_IDS.BUILDER]: ROUTES.CMS_BUILDER,
   [CMS_NAV_IDS.SETTINGS]: ROUTES.CMS_SETTINGS,
 };
 
 export const CMS_SEARCH_INPUT_ID = 'ink-cms-search';
+
+export const CMS_BOTTOM_NAV_IDS = [
+  CMS_NAV_IDS.DASHBOARD,
+  CMS_NAV_IDS.CONTENT,
+  CMS_NAV_IDS.BUILDER,
+  CMS_NAV_IDS.CREW,
+  CMS_NAV_IDS.SETTINGS,
+] as const;
+
+export const CMS_BOTTOM_NAV_CLASS = 'ink-cms__bottom-nav';
+export const CMS_SHELL_BOTTOM_NAV_CLASS = 'ink-cms--bottom-nav';

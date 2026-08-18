@@ -11,6 +11,7 @@ export type ContentTableRow = {
   title: string;
   slug: string;
   collection: string;
+  template: string;
   status: string;
   updated: string;
   updatedAt: string;

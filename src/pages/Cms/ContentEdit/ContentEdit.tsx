@@ -3,6 +3,7 @@ import { useNavigate, useParams } from '@forgedevstack/forge-compass/react';
 import { useNucleus } from '@forgedevstack/synapse';
 import {
   Badge,
+  BearIcons,
   Button,
   Card,
   Flex,
@@ -13,11 +14,8 @@ import {
 import { InkEditor } from '@forgedevstack/ink';
 import { useAuth } from '@hooks/index';
 import { useI18n } from '@i18n/index';
-import {
-  DRAG_WIDGET_MIME,
-  EMPTY_STRING,
-  ROUTES,
-} from '@const/index';
+import { DRAG_WIDGET_MIME, EMPTY_STRING, ROUTES } from '@const/index';
+import { CMS_ICON_SIZE } from '@const/numbers.const';
 import { authNucleus, contentNucleus } from '@sdk/index';
 import type { ContentStatus } from '@sdk/modules/content';
 import { CmsShell, CMS_NAV_IDS } from '../CmsShell';
@@ -29,7 +27,8 @@ import {
   CONTENT_EDIT_STATUS_ORDER,
 } from './ContentEdit.const';
 import type { BearWidgetDef } from './ContentEdit.types';
-import { appendWidgetHtml, resolveEditTarget } from './ContentEdit.utils';
+import { appendWidgetHtml, loadSeoCollapsed, resolveEditTarget, saveSeoCollapsed } from './ContentEdit.utils';
+import { DOCUMENT_TEMPLATE_ID } from '../ContentPages/ContentPages.const';
 
 type ContentRevision = {
   id: string;
@@ -69,6 +68,7 @@ export const ContentEdit: FC = () => {
   const [preview, setPreview] = useState(false);
   const [saveOk, setSaveOk] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [seoCollapsed, setSeoCollapsed] = useState(() => loadSeoCollapsed());
 
   useEffect(() => {
     if (!activeToken) return;
@@ -86,9 +86,17 @@ export const ContentEdit: FC = () => {
     setTitle(target.title);
     setBodyHtml(target.bodyHtml);
     setStatus((target.status as ContentStatus) || 'draft');
-    setSeoTitle(target.title);
-    setSeoDescription(EMPTY_STRING);
-    setScheduleAt(EMPTY_STRING);
+    setSeoTitle(
+      typeof target.payload?.seoTitle === 'string' ? target.payload.seoTitle : target.title,
+    );
+    setSeoDescription(
+      typeof target.payload?.seoDescription === 'string'
+        ? target.payload.seoDescription
+        : EMPTY_STRING,
+    );
+    setScheduleAt(
+      typeof target.payload?.scheduleAt === 'string' ? target.payload.scheduleAt : EMPTY_STRING,
+    );
     setRevisions([]);
     setSaveOk(false);
     setHydrated(true);
@@ -146,12 +154,18 @@ export const ContentEdit: FC = () => {
       setSaveOk(ok);
       return;
     }
+    const existingTemplate =
+      target.payload && typeof target.payload.template === 'string'
+        ? target.payload.template
+        : EMPTY_STRING;
     const payload = {
       ...(target.payload || {}),
       html: bodyHtml,
+      blocks: [{ type: 'html', html: bodyHtml }],
       seoTitle,
       seoDescription,
       scheduleAt: scheduleAt || null,
+      template: existingTemplate || DOCUMENT_TEMPLATE_ID,
     };
     const ok = await saveContent(activeToken, {
       collection: target.collection || EMPTY_STRING,
@@ -200,6 +214,7 @@ export const ContentEdit: FC = () => {
             <Button
               size="sm"
               variant="ink"
+              icon={<BearIcons.SaveIcon size={CMS_ICON_SIZE} />}
               onClick={() => void onSave()}
               disabled={!target || saving}
             >
@@ -275,10 +290,27 @@ export const ContentEdit: FC = () => {
             </Card>
 
             <aside className="ink-cms-edit__drawer">
-              <Card className="ink-cms-card mb-3">
-                <Typography variant="h4" className="mb-2">
-                  {t.contentEdit.publishTitle}
-                </Typography>
+              <Card className="ink-cms-card mb-3 ink-cms-edit__seo">
+                <button
+                  type="button"
+                  className="ink-cms-edit__seo-toggle"
+                  onClick={() => {
+                    const next = !seoCollapsed;
+                    setSeoCollapsed(next);
+                    saveSeoCollapsed(next);
+                  }}
+                >
+                  <Typography variant="h4" className="mb-0">
+                    {t.contentEdit.publishTitle}
+                  </Typography>
+                  {seoCollapsed ? (
+                    <BearIcons.ChevronRightIcon size={CMS_ICON_SIZE} />
+                  ) : (
+                    <BearIcons.ChevronDownIcon size={CMS_ICON_SIZE} />
+                  )}
+                </button>
+                {seoCollapsed ? null : (
+                  <>
                 <Typography variant="caption" className="ink-cms__muted mb-2 block">
                   {t.contentEdit.statusLabel}
                 </Typography>
@@ -328,6 +360,8 @@ export const ContentEdit: FC = () => {
                 <Typography variant="caption" className="ink-cms__muted mt-2 mb-0 block">
                   {t.contentEdit.collabHint}
                 </Typography>
+                  </>
+                )}
               </Card>
 
               <Card className="ink-cms-card mb-3">
