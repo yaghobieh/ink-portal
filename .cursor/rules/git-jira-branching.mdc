@@ -1,0 +1,28 @@
+---
+description: Git branches from Jira — feature/BOARD-n or bug/BOARD-n
+alwaysApply: true
+---
+
+# Git ↔ Jira branches
+
+When you pick a Jira issue, the branch prefix follows the issue type and the **board key** — not a hardcoded `INK`.
+
+| Jira type | Prefix |
+|---|---|
+| Bug | `bug/` |
+| Feature, Story, Task, Epic | `feature/` |
+
+Pattern: `{prefix}{PROJECT}-{n}`
+
+Examples:
+
+- INK Feature INK-26 → `feature/INK-26`
+- INK Bug INK-53 → `bug/INK-53`
+- CMS Feature CMS-35 → `feature/CMS-35`
+- FORGE Bug FORGE-82 → `bug/FORGE-82`
+
+`PROJECT` is the Jira project key (`INK`, `CMS`, `FORGE`, `CTX`). Do not use Linear auto slugs (`yaghobieh/gat-…`).
+
+## Integration
+
+Ink CMS work currently lives on `feature/1.1.7-cms-real`. Ticket branches PR into that branch (or `release/{version}` when the sprint branch exists). Do not merge CMS WIP into `main` mid-sprint.
