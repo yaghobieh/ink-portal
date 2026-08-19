@@ -1,28 +1,39 @@
 ---
-description: Git branches from Jira — feature/BOARD-n or bug/BOARD-n
+description: Git branches from Jira — release/sprint then feature/BOARD-n or bug/BOARD-n
 alwaysApply: true
 ---
 
 # Git ↔ Jira branches
 
-When you pick a Jira issue, the branch prefix follows the issue type and the **board key** — not a hardcoded `INK`.
+## Board flow
+
+1. Open the Jira board for that product (CMS board key is `CMS`).
+2. Move the issue to **In Progress**.
+3. Branch from the **sprint release branch**, not from `main`.
+4. This CMS sprint is **1.1.0** → `release/1.1.0`.
+5. Ticket branch: `{feature|bug}/{PROJECT}-{n}`.
+
+## Prefix
 
 | Jira type | Prefix |
 |---|---|
 | Bug | `bug/` |
 | Feature, Story, Task, Epic | `feature/` |
 
-Pattern: `{prefix}{PROJECT}-{n}`
+`PROJECT` is the board key (`CMS`, `INK`, `FORGE`, `CTX`). Example: CMS-26 → `feature/CMS-26`. Never hardcode `INK`. Never use Linear slugs (`yaghobieh/gat-…`).
 
-Examples:
+## Stories and subtasks
 
-- INK Feature INK-26 → `feature/INK-26`
-- INK Bug INK-53 → `bug/INK-53`
-- CMS Feature CMS-35 → `feature/CMS-35`
-- FORGE Bug FORGE-82 → `bug/FORGE-82`
+- Story/Feature in progress: branch `feature/CMS-26` from `release/1.1.0`.
+- Subtasks open PRs **into the story branch** (`feature/CMS-26`), not into `main`.
+- After checks: merge the story into `release/1.1.0` (Jira → In Review).
+- Do not merge CMS WIP into `main` mid-sprint (publish.yml on some libs).
 
-`PROJECT` is the Jira project key (`INK`, `CMS`, `FORGE`, `CTX`). Do not use Linear auto slugs (`yaghobieh/gat-…`).
+## Sprint end
 
-## Integration
+Merge `release/1.1.0` → `main`, then deploy CMS (Ink portal first) and/or publish the lib.
 
-Ink CMS work currently lives on `feature/1.1.7-cms-real`. Ticket branches PR into that branch (or `release/{version}` when the sprint branch exists). Do not merge CMS WIP into `main` mid-sprint.
+## Repos
+
+- Bifrost and ink-server: `release/1.1.0` then `feature/CMS-X`.
+- Ink portal is the first CMS host. Historical `origin/release/1.1.0` is the old editor portal — do not reset or force-push it. CMS sprint work here branches `feature/CMS-X` from `feature/1.1.7-cms-real` until sprint-end merge to `main`.
