@@ -1,31 +1,25 @@
-import { useState, type FC } from 'react';
+import { type FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { Badge, BearIcons, Button, Flex, Typography } from '@forgedevstack/bear';
-import { InkEditor } from '@forgedevstack/ink';
 import { Layout } from '@components/Layout';
-import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import {
   GITHUB_URL,
   HERO_EDITOR_HTML,
   HOME_AI_FEATURES,
-  HOME_AI_MEDIA_SRC,
+  HOME_AI_GIF_SRC,
   HOME_EXAMPLES,
   HOME_FEATURE_IDS,
-  HOME_GALLERY,
-  HOME_HERO_EDITOR_MIN_HEIGHT_PX,
-  HOME_HERO_TOOLBAR,
+  HOME_GALLERY_HIGHLIGHTS,
   LANDING_BG_SRC,
   LOGO_SRC,
   ROUTES,
   STACK_LABELS,
-  THEME_CLASS_SNOW,
 } from '@const/index';
+import { HomeLiveEditor } from './HomeLiveEditor';
 
 export const Home: FC = () => {
   const { t } = useI18n();
-  const { premium, active } = useInkPremium();
-  const [value, setValue] = useState(HERO_EDITOR_HTML);
 
   const features = [
     {
@@ -120,31 +114,8 @@ export const Home: FC = () => {
             </div>
 
             <div className="ink-landing__editor-wrap">
-              <div className={`ink-landing__editor ${THEME_CLASS_SNOW}`}>
-                <InkEditor
-                  value={value}
-                  onChange={setValue}
-                  minHeight={HOME_HERO_EDITOR_MIN_HEIGHT_PX}
-                  toolbar={HOME_HERO_TOOLBAR}
-                  typoAutoFix
-                  showCharCount
-                  variant="classic"
-                  premium={premium}
-                  pasteMode={active ? 'rich' : 'plain'}
-                  wysiwyg={active}
-                  features={{
-                    table: true,
-                    trackChanges: false,
-                    comments: false,
-                    ai: false,
-                    blocks: true,
-                    slash: true,
-                    signature: true,
-                    findReplace: true,
-                    horizontalRule: true,
-                  }}
-                  placeholder="Start writing…"
-                />
+              <div className="ink-landing__editor ink-landing__editor--v117">
+                <HomeLiveEditor html={HERO_EDITOR_HTML} placeholder={t.home.editorPlaceholder} showAi />
               </div>
             </div>
           </div>
@@ -171,29 +142,19 @@ export const Home: FC = () => {
             <Typography variant="body1" className="ink-home-section__body">
               {t.home.galleryBody}
             </Typography>
-            {HOME_GALLERY.filter((item) => item.wide).map((item) => (
-              <figure key={`${item.labelKey}-${item.src}`} className="ink-home-gallery__feature">
-                <img src={item.src} alt={t.home[item.altKey]} className="ink-home-gallery__feature-img" />
-                <figcaption className="ink-home-gallery__label">
-                  <Badge variant="info" className="text-xs">
-                    {t.home[item.labelKey]}
-                  </Badge>
-                </figcaption>
-              </figure>
-            ))}
-            <div className="ink-home-gallery">
-              {HOME_GALLERY.filter((item) => !item.wide).map((item) => (
-                <figure
-                  key={`${item.labelKey}-${item.src}`}
-                  className={`ink-home-gallery__item${item.tall ? ' ink-home-gallery__item--tall' : ''}`}
-                >
-                  <img src={item.src} alt={t.home[item.altKey]} className="ink-home-gallery__img" />
-                  <figcaption className="ink-home-gallery__label">
-                    <Badge variant="info" className="text-xs">
-                      {t.home[item.labelKey]}
-                    </Badge>
-                  </figcaption>
-                </figure>
+            <div className="ink-home-gallery__live">
+              <HomeLiveEditor html={HERO_EDITOR_HTML} placeholder={t.home.editorPlaceholder} showAi />
+            </div>
+            <div className="ink-home-gallery-highlights">
+              {HOME_GALLERY_HIGHLIGHTS.map((item) => (
+                <article key={item.id} className="ink-home-gallery-highlight">
+                  <Typography variant="h5" className="font-semibold mb-2">
+                    {t.home[item.titleKey]}
+                  </Typography>
+                  <Typography variant="body2" className="ink-text-muted mb-0">
+                    {t.home[item.bodyKey]}
+                  </Typography>
+                </article>
               ))}
             </div>
           </div>
@@ -235,12 +196,17 @@ export const Home: FC = () => {
             </Typography>
             <figure className="ink-home-ai__media">
               <img
-                src={HOME_AI_MEDIA_SRC}
+                src={HOME_AI_GIF_SRC}
                 alt={t.home.aiMediaAlt}
-                className="ink-home-ai__img"
+                className="ink-home-ai__gif"
                 width={720}
                 height={400}
               />
+              <figcaption className="ink-home-gallery__label">
+                <Badge variant="info" className="text-xs">
+                  {t.home.galleryAiLabel}
+                </Badge>
+              </figcaption>
             </figure>
             <div className="ink-home-ai__grid">
               {HOME_AI_FEATURES.map((feature) => (

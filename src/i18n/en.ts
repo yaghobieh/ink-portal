@@ -197,7 +197,18 @@ export const en: Messages = {
     featureDeveloperBody: 'Typed React API. CSS themes. Bring your own LLM.',
     stackTitle: 'Works great with your stack',
     galleryTitle: 'See the editor in motion',
-    galleryBody: 'Toolbar, slash menu, and paper UI — the same surface you get in the playground.',
+    galleryBody:
+      'This is the 1.1.7 document editor — live. Paragraph menu, outline, slash, and Ask Ink AI. Type in it.',
+    editorPlaceholder: 'Start writing in Ink 1.1.7…',
+    galleryHighlightToolbarTitle: 'Grouped toolbar',
+    galleryHighlightToolbarBody:
+      'Paragraph styles, format cluster, lists, media, and Ask Ink AI sit in one row with thin-stroke icons.',
+    galleryHighlightSlashTitle: 'Slash commands',
+    galleryHighlightSlashBody:
+      'Type / to insert headings, lists, tables, quotes, and callouts without leaving the keyboard.',
+    galleryHighlightAiTitle: 'Ask Ink AI',
+    galleryHighlightAiBody:
+      'Rewrite, summarize, and autocomplete on the canvas. Hosted tokens or bring your own key.',
     galleryLanding: 'Ink landing atmosphere',
     galleryLandingLabel: 'Landing',
     galleryHero: 'Ink editor in motion',
@@ -236,7 +247,7 @@ export const en: Messages = {
     aiByoTitle: 'Bring your own key',
     aiByoBody:
       'Pro unlocks BYO providers (OpenAI and others). Wire your runner — Ink stays the editor layer, not a locked model.',
-    aiMediaAlt: 'Ink editor demo with AI-ready writing surface',
+    aiMediaAlt: 'Ink AI generate, rewrite, and Tab autocomplete in the editor',
     aiCta: 'Explore Ink AI',
   },
   pricing: {
