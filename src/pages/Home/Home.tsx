@@ -13,6 +13,7 @@ import {
   HOME_EXAMPLES,
   HOME_FEATURE_IDS,
   HOME_GALLERY,
+  HOME_GALLERY_HIGHLIGHTS,
   HOME_HERO_EDITOR_MIN_HEIGHT_PX,
   HOME_HERO_TOOLBAR,
   LANDING_BG_SRC,
@@ -129,6 +130,7 @@ export const Home: FC = () => {
                   typoAutoFix
                   showCharCount
                   variant="classic"
+                  colorMode="light"
                   premium={premium}
                   pasteMode={active ? 'rich' : 'plain'}
                   wysiwyg={active}
@@ -171,7 +173,7 @@ export const Home: FC = () => {
             <Typography variant="body1" className="ink-home-section__body">
               {t.home.galleryBody}
             </Typography>
-            {HOME_GALLERY.filter((item) => item.wide).map((item) => (
+            {HOME_GALLERY.map((item) => (
               <figure key={`${item.labelKey}-${item.src}`} className="ink-home-gallery__feature">
                 <img src={item.src} alt={t.home[item.altKey]} className="ink-home-gallery__feature-img" />
                 <figcaption className="ink-home-gallery__label">
@@ -181,19 +183,16 @@ export const Home: FC = () => {
                 </figcaption>
               </figure>
             ))}
-            <div className="ink-home-gallery">
-              {HOME_GALLERY.filter((item) => !item.wide).map((item) => (
-                <figure
-                  key={`${item.labelKey}-${item.src}`}
-                  className={`ink-home-gallery__item${item.tall ? ' ink-home-gallery__item--tall' : ''}`}
-                >
-                  <img src={item.src} alt={t.home[item.altKey]} className="ink-home-gallery__img" />
-                  <figcaption className="ink-home-gallery__label">
-                    <Badge variant="info" className="text-xs">
-                      {t.home[item.labelKey]}
-                    </Badge>
-                  </figcaption>
-                </figure>
+            <div className="ink-home-gallery-highlights">
+              {HOME_GALLERY_HIGHLIGHTS.map((item) => (
+                <article key={item.id} className="ink-home-gallery-highlight">
+                  <Typography variant="h5" className="font-semibold mb-2">
+                    {t.home[item.titleKey]}
+                  </Typography>
+                  <Typography variant="body2" className="ink-text-muted mb-0">
+                    {t.home[item.bodyKey]}
+                  </Typography>
+                </article>
               ))}
             </div>
           </div>
@@ -237,7 +236,7 @@ export const Home: FC = () => {
               <img
                 src={HOME_AI_MEDIA_SRC}
                 alt={t.home.aiMediaAlt}
-                className="ink-home-ai__img"
+                className="ink-home-ai__gif"
                 width={720}
                 height={400}
               />

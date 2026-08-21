@@ -72,8 +72,8 @@ export const HOME_HERO_TOOLBAR: ToolbarOption[] = [
 
 export const HOME_GALLERY: Array<{
   src: string;
-  altKey: 'galleryDemo' | 'galleryHero' | 'galleryLanding' | 'galleryBlocks';
-  labelKey: 'galleryDemoLabel' | 'galleryHeroLabel' | 'galleryLandingLabel' | 'galleryBlocksLabel';
+  altKey: 'galleryDemo';
+  labelKey: 'galleryDemoLabel';
   tall: boolean;
   wide?: boolean;
 }> = [
@@ -81,26 +81,26 @@ export const HOME_GALLERY: Array<{
     src: '/ink-editor-demo.gif',
     altKey: 'galleryDemo',
     labelKey: 'galleryDemoLabel',
-    tall: true,
+    tall: false,
     wide: true,
   },
+];
+
+export const HOME_GALLERY_HIGHLIGHTS = [
   {
-    src: '/ink-drag-drop-install.gif',
-    altKey: 'galleryHero',
-    labelKey: 'galleryHeroLabel',
-    tall: false,
+    id: 'toolbar',
+    titleKey: 'galleryHighlightToolbarTitle' as const,
+    bodyKey: 'galleryHighlightToolbarBody' as const,
   },
   {
-    src: '/ink-landing.png',
-    altKey: 'galleryLanding',
-    labelKey: 'galleryLandingLabel',
-    tall: false,
+    id: 'slash',
+    titleKey: 'galleryHighlightSlashTitle' as const,
+    bodyKey: 'galleryHighlightSlashBody' as const,
   },
   {
-    src: '/ink-hero.png',
-    altKey: 'galleryBlocks',
-    labelKey: 'galleryBlocksLabel',
-    tall: true,
+    id: 'ai',
+    titleKey: 'galleryHighlightAiTitle' as const,
+    bodyKey: 'galleryHighlightAiBody' as const,
   },
 ];
 
