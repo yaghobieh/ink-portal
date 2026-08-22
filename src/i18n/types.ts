@@ -169,6 +169,13 @@ export interface Messages {
     stackTitle: string;
     galleryTitle: string;
     galleryBody: string;
+    editorPlaceholder: string;
+    galleryHighlightToolbarTitle: string;
+    galleryHighlightToolbarBody: string;
+    galleryHighlightSlashTitle: string;
+    galleryHighlightSlashBody: string;
+    galleryHighlightAiTitle: string;
+    galleryHighlightAiBody: string;
     galleryLanding: string;
     galleryLandingLabel: string;
     galleryHero: string;

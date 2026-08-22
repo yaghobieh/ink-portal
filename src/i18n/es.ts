@@ -196,7 +196,18 @@ export const es: Messages = {
     featureDeveloperBody: 'API React tipada. Temas CSS. Trae tu propio LLM.',
     stackTitle: 'Encaja con tu stack',
     galleryTitle: 'El editor en movimiento',
-    galleryBody: 'Toolbar, slash menu y UI en papel — la misma superficie del playground.',
+    galleryBody:
+      'Este es el editor documento 1.1.7 — en vivo. Menú de párrafo, outline, slash y Ask Ink AI. Escribe en él.',
+    editorPlaceholder: 'Empieza a escribir en Ink 1.1.7…',
+    galleryHighlightToolbarTitle: 'Toolbar agrupada',
+    galleryHighlightToolbarBody:
+      'Estilos de párrafo, formato, listas, media y Ask Ink AI en una fila con iconos de trazo fino.',
+    galleryHighlightSlashTitle: 'Comandos slash',
+    galleryHighlightSlashBody:
+      'Escribe / para insertar títulos, listas, tablas, citas y callouts sin salir del teclado.',
+    galleryHighlightAiTitle: 'Ask Ink AI',
+    galleryHighlightAiBody:
+      'Reescribe, resume y completa en el canvas. Tokens alojados o tu propia clave.',
     galleryLanding: 'Atmósfera de landing Ink',
     galleryLandingLabel: 'Landing',
     galleryHero: 'Editor Ink en movimiento',
@@ -235,7 +246,7 @@ export const es: Messages = {
     aiByoTitle: 'Trae tu propia clave',
     aiByoBody:
       'Pro desbloquea proveedores BYO (OpenAI y otros). Conecta tu runner — Ink es la capa del editor, no un modelo cerrado.',
-    aiMediaAlt: 'Demo del editor Ink con superficie lista para AI',
+    aiMediaAlt: 'Ink AI generate, reescritura y autocomplete con Tab en el editor',
     aiCta: 'Explorar Ink AI',
   },
   pricing: {

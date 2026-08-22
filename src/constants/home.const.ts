@@ -1,21 +1,23 @@
 import type { ToolbarOption } from '@forgedevstack/ink';
-import { INK_SIMPLE_TOOLBAR } from '@forgedevstack/ink';
-import { EDITOR_DEMO_SRC } from './strings.const';
 
-export const HERO_EDITOR_HTML = `<h1>Ink Editor</h1>
-<p>A modern rich text editor built for <strong>performance</strong> and <em>simplicity</em>. Nestable blocks, slash commands, and a clean API — so writing just feels right.</p>
+export const HERO_EDITOR_HTML = `<h1>Ink 1.1.7</h1>
+<p>A document editor with a grouped toolbar, outline rail, slash commands, and Ask Ink AI.</p>
 <ul>
-<li><strong>Lightweight</strong> — tiny footprint, no bloat</li>
-<li><strong>Extensible</strong> — plugins for AI, comments, and more</li>
-<li><strong>Developer Friendly</strong> — TypeScript-first React API</li>
+<li><b>Toolbar</b> — paragraph styles, format cluster, lists, media, undo, Ask Ink AI.</li>
+<li><b>Slash</b> — type / for headings, tables, quotes, callouts, and image.</li>
+<li><b>Outline</b> — jump headings from the rail while you write.</li>
 </ul>
-<blockquote>Write less configuration. Ship more product.</blockquote>`;
+<blockquote class="Ink-callout"><p>Write less configuration. Ship more product.</p></blockquote>
+<h2>What is new</h2>
+<p>Light heading menu. Thin-stroke icons. Status bar for words, characters, and synced.</p>
+<h3>Ask Ink AI</h3>
+<p>Rewrite, summarize, and Tab autocomplete on the canvas.</p>`;
 
 export const STACK_LABELS = ['React', 'Vue', 'Svelte', 'Next.js', 'Angular'] as const;
 
 export const HOME_FEATURE_IDS = ['lightweight', 'extensible', 'developer'] as const;
 
-export const HOME_AI_MEDIA_SRC = EDITOR_DEMO_SRC;
+export const HOME_AI_GIF_SRC = '/ink-ai-demo.gif';
 
 export type HomeAiFeatureKey =
   | 'aiAutocompleteTitle'
@@ -59,48 +61,53 @@ export const HOME_AI_FEATURES: Array<{
 export const HOME_HERO_TOOLBAR: ToolbarOption[] = [
   'headingDropdown',
   'divider',
-  ...INK_SIMPLE_TOOLBAR,
+  'bold',
+  'italic',
+  'underline',
+  'strikethrough',
   'divider',
+  'bulletList',
+  'orderedList',
+  'checklist' as ToolbarOption,
   'blockquote',
+  'divider',
+  'image',
   'link',
+  'table',
   'code',
   'divider',
-  'signature',
-  'findReplace',
-  'horizontalRule',
+  'undo',
+  'redo',
+  'ai',
 ];
 
-export const HOME_GALLERY: Array<{
-  src: string;
-  altKey: 'galleryDemo' | 'galleryHero' | 'galleryLanding' | 'galleryBlocks';
-  labelKey: 'galleryDemoLabel' | 'galleryHeroLabel' | 'galleryLandingLabel' | 'galleryBlocksLabel';
-  tall: boolean;
-  wide?: boolean;
-}> = [
+export const HOME_HERO_FEATURES = {
+  table: true,
+  trackChanges: true,
+  comments: true,
+  ai: true,
+  blocks: true,
+  slash: true,
+  signature: true,
+  findReplace: true,
+  horizontalRule: true,
+} as const;
+
+export const HOME_GALLERY_HIGHLIGHTS = [
   {
-    src: '/ink-editor-demo.gif',
-    altKey: 'galleryDemo',
-    labelKey: 'galleryDemoLabel',
-    tall: true,
-    wide: true,
+    id: 'toolbar',
+    titleKey: 'galleryHighlightToolbarTitle' as const,
+    bodyKey: 'galleryHighlightToolbarBody' as const,
   },
   {
-    src: '/ink-drag-drop-install.gif',
-    altKey: 'galleryHero',
-    labelKey: 'galleryHeroLabel',
-    tall: false,
+    id: 'slash',
+    titleKey: 'galleryHighlightSlashTitle' as const,
+    bodyKey: 'galleryHighlightSlashBody' as const,
   },
   {
-    src: '/ink-landing.png',
-    altKey: 'galleryLanding',
-    labelKey: 'galleryLandingLabel',
-    tall: false,
-  },
-  {
-    src: '/ink-hero.png',
-    altKey: 'galleryBlocks',
-    labelKey: 'galleryBlocksLabel',
-    tall: true,
+    id: 'ai',
+    titleKey: 'galleryHighlightAiTitle' as const,
+    bodyKey: 'galleryHighlightAiBody' as const,
   },
 ];
 
