@@ -15,6 +15,9 @@ export const CREW_PERMISSIONS = [
   'extension:install',
   'settings:read',
   'settings:edit',
+  'task:edit',
+  'task:status',
+  'task:fields',
 ] as const;
 
 export type CrewPermission = (typeof CREW_PERMISSIONS)[number];
@@ -58,6 +61,9 @@ export const DEFAULT_CREW_ROLES: CrewRole[] = [
       'media:upload',
       'extension:read',
       'settings:read',
+      'task:edit',
+      'task:status',
+      'task:fields',
     ],
     system: true,
   },
@@ -65,7 +71,7 @@ export const DEFAULT_CREW_ROLES: CrewRole[] = [
     id: 'crew',
     name: 'Crew',
     description: 'Draft and edit; cannot publish or manage users.',
-    permissions: ['page:read', 'page:create', 'page:edit', 'media:read', 'media:upload'],
+    permissions: ['page:read', 'page:create', 'page:edit', 'media:read', 'media:upload', 'task:edit'],
     system: true,
   },
   {

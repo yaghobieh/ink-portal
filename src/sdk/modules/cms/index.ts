@@ -8,7 +8,21 @@ export {
   fetchCrewRoles,
   fetchCrewUsers,
   updateCrewRoleRequest,
+  deleteCrewRoleRequest,
+  updateCrewUserRoleRequest,
 } from './crew.api';
+export {
+  fetchNotifications,
+  markNotificationReadRequest,
+  notifyTaskAgentsRequest,
+} from './notifications.api';
+export {
+  createMeetingRequest,
+  fetchMeetings,
+  updateMeetingRequest,
+} from './meetings.api';
+export type { CmsMeeting, CmsMeetingInput } from './meetings.api';
+export type { CmsNotification } from './notifications.api';
 export type {
   CmsAnalytics,
   CmsDashboardResponse,
