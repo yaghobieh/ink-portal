@@ -1,6 +1,14 @@
 import { CMS_FALSE, CMS_SEO_COLLAPSED_KEY, CMS_TRUE, EMPTY_STRING } from '@const/index';
 import type { ContentItem, CmsPageItem } from '@sdk/modules/content';
-import { CONTENT_EDIT_KIND } from './ContentEdit.const';
+import {
+  CONTENT_COLLECTION_PAGE_META,
+  CONTENT_COLLECTION_PAGES,
+} from '../ContentPages/ContentPages.const';
+import {
+  CONTENT_EDIT_KIND,
+  SCHEDULE_DEFAULT_TIME,
+  SCHEDULE_PAD_LENGTH,
+} from './ContentEdit.const';
 import type { ContentEditTarget } from './ContentEdit.types';
 
 const escapeHtml = (value: string): string =>
@@ -121,6 +129,14 @@ export const resolveEditTarget = (
 ): ContentEditTarget | null => {
   const page = pages.find((entry) => entry.id === id);
   if (page) {
+    const meta = items.find(
+      (entry) => entry.collection === CONTENT_COLLECTION_PAGE_META && entry.slug === page.id,
+    );
+    const contentPage = items.find(
+      (entry) =>
+        entry.collection === CONTENT_COLLECTION_PAGES &&
+        (entry.id === page.id || entry.slug === page.slug),
+    );
     return {
       kind: CONTENT_EDIT_KIND.PAGE,
       id: page.id,
@@ -129,6 +145,12 @@ export const resolveEditTarget = (
       status: page.status,
       bodyHtml: page.bodyHtml || EMPTY_STRING,
       mediaUrl: page.mediaUrl,
+      collection: CONTENT_COLLECTION_PAGES,
+      locale: contentPage?.locale || meta?.locale,
+      payload: {
+        ...(contentPage?.payload || {}),
+        ...(meta?.payload || {}),
+      },
     };
   }
   const item = items.find((entry) => entry.id === id);
@@ -146,4 +168,34 @@ export const resolveEditTarget = (
     };
   }
   return null;
+};
+
+export const payloadString = (
+  payload: Record<string, unknown> | undefined,
+  key: string,
+): string => {
+  if (!payload) return EMPTY_STRING;
+  const value = payload[key];
+  return typeof value === 'string' ? value : EMPTY_STRING;
+};
+
+const pad = (value: number): string => String(value).padStart(SCHEDULE_PAD_LENGTH, '0');
+
+export const splitScheduleAt = (value: string): { date: Date | null; time: string } => {
+  if (!value || !value.includes('T')) {
+    return { date: null, time: SCHEDULE_DEFAULT_TIME };
+  }
+  const [day, clock] = value.split('T');
+  const date = new Date(`${day}T00:00:00`);
+  return {
+    date: Number.isNaN(date.getTime()) ? null : date,
+    time: clock.slice(0, 5) || SCHEDULE_DEFAULT_TIME,
+  };
+};
+
+export const joinScheduleAt = (date: Date | null, time: string): string => {
+  if (!date) return EMPTY_STRING;
+  const day = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  const clock = time && time.length >= 4 ? time.slice(0, 5) : SCHEDULE_DEFAULT_TIME;
+  return `${day}T${clock}`;
 };

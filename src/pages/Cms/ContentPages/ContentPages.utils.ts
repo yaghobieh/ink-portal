@@ -16,8 +16,11 @@ export const resolveDocsPublicUrl = (slug: string): string => {
   return `${SITE_URL}${docsPath(slug)}`;
 };
 
-export const templateFromPayload = (payload: Record<string, unknown>): string =>
-  typeof payload.template === 'string' ? payload.template : EMPTY_STRING;
+export const templateFromPayload = (payload: Record<string, unknown>): string => {
+  if (typeof payload.template === 'string' && payload.template) return payload.template;
+  if (typeof payload.layoutId === 'string' && payload.layoutId) return payload.layoutId;
+  return EMPTY_STRING;
+};
 
 export const openContentRowTarget = (row: ContentTableRow): void => {
   if (row.collection !== CONTENT_COLLECTION_DOCS) return;

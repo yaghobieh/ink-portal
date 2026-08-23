@@ -12,7 +12,9 @@ export type ContentTableRow = {
   slug: string;
   collection: string;
   template: string;
+  fields: string;
   status: string;
   updated: string;
   updatedAt: string;
+  [key: string]: unknown;
 };

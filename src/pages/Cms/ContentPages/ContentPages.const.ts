@@ -1,3 +1,5 @@
+import { DOCUMENT_CLOUDINARY_IMAGE_SRC } from '@const/docsCloudinary.const';
+
 export const CONTENT_KIND_PAGE = 'page';
 export const CONTENT_KIND_ITEM = 'item';
 
@@ -6,11 +8,14 @@ export type ContentKind = typeof CONTENT_KIND_PAGE | typeof CONTENT_KIND_ITEM;
 export const CONTENT_COLLECTION_DOCS = 'docs';
 export const CONTENT_COLLECTION_PAGES = 'pages';
 export const CONTENT_COLLECTION_TEMPLATES = 'templates';
+export const CONTENT_COLLECTION_PAGE_META = 'page-meta';
+export const CONTENT_LIST_COLLECTIONS = [CONTENT_COLLECTION_PAGES] as const;
 
 export const DOCUMENT_TEMPLATE_ID = 'document';
 export const DOCUMENT_SLUG_PREFIX = 'document-';
-export const DOCUMENT_IMAGE_SRC = '/docs/toolbar.svg';
-export const DOCUMENT_IMAGE_ALT = 'Toolbar presets and format controls';
+export const DOCUMENT_IMAGE_SRC =
+  DOCUMENT_CLOUDINARY_IMAGE_SRC || '/docs/installation.svg';
+export const DOCUMENT_IMAGE_ALT = 'Install Ink and mount the editor';
 export const DOCUMENT_DEFAULT_LOCALE = 'en';
 export const DOCUMENT_STARTER_STATUS = 'draft' as const;
 
@@ -22,32 +27,52 @@ export const DOCUMENT_STARTER_BLOCKS = [
   },
   {
     type: 'p',
-    text: 'Document is the default Ink CMS template. Replace this copy, keep the gif, and add code when the page needs a snippet.',
+    text: 'Ink is a React rich-text editor that stores content as HTML and exposes structured side-channel state (comments, track changes) as JSON-friendly payloads. Install the package once, import styles once, then mount InkEditor in any form or document surface.',
   },
+  {
+    type: 'steps',
+    title: 'What you get',
+    items: [
+      {
+        title: 'npm package',
+        body: 'Adds the editor runtime, toolbar presets, and CSS entry under @forgedevstack/ink.',
+      },
+      {
+        title: 'Styles entry',
+        body: 'One import of @forgedevstack/ink/styles.css at the app root styles the chrome and content.',
+      },
+      {
+        title: 'Controlled mount',
+        body: 'value / onChange keeps the parent as source of truth — ideal for forms and save APIs.',
+      },
+    ],
+  },
+  { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink' },
   {
     type: 'code',
     language: 'tsx',
     code: `import { InkEditor } from '@forgedevstack/ink';
-
-<InkEditor
-  value={html}
-  onChange={setHtml}
-  toolbar={['headingDropdown', 'bold', 'italic', 'undo', 'redo']}
-/>`,
+import '@forgedevstack/ink/styles.css';`,
   },
-] as const;
+];
 
 export const CONTENT_COLUMN_IDS = {
   TITLE: 'title',
   SLUG: 'slug',
   COLLECTION: 'collection',
   TEMPLATE: 'template',
+  FIELDS: 'fields',
   STATUS: 'status',
   UPDATED: 'updated',
   ACTIONS: 'actions',
 } as const;
 
 export const CONTENT_DATE_LOCALE = 'en-CA';
+
+export const CONTENT_STATUS_PUBLISHED = 'published';
+export const CONTENT_STATUS_DRAFT = 'draft';
+export const CONTENT_TEMPLATE_EMPTY = '—';
+export const CONTENT_MORE_MENU_MIN_WIDTH = 160;
 
 export const CONTENT_NEW_PAGE_MENU_MIN_WIDTH = 220;
 export const SAVED_TEMPLATES_DIVIDER_KEY = 'saved-templates-divider';
