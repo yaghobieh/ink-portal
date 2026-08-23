@@ -384,6 +384,7 @@ export interface Messages {
     media: string;
     editors: string;
     crew: string;
+    tasks: string;
     liveEdit: string;
     extensions: string;
     plans: string;
@@ -397,6 +398,7 @@ export interface Messages {
     planFallback: string;
     accountFallback: string;
     signOut: string;
+    online: string;
     beta: string;
     loginTitle: string;
     loginDescription: string;
@@ -458,6 +460,7 @@ export interface Messages {
     subtitle: string;
     meetings: string;
     addUser: string;
+    taggedUsers: string;
     generateMeeting: string;
     notifyHint: string;
     empty: string;
@@ -470,6 +473,37 @@ export interface Messages {
     subtitle: string;
     range: string;
     seeAll: string;
+    seeAllHint: string;
+    unread: string;
+    markAllRead: string;
+  };
+  cmsTasks: {
+    title: string;
+    subtitle: string;
+    todo: string;
+    doing: string;
+    done: string;
+    taskTitle: string;
+    subtitleLabel: string;
+    description: string;
+    tags: string;
+    tagCreate: string;
+    tagAdd: string;
+    agent: string;
+    agentPick: string;
+    agentNotify: string;
+    status: string;
+    add: string;
+    cancel: string;
+    createTitle: string;
+    tagged: string;
+    moved: string;
+    moveBack: string;
+    moveNext: string;
+    addStatus: string;
+    addField: string;
+    fieldOption: string;
+    fieldNone: string;
   };
   cmsLook: {
     label: string;

@@ -20,6 +20,7 @@ export const ROUTES = {
   PREMIUM_SUCCESS: '/pricing/success',
   TERMS: '/terms',
   LOGIN: '/cms/login',
+  LOGIN_PUBLIC: '/login',
   CMS: '/cms',
   CMS_LOGIN: '/cms/login',
   CMS_CONTENT: '/cms/content',
@@ -30,10 +31,13 @@ export const ROUTES = {
   CMS_LIVE_EDIT: '/cms/live-edit',
   CMS_EXTENSIONS: '/cms/extensions',
   CMS_PLANS: '/cms/plans',
-  CMS_DATABASE: '/cms/database',
+  CMS_CALENDAR: '/cms/calendar',
   CMS_SETTINGS: '/cms/settings',
+  CMS_NOTIFICATIONS: '/cms/notifications',
   CMS_TEMPLATES: '/cms/templates',
   CMS_BUILDER: '/cms/builder',
+  CMS_CAST: '/cms/cast',
+  CMS_TASKS: '/cms/tasks',
   SENSORS: '/sensors',
   PAGES: '/pages',
   NOT_FOUND: '/404',
@@ -54,8 +58,8 @@ export const cmsBuilderPath = (query?: { doc?: string; layout?: string }): strin
   return search ? `${ROUTES.CMS_BUILDER}?${search}` : ROUTES.CMS_BUILDER;
 };
 
-export const INK_VERSION = '1.1.6';
-export const PORTAL_VERSION = '1.1.6';
+export const INK_VERSION = '1.1.7';
+export const PORTAL_VERSION = '1.1.7';
 
 const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },
