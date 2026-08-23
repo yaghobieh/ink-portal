@@ -74,3 +74,6 @@ export const CONTENT_EDIT_STATUS_ORDER = [
 ] as const;
 
 export const CONTENT_EDIT_REVISION_LIMIT = 12;
+export const ISO_DATE_SEP = 'T';
+export const PAD_CHAR_ZERO = '0';
+export const SCHEDULE_PAD_LENGTH = 2;
