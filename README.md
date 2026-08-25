@@ -38,7 +38,9 @@ PayPal checkout UI is **removed / disabled**. Billing will go through [ink-serve
 
 ## Deploy (Vercel)
 
-Production deploys **only** from `main` / `master` after `release/*` merges (`scripts/vercel-ignore.sh`).
+Production deploys from `main` / `master` after `release/*` merges, and from the CMS integration branch `feature/1.1.7-cms-real` (`scripts/vercel-ignore.sh`).
+
+Ticket branches: `{feature|bug}/{PROJECT}-{n}` (e.g. `feature/INK-26`, `bug/CMS-22`). `{PROJECT}` is the Jira board key.
 
 ## Search
 

@@ -15,3 +15,5 @@ export type CmsSidebarNavItem = {
   badge?: ReactNode;
   disabled?: boolean;
 };
+
+export type CmsModePreference = 'light' | 'dark' | 'system';

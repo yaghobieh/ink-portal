@@ -4,6 +4,7 @@ import { Button, Flex, Input, Spinner, Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
 import {
   AUTH_BEARER_PREFIX,
+  AUTH_GITHUB_PATH,
   AUTH_GOOGLE_PATH,
   AUTH_HEADER_AUTHORIZATION,
   AUTH_LOGIN_PATH,
@@ -145,14 +146,14 @@ export const Login: FC = () => {
     }
   };
 
-  const onGoogleLogin = async () => {
+  const startOauth = async (path: string) => {
     setState({ loading: true, error: false });
     try {
       if (!INK_API_URL) {
         setState({ loading: false, error: true });
         return;
       }
-      const response = await fetch(`${INK_API_URL}${AUTH_GOOGLE_PATH}`);
+      const response = await fetch(`${INK_API_URL}${path}`);
       if (!response.ok) {
         setState({ loading: false, error: true });
         return;
@@ -166,6 +167,14 @@ export const Login: FC = () => {
     } catch {
       setState({ loading: false, error: true });
     }
+  };
+
+  const onGoogleLogin = async () => {
+    await startOauth(AUTH_GOOGLE_PATH);
+  };
+
+  const onGithubLogin = async () => {
+    await startOauth(AUTH_GITHUB_PATH);
   };
 
   return (
@@ -259,6 +268,9 @@ export const Login: FC = () => {
                 </form>
                 <Button variant="inkOutline" onClick={onGoogleLogin} disabled={state.loading}>
                   {state.loading ? t.login.googleLoading : t.login.google}
+                </Button>
+                <Button variant="inkOutline" onClick={onGithubLogin} disabled={state.loading}>
+                  {state.loading ? t.login.googleLoading : t.login.github}
                 </Button>
                 {state.error ? (
                   <Typography variant="body2" className="text-red-600 mb-0">

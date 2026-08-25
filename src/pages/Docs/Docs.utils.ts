@@ -1,23 +1,26 @@
-import type { DocDemoBlock, DocsBlock, DocsPageContent } from '@const/docsContent.types';
+import type { DocDemoBlock, DocsBlock } from '@const/docsContent.types';
 import { EMPTY_STRING } from '@const/index';
 import type { PublicDocBlock, PublicDocDemoBlock, PublicDocPage } from '@sdk/modules/docs';
 import { PUBLIC_DOCS_BLOCK_TYPES } from '@sdk/modules/docs';
 import { DOC_DEMO_BY_ID, EMPTY_DOC_HTML } from './Docs.const';
 import type { DocsResolvedPage } from './Docs.types';
 
+const isHtmlOnlyBlocks = (blocks: PublicDocBlock[]): boolean =>
+  blocks.length === 1 && blocks[0]?.type === PUBLIC_DOCS_BLOCK_TYPES.HTML;
+
 export const extractCmsBlocks = (page: PublicDocPage | null): PublicDocBlock[] => {
   if (!page) return [];
   const fromBlocks = Array.isArray(page.payload?.blocks) ? page.payload.blocks : [];
-  if (fromBlocks.length > 0) return fromBlocks;
   const fromSections = Array.isArray(page.payload?.sections) ? page.payload.sections : [];
-  if (fromSections.length > 0) return fromSections;
+  const rich = fromBlocks.length > 0 ? fromBlocks : fromSections;
+  if (rich.length > 0 && !isHtmlOnlyBlocks(rich)) return rich;
   if (typeof page.payload?.html === 'string' && page.payload.html) {
     return [{ type: PUBLIC_DOCS_BLOCK_TYPES.HTML, html: page.payload.html }];
   }
   if (typeof page.bodyHtml === 'string' && page.bodyHtml) {
     return [{ type: PUBLIC_DOCS_BLOCK_TYPES.HTML, html: page.bodyHtml }];
   }
-  return [];
+  return rich;
 };
 
 export const resolveDemoBlock = (block: PublicDocDemoBlock): DocDemoBlock | null => {
@@ -56,33 +59,24 @@ export const resolveDemoBlock = (block: PublicDocDemoBlock): DocDemoBlock | null
 export const resolveDocsPage = (
   slug: string,
   apiPage: PublicDocPage | null,
-  staticPage: DocsPageContent | undefined,
 ): DocsResolvedPage => {
   const cmsBlocks = extractCmsBlocks(apiPage);
   if (apiPage && cmsBlocks.length > 0) {
+    const labelKey =
+      typeof apiPage.payload?.labelKey === 'string' ? apiPage.payload.labelKey : undefined;
     return {
       source: 'api',
       slug,
-      title: apiPage.title || staticPage?.id || slug,
-      labelKey: staticPage?.labelKey,
+      title: apiPage.title || slug,
+      labelKey,
       blocks: cmsBlocks,
-      apiPage,
-    };
-  }
-  if (staticPage) {
-    return {
-      source: 'static',
-      slug,
-      title: staticPage.id,
-      labelKey: staticPage.labelKey,
-      blocks: staticPage.blocks,
       apiPage,
     };
   }
   return {
     source: 'none',
     slug,
-    title: slug,
+    title: apiPage?.title || slug,
     blocks: [],
     apiPage,
   };

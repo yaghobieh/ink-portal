@@ -13,6 +13,13 @@ export type AuthLoginRequest = {
   password: string;
 };
 
+export type AuthRegisterRequest = {
+  email: string;
+  name: string;
+  password: string;
+  username?: string;
+};
+
 export type AuthLoginResponse = {
   token?: string;
   user?: AuthUser;
@@ -28,6 +35,7 @@ export type AuthState = {
   loading: boolean;
   error: boolean;
   login: (username: string, password: string) => Promise<boolean>;
+  register: (input: AuthRegisterRequest) => Promise<boolean>;
   fetchMe: () => Promise<boolean>;
   setToken: (token: string) => void;
   logout: () => void;

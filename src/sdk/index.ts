@@ -6,3 +6,6 @@ export * from './modules/content';
 export * from './modules/docs';
 export * from './modules/media';
 export * from './modules/plans';
+export * from './modules/pages';
+export * from './modules/version';
+export * from './cmsSave';

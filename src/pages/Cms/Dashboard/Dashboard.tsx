@@ -12,13 +12,8 @@ import { CmsShell, CMS_NAV_IDS } from '../CmsShell';
 import {
   CMS_PERCENT_BASE,
   FALLBACK_ANALYTICS,
-  MONTH_KEYS,
-  SALES_MONTHLY_STACKS,
-  SALES_STACK_KEYS,
   WEEKDAY_KEYS,
   barHeightPercent,
-  formatCurrency,
-  formatDelta,
   formatNumber,
 } from './Dashboard.const';
 
@@ -35,18 +30,16 @@ export const Dashboard: FC = () => {
     }
   }, [activeToken, fetchDashboard]);
 
-  const data = analytics ?? FALLBACK_ANALYTICS;
+  const data = analytics ? { ...FALLBACK_ANALYTICS, ...analytics } : FALLBACK_ANALYTICS;
   const weeklyMax = Math.max(...data.weekly, NUMBER_ZERO);
   const distributionTotal = data.distribution.reduce((sum, slice) => sum + slice.value, NUMBER_ZERO);
 
-  const integrationColumns: ColumnDefinition<CmsIntegrationRow>[] = [
-    { id: 'application', accessor: 'application', header: t.dashboard.colApplication, sortable: true },
-    { id: 'type', accessor: 'type', header: t.dashboard.colType, sortable: true },
+  const collectionColumns: ColumnDefinition<CmsIntegrationRow>[] = [
+    { id: 'application', accessor: 'application', header: t.dashboard.colCollection, sortable: true },
+    { id: 'type', accessor: 'type', header: t.dashboard.colPublishedMix, sortable: true },
     { id: 'rate', accessor: 'rate', header: t.dashboard.colRate, sortable: true },
-    { id: 'profit', accessor: 'profit', header: t.dashboard.colProfit, sortable: true },
+    { id: 'profit', accessor: 'profit', header: t.dashboard.colItems, sortable: true },
   ];
-
-  const kpiTone = (delta: number) => (delta >= NUMBER_ZERO ? 'up' : 'down');
 
   return (
     <CmsShell activeNavId={CMS_NAV_IDS.DASHBOARD}>
@@ -75,39 +68,54 @@ export const Dashboard: FC = () => {
           </Typography>
         ) : null}
 
-        <div className="ink-cms-dashboard__kpis">
+        <div className="ink-cms-dashboard__kpis ink-cms-dashboard__kpis--wide">
           <Card className="ink-cms-card">
             <Typography variant="caption" className="ink-cms__muted mb-1">
-              {t.dashboard.pageViews}
+              {t.dashboard.documents}
             </Typography>
-            <Typography variant="h3" className="mb-1">
-              {formatNumber(data.pageViews)}
+            <Typography variant="h3" className="mb-0">
+              {formatNumber(data.documents)}
             </Typography>
-            <Badge variant={kpiTone(data.pageViewsDelta) === 'up' ? 'success' : 'error'} className="text-xs">
-              {formatDelta(data.pageViewsDelta)}
-            </Badge>
           </Card>
           <Card className="ink-cms-card">
             <Typography variant="caption" className="ink-cms__muted mb-1">
-              {t.dashboard.revenue}
+              {t.dashboard.publishedCount}
             </Typography>
-            <Typography variant="h3" className="mb-1">
-              {formatCurrency(data.totalRevenue)}
+            <Typography variant="h3" className="mb-0">
+              {formatNumber(data.published)}
             </Typography>
-            <Badge variant={kpiTone(data.revenueDelta) === 'up' ? 'success' : 'error'} className="text-xs">
-              {formatDelta(data.revenueDelta)}
-            </Badge>
           </Card>
           <Card className="ink-cms-card">
             <Typography variant="caption" className="ink-cms__muted mb-1">
-              {t.dashboard.bounce}
+              {t.dashboard.drafts}
             </Typography>
-            <Typography variant="h3" className="mb-1">
-              {data.bounceRate.toFixed(1)}%
+            <Typography variant="h3" className="mb-0">
+              {formatNumber(data.drafts)}
             </Typography>
-            <Badge variant={kpiTone(data.bounceDelta) === 'up' ? 'error' : 'success'} className="text-xs">
-              {formatDelta(data.bounceDelta)}
-            </Badge>
+          </Card>
+          <Card className="ink-cms-card">
+            <Typography variant="caption" className="ink-cms__muted mb-1">
+              {t.dashboard.templatesCount}
+            </Typography>
+            <Typography variant="h3" className="mb-0">
+              {formatNumber(data.templates)}
+            </Typography>
+          </Card>
+          <Card className="ink-cms-card">
+            <Typography variant="caption" className="ink-cms__muted mb-1">
+              {t.dashboard.mediaCount}
+            </Typography>
+            <Typography variant="h3" className="mb-0">
+              {formatNumber(data.media)}
+            </Typography>
+          </Card>
+          <Card className="ink-cms-card">
+            <Typography variant="caption" className="ink-cms__muted mb-1">
+              {t.dashboard.tablesCount}
+            </Typography>
+            <Typography variant="h3" className="mb-0">
+              {formatNumber(data.tables)}
+            </Typography>
           </Card>
         </div>
 
@@ -115,60 +123,20 @@ export const Dashboard: FC = () => {
           <Card className="ink-cms-card ink-cms-dashboard__sales">
             <Flex justify="between" align="center" className="mb-4">
               <Typography variant="h4" className="mb-0">
-                {t.dashboard.salesOverview}
+                {t.dashboard.tokens}
               </Typography>
               <Typography variant="h5" className="mb-0">
-                {formatCurrency(data.salesOverview)}
+                {formatNumber(data.tokensUsed)} / {formatNumber(data.tokensLimit)}
               </Typography>
             </Flex>
-            <div className="ink-cms-bars ink-cms-bars--stacked">
-              {(() => {
-                const stackTotals = SALES_MONTHLY_STACKS.map((stack) =>
-                  stack.reduce((sum, part) => sum + part, NUMBER_ZERO),
-                );
-                const salesMax = Math.max(...stackTotals, NUMBER_ZERO);
-                return SALES_MONTHLY_STACKS.map((stack, index) => {
-                  const total = stackTotals[index];
-                  const columnHeight = barHeightPercent(total, salesMax);
-                  const columnStyle = { '--ink-cms-bar-h': `${columnHeight}%` } as CSSProperties;
-                  return (
-                    <div key={MONTH_KEYS[index]} className="ink-cms-bars__col">
-                      <div className="ink-cms-bars__stack-wrap">
-                        <div className="ink-cms-bars__stack" style={columnStyle}>
-                          {stack.map((part, partIndex) => {
-                            const height = barHeightPercent(part, total || CMS_PERCENT_BASE);
-                            const style = { '--ink-cms-bar-h': `${height}%` } as CSSProperties;
-                            return (
-                              <span
-                                key={SALES_STACK_KEYS[partIndex]}
-                                className={`ink-cms-bars__segment ink-cms-bars__segment--${SALES_STACK_KEYS[partIndex]}`}
-                                style={style}
-                              />
-                            );
-                          })}
-                        </div>
-                      </div>
-                      <Typography variant="caption" className="ink-cms__muted mb-0">
-                        {t.dashboard.months[MONTH_KEYS[index]]}
-                      </Typography>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
+            <Badge variant="info" className="text-xs">
+              {data.usageRate.toFixed(1)}%
+            </Badge>
           </Card>
 
           <Card className="ink-cms-card">
-            <Flex justify="between" align="center" className="mb-4">
-              <Typography variant="h4" className="mb-0">
-                {t.dashboard.subscribers}
-              </Typography>
-              <Badge variant="success" className="text-xs">
-                {formatDelta(data.subscribersDelta)}
-              </Badge>
-            </Flex>
-            <Typography variant="h3" className="mb-4">
-              {formatNumber(data.subscribers)}
+            <Typography variant="h4" className="mb-4">
+              {t.dashboard.activity}
             </Typography>
             <div className="ink-cms-bars ink-cms-bars--weekly">
               {data.weekly.map((value, index) => {
@@ -192,44 +160,55 @@ export const Dashboard: FC = () => {
             <Typography variant="h4" className="mb-4">
               {t.dashboard.distribution}
             </Typography>
-            <div className="ink-cms-rings">
-              {data.distribution.map((slice) => {
-                const percent =
-                  distributionTotal > NUMBER_ZERO
-                    ? Math.round((slice.value / distributionTotal) * CMS_PERCENT_BASE)
-                    : NUMBER_ZERO;
-                const style = {
-                  '--ink-cms-ring': `${percent}`,
-                } as CSSProperties;
-                return (
-                  <div key={slice.label} className="ink-cms-rings__item">
-                    <div className="ink-cms-rings__ring" style={style}>
-                      <Typography variant="body2" className="mb-0 font-medium">
-                        {percent}%
+            {data.distribution.length === NUMBER_ZERO ? (
+              <Typography variant="body2" className="ink-cms__muted mb-0">
+                {t.dashboard.listEmpty}
+              </Typography>
+            ) : (
+              <div className="ink-cms-rings">
+                {data.distribution.map((slice) => {
+                  const percent =
+                    distributionTotal > NUMBER_ZERO
+                      ? Math.round((slice.value / distributionTotal) * CMS_PERCENT_BASE)
+                      : NUMBER_ZERO;
+                  const style = {
+                    '--ink-cms-ring': `${percent}`,
+                  } as CSSProperties;
+                  return (
+                    <div key={slice.label} className="ink-cms-rings__item">
+                      <div className="ink-cms-rings__ring" style={style}>
+                        <Typography variant="body2" className="mb-0 font-medium">
+                          {percent}%
+                        </Typography>
+                      </div>
+                      <Typography variant="caption" className="ink-cms__muted mb-0">
+                        {slice.label}
+                      </Typography>
+                      <Typography variant="body2" className="mb-0">
+                        {formatNumber(slice.value)}
                       </Typography>
                     </div>
-                    <Typography variant="caption" className="ink-cms__muted mb-0">
-                      {slice.label}
-                    </Typography>
-                    <Typography variant="body2" className="mb-0">
-                      {formatCurrency(slice.value)}
-                    </Typography>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </Card>
         </div>
 
         <Card className="ink-cms-card">
           <Typography variant="h4" className="mb-4">
-            {t.dashboard.integrations}
+            {t.dashboard.collections}
           </Typography>
           <GridTable
             data={data.integrations}
-            columns={integrationColumns}
+            columns={collectionColumns}
             showPagination={false}
             showFilter={false}
+            emptyContent={
+              <Typography variant="body2" className="ink-cms__muted mb-0">
+                {t.dashboard.listEmpty}
+              </Typography>
+            }
             tableEffects={{ hover: true, sort: true, row: true }}
           />
         </Card>

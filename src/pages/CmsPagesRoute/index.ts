@@ -1,0 +1,1 @@
+export { CmsPagesRoute } from './CmsPagesRoute';

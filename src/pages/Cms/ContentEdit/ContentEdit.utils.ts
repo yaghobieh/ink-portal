@@ -1,6 +1,17 @@
-import { EMPTY_STRING } from '@const/index';
+import { CMS_FALSE, CMS_SEO_COLLAPSED_KEY, CMS_TRUE, EMPTY_STRING } from '@const/index';
+import { NUMBER_ONE } from '@const/numbers';
 import type { ContentItem, CmsPageItem } from '@sdk/modules/content';
-import { CONTENT_EDIT_KIND } from './ContentEdit.const';
+import {
+  CONTENT_COLLECTION_PAGE_META,
+  CONTENT_COLLECTION_PAGES,
+} from '../ContentPages/ContentPages.const';
+import {
+  CONTENT_EDIT_KIND,
+  ISO_DATE_SEP,
+  PAD_CHAR_ZERO,
+  SCHEDULE_DEFAULT_TIME,
+  SCHEDULE_PAD_LENGTH,
+} from './ContentEdit.const';
 import type { ContentEditTarget } from './ContentEdit.types';
 
 const escapeHtml = (value: string): string =>
@@ -39,6 +50,13 @@ const sectionToHtml = (section: unknown): string => {
   }
   if (typeof entry.text === 'string') {
     return `<p>${escapeHtml(entry.text)}</p>`;
+  }
+  if (entry.type === 'image' && typeof entry.src === 'string' && entry.src) {
+    const alt = typeof entry.alt === 'string' ? escapeHtml(entry.alt) : EMPTY_STRING;
+    return `<img src="${escapeHtml(entry.src)}" alt="${alt}" />`;
+  }
+  if (entry.type === 'code' && typeof entry.code === 'string') {
+    return `<pre>${escapeHtml(entry.code)}</pre>`;
   }
   if (entry.type === 'steps' && Array.isArray(entry.items)) {
     const title =
@@ -95,6 +113,18 @@ export const appendWidgetHtml = (bodyHtml: string, widgetHtml: string): string =
   return `${bodyHtml}\n${widgetHtml}`;
 };
 
+export const loadSeoCollapsed = (): boolean => {
+  try {
+    return localStorage.getItem(CMS_SEO_COLLAPSED_KEY) === CMS_TRUE;
+  } catch {
+    return false;
+  }
+};
+
+export const saveSeoCollapsed = (collapsed: boolean): void => {
+  localStorage.setItem(CMS_SEO_COLLAPSED_KEY, collapsed ? CMS_TRUE : CMS_FALSE);
+};
+
 export const resolveEditTarget = (
   id: string,
   pages: CmsPageItem[],
@@ -102,6 +132,14 @@ export const resolveEditTarget = (
 ): ContentEditTarget | null => {
   const page = pages.find((entry) => entry.id === id);
   if (page) {
+    const meta = items.find(
+      (entry) => entry.collection === CONTENT_COLLECTION_PAGE_META && entry.slug === page.id,
+    );
+    const contentPage = items.find(
+      (entry) =>
+        entry.collection === CONTENT_COLLECTION_PAGES &&
+        (entry.id === page.id || entry.slug === page.slug),
+    );
     return {
       kind: CONTENT_EDIT_KIND.PAGE,
       id: page.id,
@@ -110,6 +148,12 @@ export const resolveEditTarget = (
       status: page.status,
       bodyHtml: page.bodyHtml || EMPTY_STRING,
       mediaUrl: page.mediaUrl,
+      collection: CONTENT_COLLECTION_PAGES,
+      locale: contentPage?.locale || meta?.locale,
+      payload: {
+        ...(contentPage?.payload || {}),
+        ...(meta?.payload || {}),
+      },
     };
   }
   const item = items.find((entry) => entry.id === id);
@@ -127,4 +171,41 @@ export const resolveEditTarget = (
     };
   }
   return null;
+};
+
+export const payloadString = (
+  payload: Record<string, unknown> | undefined,
+  key: string,
+): string => {
+  if (!payload) return EMPTY_STRING;
+  const value = payload[key];
+  return typeof value === 'string' ? value : EMPTY_STRING;
+};
+
+const pad = (value: number): string => String(value).padStart(SCHEDULE_PAD_LENGTH, PAD_CHAR_ZERO);
+
+export const nowScheduleAt = (): string => {
+  const now = new Date();
+  const day = `${now.getFullYear()}-${pad(now.getMonth() + NUMBER_ONE)}-${pad(now.getDate())}`;
+  const clock = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  return `${day}${ISO_DATE_SEP}${clock}`;
+};
+
+export const splitScheduleAt = (value: string): { date: Date | null; time: string } => {
+  if (!value || !value.includes(ISO_DATE_SEP)) {
+    return { date: null, time: SCHEDULE_DEFAULT_TIME };
+  }
+  const [day, clock] = value.split(ISO_DATE_SEP);
+  const date = new Date(`${day}${ISO_DATE_SEP}00:00:00`);
+  return {
+    date: Number.isNaN(date.getTime()) ? null : date,
+    time: clock.slice(0, 5) || SCHEDULE_DEFAULT_TIME,
+  };
+};
+
+export const joinScheduleAt = (date: Date | null, time: string): string => {
+  if (!date) return EMPTY_STRING;
+  const day = `${date.getFullYear()}-${pad(date.getMonth() + NUMBER_ONE)}-${pad(date.getDate())}`;
+  const clock = time && time.length >= 4 ? time.slice(0, 5) : SCHEDULE_DEFAULT_TIME;
+  return `${day}${ISO_DATE_SEP}${clock}`;
 };

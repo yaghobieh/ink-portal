@@ -2,38 +2,94 @@ import { ROUTES } from '@const/routes.const';
 import {
   CMS_AVATAR_INITIALS_LENGTH,
   CMS_ICON_SIZE,
+  CMS_SIDEBAR_COLLAPSED_WIDTH_PX,
+  CMS_SIDEBAR_MAX_WIDTH_PX,
+  CMS_SIDEBAR_MIN_WIDTH_PX,
   CMS_SIDEBAR_WIDTH_PX,
 } from '@const/numbers.const';
 
 export {
   CMS_AVATAR_INITIALS_LENGTH,
   CMS_ICON_SIZE,
+  CMS_SIDEBAR_COLLAPSED_WIDTH_PX,
+  CMS_SIDEBAR_MAX_WIDTH_PX,
+  CMS_SIDEBAR_MIN_WIDTH_PX,
   CMS_SIDEBAR_WIDTH_PX,
 };
 
 export const CMS_NAV_IDS = {
   DASHBOARD: 'dashboard',
   CONTENT: 'content',
+  PAGES: 'pages',
   MEDIA: 'media',
   EDITORS: 'editors',
   CREW: 'crew',
   LIVE_EDIT: 'live-edit',
   EXTENSIONS: 'extensions',
+  BUNDLES: 'bundles',
   PLANS: 'plans',
+  AI_USAGE: 'ai-usage',
+  CALENDAR: 'calendar',
+  TEMPLATES: 'templates',
+  BUILDER: 'builder',
+  CAST: 'cast',
   ANALYTICS: 'analytics',
   SETTINGS: 'settings',
+  HELP: 'help',
+  TASKS: 'tasks',
+  CHAT: 'chat',
+  NOTIFICATIONS: 'notifications',
+} as const;
+
+export const CMS_NAV_SECTIONS = {
+  OVERVIEW: 'sec-overview',
+  DESIGN: 'sec-design',
+  GENERAL: 'sec-general',
 } as const;
 
 export const CMS_NAV_ROUTES: Record<string, string> = {
   [CMS_NAV_IDS.DASHBOARD]: ROUTES.CMS,
   [CMS_NAV_IDS.CONTENT]: ROUTES.CMS_CONTENT,
+  [CMS_NAV_IDS.PAGES]: ROUTES.CMS_CONTENT,
   [CMS_NAV_IDS.MEDIA]: ROUTES.CMS_MEDIA,
   [CMS_NAV_IDS.EDITORS]: ROUTES.CMS_EDITORS,
   [CMS_NAV_IDS.CREW]: ROUTES.CMS_CREW,
   [CMS_NAV_IDS.LIVE_EDIT]: ROUTES.CMS_LIVE_EDIT,
   [CMS_NAV_IDS.EXTENSIONS]: ROUTES.CMS_EXTENSIONS,
+  [CMS_NAV_IDS.BUNDLES]: ROUTES.CMS_EXTENSIONS,
   [CMS_NAV_IDS.PLANS]: ROUTES.CMS_PLANS,
+  [CMS_NAV_IDS.AI_USAGE]: ROUTES.CMS_PLANS,
+  [CMS_NAV_IDS.CALENDAR]: ROUTES.CMS_CALENDAR,
+  [CMS_NAV_IDS.TEMPLATES]: ROUTES.CMS_TEMPLATES,
+  [CMS_NAV_IDS.BUILDER]: ROUTES.CMS_BUILDER,
+  [CMS_NAV_IDS.CAST]: ROUTES.CMS_CAST,
   [CMS_NAV_IDS.SETTINGS]: ROUTES.CMS_SETTINGS,
+  [CMS_NAV_IDS.HELP]: ROUTES.DOCS,
+  [CMS_NAV_IDS.TASKS]: ROUTES.CMS_TASKS,
+  [CMS_NAV_IDS.NOTIFICATIONS]: ROUTES.CMS_NOTIFICATIONS,
 };
 
 export const CMS_SEARCH_INPUT_ID = 'ink-cms-search';
+export const CMS_RAIL_SEARCH_ID = 'ink-cms-rail-search';
+export const CMS_SEARCH_KEY = 'k';
+export const CMS_KEY_ENTER = 'Enter';
+
+export const CMS_BOTTOM_NAV_IDS = [
+  CMS_NAV_IDS.DASHBOARD,
+  CMS_NAV_IDS.PAGES,
+  CMS_NAV_IDS.AI_USAGE,
+  CMS_NAV_IDS.BUNDLES,
+  CMS_NAV_IDS.SETTINGS,
+] as const;
+
+export const CMS_BOTTOM_NAV_CLASS = 'ink-cms__bottom-nav';
+export const CMS_SHELL_BOTTOM_NAV_CLASS = 'ink-cms--bottom-nav';
+
+export const CMS_AVATAR_PALETTE = [
+  '#2951C4',
+  '#0E8A6E',
+  '#7C3AED',
+  '#C4302B',
+  '#D97706',
+  '#0369A1',
+] as const;
