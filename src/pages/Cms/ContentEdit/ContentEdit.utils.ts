@@ -1,6 +1,12 @@
 import { CMS_FALSE, CMS_SEO_COLLAPSED_KEY, CMS_TRUE, EMPTY_STRING } from '@const/index';
+import { NUMBER_ONE } from '@const/numbers';
 import type { ContentItem, CmsPageItem } from '@sdk/modules/content';
-import { CONTENT_EDIT_KIND } from './ContentEdit.const';
+import {
+  CONTENT_EDIT_KIND,
+  ISO_DATE_SEP,
+  PAD_CHAR_ZERO,
+  SCHEDULE_PAD_LENGTH,
+} from './ContentEdit.const';
 import type { ContentEditTarget } from './ContentEdit.types';
 
 const escapeHtml = (value: string): string =>
@@ -146,4 +152,14 @@ export const resolveEditTarget = (
     };
   }
   return null;
+};
+
+const padSchedulePart = (value: number): string =>
+  String(value).padStart(SCHEDULE_PAD_LENGTH, PAD_CHAR_ZERO);
+
+export const nowScheduleAt = (): string => {
+  const now = new Date();
+  const day = `${now.getFullYear()}-${padSchedulePart(now.getMonth() + NUMBER_ONE)}-${padSchedulePart(now.getDate())}`;
+  const clock = `${padSchedulePart(now.getHours())}:${padSchedulePart(now.getMinutes())}`;
+  return `${day}${ISO_DATE_SEP}${clock}`;
 };

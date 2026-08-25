@@ -27,7 +27,13 @@ import {
   CONTENT_EDIT_STATUS_ORDER,
 } from './ContentEdit.const';
 import type { BearWidgetDef } from './ContentEdit.types';
-import { appendWidgetHtml, loadSeoCollapsed, resolveEditTarget, saveSeoCollapsed } from './ContentEdit.utils';
+import {
+  appendWidgetHtml,
+  loadSeoCollapsed,
+  nowScheduleAt,
+  resolveEditTarget,
+  saveSeoCollapsed,
+} from './ContentEdit.utils';
 import { DOCUMENT_TEMPLATE_ID } from '../ContentPages/ContentPages.const';
 
 type ContentRevision = {
@@ -63,7 +69,7 @@ export const ContentEdit: FC = () => {
   const [status, setStatus] = useState<ContentStatus>('published');
   const [seoTitle, setSeoTitle] = useState(EMPTY_STRING);
   const [seoDescription, setSeoDescription] = useState(EMPTY_STRING);
-  const [scheduleAt, setScheduleAt] = useState(EMPTY_STRING);
+  const [scheduleAt, setScheduleAt] = useState(nowScheduleAt);
   const [revisions, setRevisions] = useState<ContentRevision[]>([]);
   const [preview, setPreview] = useState(false);
   const [saveOk, setSaveOk] = useState(false);
@@ -94,9 +100,9 @@ export const ContentEdit: FC = () => {
         ? target.payload.seoDescription
         : EMPTY_STRING,
     );
-    setScheduleAt(
-      typeof target.payload?.scheduleAt === 'string' ? target.payload.scheduleAt : EMPTY_STRING,
-    );
+    const storedSchedule =
+      typeof target.payload?.scheduleAt === 'string' ? target.payload.scheduleAt : EMPTY_STRING;
+    setScheduleAt(storedSchedule || nowScheduleAt());
     setRevisions([]);
     setSaveOk(false);
     setHydrated(true);
