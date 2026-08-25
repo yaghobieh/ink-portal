@@ -4,7 +4,7 @@ import { useNucleus } from '@forgedevstack/synapse';
 import { BearIcons, Button, Card, Flex, Spinner, Typography } from '@forgedevstack/bear';
 import { useAuth } from '@hooks/index';
 import { useI18n } from '@i18n/index';
-import { cmsBuilderPath } from '@const/index';
+import { cmsBuilderPath, cmsEditPath } from '@const/index';
 import { CMS_ICON_SIZE } from '@const/numbers.const';
 import { authNucleus, contentNucleus } from '@sdk/index';
 import { saveContentRequest } from '@sdk/modules/content';
@@ -14,7 +14,14 @@ import {
   DOCUMENT_DEFAULT_LOCALE,
   DOCUMENT_STARTER_STATUS,
 } from '../ContentPages/ContentPages.const';
-import { cloneCanvasTree } from '../BuilderPages/BuilderPages.utils';
+import { canvasFromPayload, cloneCanvasTree } from '../BuilderPages/BuilderPages.utils';
+import {
+  PAYLOAD_KEY_CAST_FIELDS,
+  PAYLOAD_KEY_CAST_VALUES,
+  PAYLOAD_KEY_LAYOUT,
+  PAYLOAD_KEY_TEMPLATE,
+} from '../ContentEdit/ContentEdit.const';
+import { castFieldsFromPayload } from '../ContentEdit/castFields.utils';
 import {
   PAGE_LAYOUT_TEMPLATES,
   PAGE_SLUG_PREFIX,
@@ -50,6 +57,8 @@ export const TemplatesPages: FC = () => {
       status: DOCUMENT_STARTER_STATUS,
       payload: {
         canvas: blank ? cloneCanvasTree(blank.tree) : [],
+        [PAYLOAD_KEY_CAST_FIELDS]: [],
+        [PAYLOAD_KEY_CAST_VALUES]: {},
       },
     });
     if (!item) return;
@@ -76,6 +85,35 @@ export const TemplatesPages: FC = () => {
     if (!item) return;
     await fetchContent(activeToken);
     navigate(cmsBuilderPath({ doc: item.id }));
+  };
+
+  const onUseSaved = async (templateId: string) => {
+    if (!activeToken) return;
+    const saved = items.find((entry) => entry.id === templateId);
+    if (!saved) return;
+    const fromSaved = canvasFromPayload(saved.payload);
+    const slug = `${PAGE_SLUG_PREFIX}${Date.now()}`;
+    const layoutId =
+      typeof saved.payload[PAYLOAD_KEY_LAYOUT] === 'string'
+        ? saved.payload[PAYLOAD_KEY_LAYOUT]
+        : undefined;
+    const item = await saveContentRequest(activeToken, {
+      collection: CONTENT_COLLECTION_PAGES,
+      slug,
+      locale: DOCUMENT_DEFAULT_LOCALE,
+      title: saved.title || saved.slug,
+      status: DOCUMENT_STARTER_STATUS,
+      payload: {
+        canvas: fromSaved ? cloneCanvasTree(fromSaved) : [],
+        [PAYLOAD_KEY_LAYOUT]: layoutId,
+        [PAYLOAD_KEY_TEMPLATE]: saved.id,
+        [PAYLOAD_KEY_CAST_FIELDS]: [],
+        [PAYLOAD_KEY_CAST_VALUES]: {},
+      },
+    });
+    if (!item) return;
+    await fetchContent(activeToken);
+    navigate(cmsEditPath(item.id));
   };
 
   return (
@@ -171,16 +209,34 @@ export const TemplatesPages: FC = () => {
                     {item.title || item.slug}
                   </Typography>
                   <Typography variant="caption" className="ink-cms__muted mb-0">
-                    {item.collection} · {item.status}
+                    {item.collection} · {item.status} · {t.cmsTemplates.fieldCount}{' '}
+                    {castFieldsFromPayload(item.payload).length}
                   </Typography>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    icon={<BearIcons.EditIcon size={CMS_ICON_SIZE} />}
-                    onClick={() => navigate(cmsBuilderPath({ doc: item.id }))}
-                  >
-                    {t.cmsTemplates.design}
-                  </Button>
+                  <Flex gap={2} className="flex-wrap">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      icon={<BearIcons.EditIcon size={CMS_ICON_SIZE} />}
+                      onClick={() => navigate(cmsBuilderPath({ doc: item.id }))}
+                    >
+                      {t.cmsTemplates.design}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => navigate(cmsEditPath(item.id))}
+                    >
+                      {t.cmsTemplates.editFields}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ink"
+                      onClick={() => void onUseSaved(item.id)}
+                      disabled={saving || !activeToken}
+                    >
+                      {t.cmsTemplates.useTemplate}
+                    </Button>
+                  </Flex>
                 </Flex>
               </Card>
             ))}

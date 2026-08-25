@@ -169,6 +169,7 @@ export interface Messages {
     stackTitle: string;
     galleryTitle: string;
     galleryBody: string;
+    editorPlaceholder: string;
     galleryHighlightToolbarTitle: string;
     galleryHighlightToolbarBody: string;
     galleryHighlightSlashTitle: string;
@@ -383,10 +384,12 @@ export interface Messages {
     media: string;
     editors: string;
     crew: string;
+    tasks: string;
     liveEdit: string;
     extensions: string;
     plans: string;
     database: string;
+    calendar: string;
     templates: string;
     builder: string;
     analytics: string;
@@ -395,6 +398,7 @@ export interface Messages {
     planFallback: string;
     accountFallback: string;
     signOut: string;
+    online: string;
     beta: string;
     loginTitle: string;
     loginDescription: string;
@@ -416,6 +420,20 @@ export interface Messages {
     chatErrorPlan: string;
     chatErrorConfig: string;
     chatErrorGeneric: string;
+    chatPromptCreatePage: string;
+    chatPromptTemplate: string;
+    chatPromptTheme: string;
+    chatAskCreatePage: string;
+    chatAskTemplate: string;
+    chatAskTheme: string;
+    sessionChecking: string;
+    healthOk: string;
+    healthDown: string;
+    healthUnknown: string;
+    healthOkHint: string;
+    healthConnectingHint: string;
+    healthDownHint: string;
+    healthMissingApi: string;
     alertsAll: string;
     alertsUnseen: string;
     alertsSeen: string;
@@ -426,6 +444,8 @@ export interface Messages {
     alertToolbarBody: string;
     alertDatabaseTitle: string;
     alertDatabaseBody: string;
+    alertCalendarTitle: string;
+    alertCalendarBody: string;
     alertBuilderTitle: string;
     alertBuilderBody: string;
     agentName: string;
@@ -434,6 +454,56 @@ export interface Messages {
     agentSuggestDocs: string;
     agentSuggestBlank: string;
     agentCreateHint: string;
+  };
+  cmsCalendar: {
+    title: string;
+    subtitle: string;
+    meetings: string;
+    addUser: string;
+    taggedUsers: string;
+    generateMeeting: string;
+    notifyHint: string;
+    empty: string;
+    create: string;
+    titleLabel: string;
+    start: string;
+  };
+  cmsNotifications: {
+    title: string;
+    subtitle: string;
+    range: string;
+    seeAll: string;
+    seeAllHint: string;
+    unread: string;
+    markAllRead: string;
+  };
+  cmsTasks: {
+    title: string;
+    subtitle: string;
+    todo: string;
+    doing: string;
+    done: string;
+    taskTitle: string;
+    subtitleLabel: string;
+    description: string;
+    tags: string;
+    tagCreate: string;
+    tagAdd: string;
+    agent: string;
+    agentPick: string;
+    agentNotify: string;
+    status: string;
+    add: string;
+    cancel: string;
+    createTitle: string;
+    tagged: string;
+    moved: string;
+    moveBack: string;
+    moveNext: string;
+    addStatus: string;
+    addField: string;
+    fieldOption: string;
+    fieldNone: string;
   };
   cmsLook: {
     label: string;
@@ -516,6 +586,7 @@ export interface Messages {
     contentColStatus: string;
     contentColUpdated: string;
     contentColTemplate: string;
+    contentColFields: string;
     contentOpenHint: string;
     contentColActions: string;
     contentOpenDocs: string;
@@ -624,16 +695,26 @@ export interface Messages {
     notFound: string;
     widgetsTitle: string;
     widgetsHint: string;
+    widgetsOpen: string;
     publishTitle: string;
     statusLabel: string;
     seoTitle: string;
     seoDescription: string;
     scheduleAt: string;
+    scheduleDate: string;
+    scheduleTime: string;
     revisionsTitle: string;
     revisionsHint: string;
     revisionsEmpty: string;
     collabHint: string;
     openStage: string;
+    castFieldsTitle: string;
+    castFieldsHint: string;
+    castAddField: string;
+    castFromTemplate: string;
+    castValue: string;
+    castPreviewTitle: string;
+    castEmpty: string;
   };
   cmsTemplates: {
     title: string;
@@ -645,6 +726,9 @@ export interface Messages {
     design: string;
     useLayout: string;
     newTemplate: string;
+    editFields: string;
+    useTemplate: string;
+    fieldCount: string;
   };
   cmsBuilder: {
     title: string;
@@ -989,6 +1073,15 @@ export interface Messages {
     session: string;
     pagesTitle: string;
     pages: string;
+    oopsTitle: string;
+    oopsBody: string;
+    retry: string;
+    devHint: string;
+    devApi: string;
+    devStatus: string;
+    devReason: string;
+    devResponse: string;
+    devEmpty: string;
   };
   notFound: {
     title: string;
