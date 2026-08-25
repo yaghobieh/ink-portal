@@ -2,11 +2,12 @@ export { mediaNucleus } from './media.reducer';
 export {
   CMS_MEDIA_PATH,
   CMS_MEDIA_SIGN_PATH,
+  CMS_MEDIA_UPLOAD_PATH,
   fetchMediaRequest,
   fetchSign,
   registerMedia,
   uploadAndRegisterMedia,
-  uploadToCloudinary,
+  uploadViaServer,
 } from './media.api';
 export {
   CLOUDINARY_API_BASE,
