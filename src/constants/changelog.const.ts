@@ -6,8 +6,17 @@ export type ChangelogEntry = {
 
 export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
   {
-    version: '1.1.6',
+    version: '1.1.7',
     defaultOpen: true,
+    items: [
+      'Document chrome: grouped toolbar, outline rail, Ask Ink AI, slash search',
+      'Light heading dropdown portaled under the trigger',
+      'Status bar words / chars / synced',
+      'Portal marketing uses the live 1.1.7 editor, not classic snow theme',
+    ],
+  },
+  {
+    version: '1.1.6',
     items: [
       'Ship as portal release line (closes 1.1.5 track as 1.1.6)',
       'OpenAI ghost autocomplete on /ai + Playground (no demo stub)',
