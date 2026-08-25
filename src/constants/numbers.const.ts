@@ -1,3 +1,4 @@
+export const NUMBER_ZERO = 0;
 export const NAV_HEIGHT_PX = 64;
 export const NAV_LOGO_SIZE_PX = 32;
 export const MAX_CONTENT_WIDTH_PX = 1280;

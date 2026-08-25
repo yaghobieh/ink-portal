@@ -8,8 +8,14 @@ import { I18nProvider } from './i18n';
 import { App } from './App';
 import { THEME_STORAGE_KEY } from '@const/index';
 import { inkTheme, inkVariants } from './config';
+import { bindWindowVersion, CONSOLE_VERSION_LABEL, fetchVersionInfo } from '@sdk/modules/version';
 import './styles/index.css';
 import './styles/cms.css';
+
+void fetchVersionInfo().then((info) => {
+  bindWindowVersion(info);
+  console.info(CONSOLE_VERSION_LABEL, info);
+});
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
