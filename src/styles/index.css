@@ -731,19 +731,11 @@ body.dark .ink-code,
 .ink-landing__grid {
   position: relative;
   z-index: 1;
-  max-width: 1180px;
+  max-width: 760px;
   margin: 0 auto;
   display: grid;
   gap: 2.5rem;
-  align-items: center;
-}
-
-@media (min-width: 960px) {
-  .ink-landing__grid {
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-    gap: 3rem;
-    padding-top: 1.5rem;
-  }
+  align-items: start;
 }
 
 .ink-landing__mark {
@@ -768,7 +760,7 @@ body.dark .ink-code,
   line-height: 1.08;
   letter-spacing: -0.03em;
   color: var(--ink-portal-ink);
-  max-width: 14ch;
+  max-width: 18ch;
 }
 
 .ink-landing__accent {

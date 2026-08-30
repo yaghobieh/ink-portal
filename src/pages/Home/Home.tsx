@@ -113,11 +113,6 @@ export const Home: FC = () => {
               </Flex>
             </div>
 
-            <div className="ink-landing__editor-wrap">
-              <div className="ink-landing__editor ink-landing__editor--v117">
-                <HomeLiveEditor html={HERO_EDITOR_HTML} placeholder={t.home.editorPlaceholder} showAi />
-              </div>
-            </div>
           </div>
 
           <div className="ink-landing__stack">
