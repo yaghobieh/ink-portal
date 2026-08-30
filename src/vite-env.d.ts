@@ -2,7 +2,6 @@
 
 interface ImportMetaEnv {
   readonly VITE_INK_API_URL?: string;
-  readonly VITE_BIFROST_API_URL?: string;
   readonly VITE_OPENAI_API_KEY?: string;
 }
 

@@ -20,7 +20,6 @@ export const PLAN_COMPARE_ROW_KEYS = [
   'compareAiTokens',
   'compareAutocomplete',
   'compareSiteToken',
-  'compareSites',
   'compareCreditsPool',
   'compareUsageDashboard',
   'compareNpmAccess',
@@ -92,12 +91,6 @@ export const PLAN_COMPARE_MATRIX: PlanCompareMatrixRow[] = [
     free: COMPARE_NO,
     pro: COMPARE_YES,
     ai: COMPARE_YES,
-  },
-  {
-    id: 'compareSites',
-    free: '1',
-    pro: '1',
-    ai: '5',
   },
   {
     id: 'compareCreditsPool',

@@ -99,5 +99,4 @@ export const NUMBER_NINETY_SEVEN = 97;
 export const NUMBER_NINETY_EIGHT = 98;
 export const NUMBER_NINETY_NINE = 99;
 export const NUMBER_ONE_HUNDRED = 100;
-export const NUMBER_ONE_THOUSAND = 1000;
 

@@ -1,1 +1,0 @@
-export { TemplatesPages } from './TemplatesPages';

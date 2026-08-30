@@ -7,16 +7,15 @@ import { DocHeroMedia } from '@components/DocHeroMedia';
 import { useI18n } from '@i18n/index';
 import {
   DEFAULT_DOCS_SLUG,
+  DOCS_PAGE_BY_ID,
   docsPath,
   EMPTY_STRING,
   getDocsPageMedia,
-  HTML_IMG_OPEN,
   ROUTES,
 } from '@const/index';
 import type { DocsBlock } from '@const/docsContent.types';
 import { fetchPublicDocBySlugRequest, PUBLIC_DOCS_BLOCK_TYPES } from '@sdk/modules/docs';
-import type { PublicDocBlock, PublicDocPage, PublicDocStepsBlock } from '@sdk/modules/docs';
-import { fetchCmsPageRequest, PAGE_TYPE } from '@sdk/modules/pages';
+import type { PublicDocBlock, PublicDocStepsBlock } from '@sdk/modules/docs';
 import {
   DOCS_HEADER_LEVEL_H2,
   DOCS_HEADER_LEVEL_H3,
@@ -27,11 +26,7 @@ import { resolveDemoBlock, resolveDocsPage } from './Docs.utils';
 import type { DocsResolvedPage } from './Docs.types';
 
 const cmsBlocksHaveImage = (blocks: PublicDocBlock[]): boolean =>
-  blocks.some((block) => {
-    if (block.type === PUBLIC_DOCS_BLOCK_TYPES.IMAGE) return true;
-    if (block.type !== PUBLIC_DOCS_BLOCK_TYPES.HTML) return false;
-    return typeof block.html === 'string' && block.html.includes(HTML_IMG_OPEN);
-  });
+  blocks.some((block) => block.type === PUBLIC_DOCS_BLOCK_TYPES.IMAGE);
 
 const headerVariant = (level?: number): 'h2' | 'h3' | 'h4' => {
   if (level === DOCS_HEADER_LEVEL_H4) return 'h4';
@@ -229,33 +224,14 @@ export const Docs: FC = () => {
   useEffect(() => {
     if (!slug) return;
     let cancelled = false;
+    const staticPage = DOCS_PAGE_BY_ID[slug];
     setLoading(true);
-    setResolved(null);
+    setResolved(resolveDocsPage(slug, null, staticPage));
 
-    const load = async () => {
-      const fromPages = await fetchCmsPageRequest({ name: slug, type: PAGE_TYPE.DOC });
-      if (cancelled) return;
-      if (fromPages) {
-        const apiPage: PublicDocPage = {
-          slug: fromPages.name,
-          title: fromPages.title,
-          status: fromPages.status,
-          locale: fromPages.locale,
-          payload: fromPages.payload,
-          updatedAt: fromPages.updatedAt,
-        };
-        setResolved(resolveDocsPage(slug, apiPage));
-        return;
-      }
-      const apiPage = await fetchPublicDocBySlugRequest(slug);
-      if (cancelled) return;
-      setResolved(resolveDocsPage(slug, apiPage));
-    };
-
-    void load()
-      .catch(() => {
+    void fetchPublicDocBySlugRequest(slug)
+      .then((apiPage) => {
         if (cancelled) return;
-        setResolved(resolveDocsPage(slug, null));
+        setResolved(resolveDocsPage(slug, apiPage, staticPage));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

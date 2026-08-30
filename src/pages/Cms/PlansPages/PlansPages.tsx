@@ -86,9 +86,6 @@ export const PlansPages: FC = () => {
                 </Typography>
                 <Typography variant="caption" className="ink-cms__muted block mb-3">
                   {plan.price.period} · AI: {plan.aiMode} · tokens: {plan.monthlyTokenLimit}
-                  {plan.sitesLimit
-                    ? ` · sites: ${plan.sitesLimit}`
-                    : ''}
                 </Typography>
                 <ul className="ink-cms-plan-card__features">
                   {plan.licenseFeatures.length === 0 ? (

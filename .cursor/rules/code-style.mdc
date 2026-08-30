@@ -12,5 +12,4 @@ alwaysApply: true
 - Bear components for UI chrome.
 - Path aliases: `@/*`, `@const/*`, `@pages/*`, `@components/*`, `@i18n/*`.
 - Tag work `portal` in Jira/Linear; library changes live in `ink` with tag `library`.
-- Branches from Jira: `{feature|bug}/{PROJECT}-{n}` (e.g. `feature/INK-26`). See `git-jira-branching.mdc`.
 - Do not name competitor products in copy.
