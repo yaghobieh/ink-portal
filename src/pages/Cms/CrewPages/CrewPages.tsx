@@ -1,5 +1,4 @@
-import { useEffect, useState, type FC } from 'react';
-import { useNucleus } from '@forgedevstack/synapse';
+import { useState, type FC } from 'react';
 import {
   Badge,
   Button,
@@ -10,18 +9,11 @@ import {
 } from '@forgedevstack/bear';
 import { useI18n } from '@i18n/index';
 import { EMPTY_STRING } from '@const/index';
-import { authNucleus } from '@sdk/index';
-import {
-  createCrewRoleRequest,
-  createCrewUserRequest,
-  fetchCrewRoles,
-  fetchCrewUsers,
-  updateCrewRoleRequest,
-} from '@sdk/modules/cms';
 import { CmsShell, CMS_NAV_IDS } from '../CmsShell';
 import {
   CREW_PERMISSIONS,
   DEFAULT_CREW_ROLES,
+  DEFAULT_CREW_USERS,
   type CrewPermission,
   type CrewRole,
   type CrewUser,
@@ -29,43 +21,18 @@ import {
 
 export const CrewPages: FC = () => {
   const { t } = useI18n();
-  const { token } = useNucleus(authNucleus);
-  const [users, setUsers] = useState<CrewUser[]>([]);
+  const [users, setUsers] = useState<CrewUser[]>(DEFAULT_CREW_USERS);
   const [roles, setRoles] = useState<CrewRole[]>(DEFAULT_CREW_ROLES);
   const [name, setName] = useState(EMPTY_STRING);
   const [email, setEmail] = useState(EMPTY_STRING);
   const [username, setUsername] = useState(EMPTY_STRING);
-  const [password, setPassword] = useState(EMPTY_STRING);
-  const [roleId, setRoleId] = useState(EMPTY_STRING);
+  const [roleId, setRoleId] = useState('officer');
   const [roleName, setRoleName] = useState(EMPTY_STRING);
   const [roleDescription, setRoleDescription] = useState(EMPTY_STRING);
   const [selectedPermissions, setSelectedPermissions] = useState<CrewPermission[]>([
     'page:read',
     'page:edit',
   ]);
-  const [editingRoleId, setEditingRoleId] = useState(EMPTY_STRING);
-  const [loadError, setLoadError] = useState(false);
-  const [saving, setSaving] = useState(false);
-
-  const loadCrew = async () => {
-    if (!token) return;
-    const [nextUsers, nextRoles] = await Promise.all([
-      fetchCrewUsers(token),
-      fetchCrewRoles(token),
-    ]);
-    if (!nextUsers || !nextRoles) {
-      setLoadError(true);
-      return;
-    }
-    setLoadError(false);
-    setUsers(nextUsers);
-    setRoles(nextRoles);
-    if (!roleId && nextRoles[0]) setRoleId(nextRoles[0].id);
-  };
-
-  useEffect(() => {
-    void loadCrew();
-  }, [token]);
 
   const togglePermission = (permission: CrewPermission) => {
     setSelectedPermissions((current) =>
@@ -75,68 +42,34 @@ export const CrewPages: FC = () => {
     );
   };
 
-  const createUser = async () => {
-    if (!token || !name.trim() || !email.trim() || !username.trim() || !password || !roleId) return;
-    setSaving(true);
-    const next = await createCrewUserRequest(token, {
+  const createUser = () => {
+    if (!name.trim() || !email.trim() || !username.trim()) return;
+    const next: CrewUser = {
+      id: `u-${Date.now()}`,
       name: name.trim(),
       email: email.trim(),
       username: username.trim(),
-      password,
-      roleId,
-    });
-    setSaving(false);
-    if (!next) {
-      setLoadError(true);
-      return;
-    }
+      roleIds: [roleId],
+      active: true,
+    };
     setUsers((current) => [next, ...current]);
     setName(EMPTY_STRING);
     setEmail(EMPTY_STRING);
     setUsername(EMPTY_STRING);
-    setPassword(EMPTY_STRING);
   };
 
-  const createRole = async () => {
-    if (!token || !roleName.trim() || selectedPermissions.length === 0) return;
-    setSaving(true);
-    if (editingRoleId) {
-      const updated = await updateCrewRoleRequest(token, editingRoleId, {
-        name: roleName.trim(),
-        description: roleDescription.trim(),
-        permissions: selectedPermissions,
-      });
-      setSaving(false);
-      if (!updated) {
-        setLoadError(true);
-        return;
-      }
-      setRoles((current) => current.map((role) => (role.id === updated.id ? updated : role)));
-      setEditingRoleId(EMPTY_STRING);
-      setRoleName(EMPTY_STRING);
-      setRoleDescription(EMPTY_STRING);
-      return;
-    }
-    const next = await createCrewRoleRequest(token, {
+  const createRole = () => {
+    if (!roleName.trim() || selectedPermissions.length === 0) return;
+    const next: CrewRole = {
+      id: `role-${Date.now()}`,
       name: roleName.trim(),
       description: roleDescription.trim() || t.cmsCrew.roleCustomHint,
       permissions: selectedPermissions,
-    });
-    setSaving(false);
-    if (!next) {
-      setLoadError(true);
-      return;
-    }
+      system: false,
+    };
     setRoles((current) => [next, ...current]);
     setRoleName(EMPTY_STRING);
     setRoleDescription(EMPTY_STRING);
-  };
-
-  const startEditRole = (role: CrewRole) => {
-    setEditingRoleId(role.id);
-    setRoleName(role.name);
-    setRoleDescription(role.description);
-    setSelectedPermissions(role.permissions);
   };
 
   return (
@@ -150,11 +83,6 @@ export const CrewPages: FC = () => {
             {t.cmsCrew.subtitle}
           </Typography>
         </div>
-        {loadError ? (
-          <Typography variant="body2" className="ink-cms-dashboard__error mb-0">
-            {t.cmsCrew.loadError}
-          </Typography>
-        ) : null}
 
         <div className="ink-cms-edit__layout">
           <Card className="ink-cms-card">
@@ -180,14 +108,6 @@ export const CrewPages: FC = () => {
                 value={username}
                 onChange={(event) => setUsername(event.target.value)}
               />
-              <Input
-                id="crew-user-password"
-                type="password"
-                label={t.cmsCrew.userPassword}
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                autoComplete="new-password"
-              />
               <label className="ink-cms__muted text-sm" htmlFor="crew-user-role">
                 {t.cmsCrew.userRole}
               </label>
@@ -203,7 +123,7 @@ export const CrewPages: FC = () => {
                   </option>
                 ))}
               </select>
-              <Button size="sm" variant="ink" onClick={() => void createUser()} disabled={saving}>
+              <Button size="sm" variant="ink" onClick={createUser}>
                 {t.cmsCrew.createUser}
               </Button>
             </Flex>
@@ -267,8 +187,8 @@ export const CrewPages: FC = () => {
                   );
                 })}
               </Flex>
-              <Button size="sm" variant="ink" onClick={() => void createRole()} disabled={saving}>
-                {editingRoleId ? t.cmsCrew.saveRole : t.cmsCrew.createRole}
+              <Button size="sm" variant="ink" onClick={createRole}>
+                {t.cmsCrew.createRole}
               </Button>
             </Flex>
             <Flex direction="column" gap={2}>
@@ -286,16 +206,11 @@ export const CrewPages: FC = () => {
                         {role.permissions.length} {t.cmsCrew.permissionsCount}
                       </Typography>
                     </div>
-                    <Flex gap={1} className="flex-wrap">
-                      {role.system ? (
-                        <Badge variant="neutral" className="text-xs">
-                          {t.cmsCrew.systemRole}
-                        </Badge>
-                      ) : null}
-                      <Button size="sm" variant="outline" onClick={() => startEditRole(role)}>
-                        {t.cmsCrew.editRole}
-                      </Button>
-                    </Flex>
+                    {role.system ? (
+                      <Badge variant="neutral" className="text-xs">
+                        {t.cmsCrew.systemRole}
+                      </Badge>
+                    ) : null}
                   </Flex>
                 </Card>
               ))}

@@ -10,7 +10,6 @@ export type CmsPlan = {
   portalTier: string;
   aiMode: string;
   monthlyTokenLimit: number;
-  sitesLimit?: number;
   licenseFeatures: string[];
   price: PlanPrice;
   status: string;

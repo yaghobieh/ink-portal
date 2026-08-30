@@ -3,25 +3,23 @@ import { EMPTY_STRING } from '@const/index';
 import { requestWithError } from '../../http';
 import { authHeaders } from '../auth/auth.api';
 import {
+  CLOUDINARY_API_BASE,
+  CLOUDINARY_FORM_KEYS,
+  CLOUDINARY_UPLOAD_PATH,
   CMS_MEDIA_PATH,
   CMS_MEDIA_SIGN_PATH,
-  CMS_MEDIA_UPLOAD_PATH,
-  CONTENT_TYPE_JSON,
   DEFAULT_MEDIA_FOLDER,
   DEFAULT_MEDIA_RESOURCE_TYPE,
-  HTTP_METHOD_POST,
-  MEDIA_UPLOAD_DATA_URL_KEY,
-  MEDIA_UPLOAD_FILE_NAME_KEY,
 } from './media.const';
 import type {
   CloudinarySignResponse,
+  CloudinaryUploadResult,
   MediaItem,
   MediaListResponse,
   RegisterMediaInput,
 } from './media.types';
-import { fileToDataUrl } from './media.utils';
 
-export { CMS_MEDIA_PATH, CMS_MEDIA_SIGN_PATH, CMS_MEDIA_UPLOAD_PATH };
+export { CMS_MEDIA_PATH, CMS_MEDIA_SIGN_PATH };
 
 export const fetchMediaRequest = async (
   token: string,
@@ -50,6 +48,39 @@ export const fetchSign = async (
   return (await response.json()) as CloudinarySignResponse;
 };
 
+export const uploadToCloudinary = async (
+  file: File,
+  sign: CloudinarySignResponse,
+): Promise<CloudinaryUploadResult | null> => {
+  if (!sign.cloudName) return null;
+  const endpoint = `${CLOUDINARY_API_BASE}/${sign.cloudName}${CLOUDINARY_UPLOAD_PATH}`;
+  const form = new FormData();
+  form.append(CLOUDINARY_FORM_KEYS.FILE, file);
+
+  if (sign.uploadPreset) {
+    form.append(CLOUDINARY_FORM_KEYS.UPLOAD_PRESET, sign.uploadPreset);
+  }
+
+  if (sign.apiKey && sign.signature != null && sign.timestamp != null) {
+    form.append(CLOUDINARY_FORM_KEYS.API_KEY, sign.apiKey);
+    form.append(CLOUDINARY_FORM_KEYS.TIMESTAMP, String(sign.timestamp));
+    form.append(CLOUDINARY_FORM_KEYS.SIGNATURE, sign.signature);
+  }
+
+  const folder = sign.folder || DEFAULT_MEDIA_FOLDER;
+  if (folder) {
+    form.append(CLOUDINARY_FORM_KEYS.FOLDER, folder);
+  }
+
+  const response = await requestWithError(
+    endpoint,
+    { method: 'POST', body: form },
+    { mode: 'modal', message: 'Cloudinary upload failed' },
+  );
+  if (!response.ok) return null;
+  return (await response.json()) as CloudinaryUploadResult;
+};
+
 export const registerMedia = async (
   token: string,
   input: RegisterMediaInput,
@@ -58,10 +89,10 @@ export const registerMedia = async (
   const response = await requestWithError(
     `${INK_API_URL}${CMS_MEDIA_PATH}`,
     {
-      method: HTTP_METHOD_POST,
+      method: 'POST',
       headers: {
         ...authHeaders(token),
-        'Content-Type': CONTENT_TYPE_JSON,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         publicId: input.publicId,
@@ -82,41 +113,25 @@ export const registerMedia = async (
   return data.item ?? null;
 };
 
-export const uploadViaServer = async (
-  token: string,
-  file: File,
-): Promise<MediaItem | null> => {
-  if (!INK_API_URL || !token) {
-    return null;
-  }
-  const dataUrl = await fileToDataUrl(file);
-  const response = await requestWithError(
-    `${INK_API_URL}${CMS_MEDIA_UPLOAD_PATH}`,
-    {
-      method: HTTP_METHOD_POST,
-      headers: {
-        ...authHeaders(token),
-        'Content-Type': CONTENT_TYPE_JSON,
-      },
-      body: JSON.stringify({
-        [MEDIA_UPLOAD_DATA_URL_KEY]: dataUrl,
-        [MEDIA_UPLOAD_FILE_NAME_KEY]: file.name,
-      }),
-    },
-    { mode: 'modal', message: 'Media upload failed' },
-  );
-  if (!response.ok) {
-    return null;
-  }
-  const data = (await response.json()) as { item?: MediaItem };
-  return data.item ?? null;
-};
-
 export const uploadAndRegisterMedia = async (
   token: string,
   file: File,
 ): Promise<MediaItem | null> => {
-  return uploadViaServer(token, file);
+  const sign = await fetchSign(token);
+  if (!sign) return null;
+  const uploaded = await uploadToCloudinary(file, sign);
+  if (!uploaded?.public_id || !uploaded.secure_url) return null;
+  return registerMedia(token, {
+    publicId: uploaded.public_id,
+    url: uploaded.url || uploaded.secure_url,
+    secureUrl: uploaded.secure_url,
+    resourceType: uploaded.resource_type || DEFAULT_MEDIA_RESOURCE_TYPE,
+    format: uploaded.format ?? null,
+    bytes: uploaded.bytes ?? 0,
+    width: uploaded.width ?? null,
+    height: uploaded.height ?? null,
+    folder: sign.folder || DEFAULT_MEDIA_FOLDER,
+  });
 };
 
 export const mediaAltFromPublicId = (publicId: string): string =>
