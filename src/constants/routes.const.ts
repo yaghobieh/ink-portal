@@ -12,6 +12,9 @@ export const ROUTES = {
   DEMO_TABLES: '/demos/tables',
   DEMO_MARKDOWN: '/demos/markdown',
   DEMO_MOBILE: '/demos/mobile',
+  DEMO_TITLES: '/demos/titles',
+  DEMO_EXCEL: '/demos/sheet',
+  DEMO_GRAPH: '/demos/graph',
   PLAYGROUND: '/playground',
   GET_STARTED: '/get-started',
   CHANGELOG: '/changelog',
@@ -58,8 +61,8 @@ export const cmsBuilderPath = (query?: { doc?: string; layout?: string }): strin
   return search ? `${ROUTES.CMS_BUILDER}?${search}` : ROUTES.CMS_BUILDER;
 };
 
-export const INK_VERSION = '1.1.7';
-export const PORTAL_VERSION = '1.1.7';
+export const INK_VERSION = '1.1.8';
+export const PORTAL_VERSION = '1.1.8';
 
 const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },

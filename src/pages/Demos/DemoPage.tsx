@@ -11,7 +11,10 @@ import {
   DEMO_HTML_COLLAB,
   DEMO_HTML_DOCUMENT,
   DEMO_HTML_FEATURE,
+  DEMO_HTML_GRAPH,
+  DEMO_HTML_SHEET,
   DEMO_HTML_TABLES,
+  DEMO_HTML_TITLES,
   HERO_EDITOR_MIN_HEIGHT_PX,
   MOCK_COLLAB_COMMENTS,
   MOCK_COLLAB_TRACK,
@@ -19,7 +22,17 @@ import {
   THEME_CLASS_SNOW,
 } from '@const/index';
 
-type DemoKind = 'feature-rich' | 'ai' | 'collaborative' | 'document' | 'tables' | 'markdown' | 'mobile';
+type DemoKind =
+  | 'feature-rich'
+  | 'ai'
+  | 'collaborative'
+  | 'document'
+  | 'tables'
+  | 'markdown'
+  | 'mobile'
+  | 'titles'
+  | 'sheet'
+  | 'graph';
 
 const pathToKind = (path: string): DemoKind => {
   if (path.includes('/ai')) return 'ai';
@@ -28,6 +41,9 @@ const pathToKind = (path: string): DemoKind => {
   if (path.includes('/tables')) return 'tables';
   if (path.includes('/markdown')) return 'markdown';
   if (path.includes('/mobile')) return 'mobile';
+  if (path.includes('/titles')) return 'titles';
+  if (path.includes('/sheet')) return 'sheet';
+  if (path.includes('/graph')) return 'graph';
   return 'feature-rich';
 };
 
@@ -46,6 +62,12 @@ export const DemoPage: FC = () => {
         return DEMO_HTML_DOCUMENT;
       case 'tables':
         return DEMO_HTML_TABLES;
+      case 'titles':
+        return DEMO_HTML_TITLES;
+      case 'sheet':
+        return DEMO_HTML_SHEET;
+      case 'graph':
+        return DEMO_HTML_GRAPH;
       case 'markdown':
       case 'mobile':
         return DEMO_HTML_FEATURE;
@@ -75,6 +97,12 @@ export const DemoPage: FC = () => {
         return t.demos.markdown.title;
       case 'mobile':
         return t.demos.mobile.title;
+      case 'titles':
+        return t.demos.titles.title;
+      case 'sheet':
+        return t.demos.sheet.title;
+      case 'graph':
+        return t.demos.graph.title;
       default:
         return t.demos.featureRich.title;
     }
@@ -94,6 +122,12 @@ export const DemoPage: FC = () => {
         return t.demos.markdown.description;
       case 'mobile':
         return t.demos.mobile.description;
+      case 'titles':
+        return t.demos.titles.description;
+      case 'sheet':
+        return t.demos.sheet.description;
+      case 'graph':
+        return t.demos.graph.description;
       default:
         return t.demos.featureRich.description;
     }
@@ -138,9 +172,13 @@ export const DemoPage: FC = () => {
                 table: true,
                 trackChanges: kind === 'collaborative' || kind === 'feature-rich',
                 comments: kind === 'collaborative' || kind === 'ai' || kind === 'feature-rich',
-                ai: kind === 'ai' || kind === 'feature-rich',
+                ai: kind === 'ai' || kind === 'feature-rich' || kind === 'graph',
+                outline: true,
                 blocks: kind === 'document' || kind === 'feature-rich',
                 slash: true,
+                titles: true,
+                excel: true,
+                graph: true,
               }}
               trackChanges={trackChanges}
               onTrackChangesChange={setTrackChanges}
@@ -149,7 +187,7 @@ export const DemoPage: FC = () => {
               onCommentsChange={setComments}
               showCommentsPanel={kind === 'collaborative' || kind === 'feature-rich'}
               ai={
-                kind === 'ai' || kind === 'feature-rich'
+                kind === 'ai' || kind === 'feature-rich' || kind === 'graph'
                   ? { enabled: true, placement: 'sidebar', openOnInit: kind === 'ai', showHistory: true }
                   : undefined
               }

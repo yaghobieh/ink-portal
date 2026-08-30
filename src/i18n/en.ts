@@ -4,7 +4,7 @@ export const en: Messages = {
   brand: 'Ink',
   tagline: 'A rich text editor that just feels right.',
   heroSupport:
-    '1.1.7 document chrome — grouped toolbar, outline rail, slash commands, and Ask Ink AI. Lightweight, typed, and ready to ship.',
+    '1.1.8 document chrome — grouped toolbar, outline rail, slash commands, and Ask Ink AI. Lightweight, typed, and ready to ship.',
   ctaDocs: 'Documentation',
   ctaPlayground: 'Playground',
   ctaDemos: 'Demos',
@@ -111,6 +111,9 @@ export const en: Messages = {
     title: 'Get started',
     description: 'Install the package and render InkEditor in a few lines.',
     install: 'Install',
+    body: 'Install the editor with npx i @forgedevstack/ink, then add plugins by name: titles, graph, theme, or excel. Import styles once and mount InkEditor.',
+    signPadTitle: 'Sign pad + draft memory',
+    signPadHint: 'Open the sign pad, draw, then insert. Refresh to confirm keepInMemory restores the draft.',
     next: 'Continue to full documentation',
   },
   changelog: {
@@ -158,6 +161,18 @@ export const en: Messages = {
       title: 'Mobile-friendly',
       description: 'Responsive shell — panels stack under the editor on small screens.',
     },
+    titles: {
+      title: 'Titles',
+      description: 'Thirty title styles. Select text and pick a preset from the gallery.',
+    },
+    sheet: {
+      title: 'Sheet',
+      description: 'Edit a grid or import CSV, then insert it as a table.',
+    },
+    graph: {
+      title: 'Graph',
+      description: 'Insert a bar, line, or pie graph from sample values.',
+    },
   },
   ai: {
     title: 'Ink AI',
@@ -199,7 +214,7 @@ export const en: Messages = {
     galleryTitle: 'See the editor in motion',
     galleryBody:
       'This is the 1.1.7 document editor — live. Paragraph menu, outline, slash, and Ask Ink AI. Type in it.',
-    editorPlaceholder: 'Start writing in Ink 1.1.7…',
+    editorPlaceholder: 'Start writing…',
     galleryHighlightToolbarTitle: 'Grouped toolbar',
     galleryHighlightToolbarBody:
       'Paragraph styles, format cluster, lists, media, and Ask Ink AI sit in one row with thin-stroke icons.',
@@ -231,6 +246,12 @@ export const en: Messages = {
     exampleAiBody: 'Chat, quick actions, review, and translate with the local demo provider.',
     exampleCollabTitle: 'Collaborative MVP',
     exampleCollabBody: 'Comments archive and track changes with mock authors.',
+    exampleTitlesTitle: 'Titles',
+    exampleTitlesBody: 'Word-era title styles from a 5×6 gallery.',
+    exampleSheetTitle: 'Sheet',
+    exampleSheetBody: 'Grid editor and CSV import that insert an Ink table.',
+    exampleGraphTitle: 'Graph',
+    exampleGraphBody: 'Bar, line, and pie graphs as SVG in the document.',
     exampleOpen: 'Open demo',
     aiSectionTitle: 'Ink AI',
     aiSectionBody:
@@ -707,6 +728,7 @@ export const en: Messages = {
     crumbsProduct: 'Product',
     crumbsFile: 'Ink Editor.doc',
     share: 'Share',
+    fullscreen: 'Fill screen',
     sharePdf: 'Share as PDF',
     shareWord: 'Share as Word',
     shareHtml: 'Share as HTML',
@@ -720,7 +742,7 @@ export const en: Messages = {
     notesLocked: 'Extra editors',
     notesLockedBody: 'A second document tab ships with the $19 pack and above.',
     openPricing: 'See plans',
-    version: 'v1.1.7',
+    version: 'v1.1.8',
   },
   contentEdit: {
     title: 'Edit content',

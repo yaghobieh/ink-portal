@@ -14,10 +14,10 @@ export const Demos: FC = () => {
         <Typography variant="h1" className="text-4xl md:text-5xl font-bold tracking-tight mb-3">
           {t.demos.title}
         </Typography>
-        <Typography variant="body1" className="text-slate-500 max-w-2xl mb-4">
+        <Typography variant="body1" className="ink-text-muted max-w-2xl mb-4">
           {t.demos.description}
         </Typography>
-        <Typography variant="caption" className="text-teal-800/80 block mb-10">
+        <Typography variant="caption" className="ink-text-muted block mb-10">
           {t.demos.mobileNote}
         </Typography>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -25,10 +25,10 @@ export const Demos: FC = () => {
             const copy = t.demos[card.id];
             return (
               <Link key={card.id} to={card.href} className="ink-demo-card group">
-                <Typography variant="h5" className="font-semibold mb-2 group-hover:text-teal-800">
+                <Typography variant="h5" className="font-semibold mb-2">
                   {copy.title}
                 </Typography>
-                <Typography variant="body2" className="text-slate-500 mb-4">
+                <Typography variant="body2" className="ink-text-muted mb-4">
                   {copy.description}
                 </Typography>
                 <Flex>

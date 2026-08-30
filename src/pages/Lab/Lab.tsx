@@ -28,6 +28,7 @@ export const Lab: FC = () => {
   const { t } = useI18n();
   const { navigate } = useNavigate();
   const { premium, active } = useInkPremium();
+  const [fillScreen, setFillScreen] = useState(false);
   const [state, setState] = useState(LAB_INITIAL_STATE);
   const providerId = resolveLabAiProviderId();
   const canSplit = Boolean(active && premium);
@@ -57,6 +58,24 @@ export const Lab: FC = () => {
           <div className="ink-lab-app__top">
             <Flex align="center" gap={2} className="ink-lab-app__actions">
               <LabShareMenu html={state.docs[activeId]} />
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  const next = !fillScreen;
+                  setFillScreen(next);
+                  const node = document.querySelector('.ink-lab-app');
+                  if (next && node instanceof HTMLElement) {
+                    void node.requestFullscreen();
+                    return;
+                  }
+                  if (document.fullscreenElement) {
+                    void document.exitFullscreen();
+                  }
+                }}
+              >
+                {t.lab.fullscreen}
+              </Button>
               <Button size="sm" variant="ink">
                 {t.lab.publish}
               </Button>

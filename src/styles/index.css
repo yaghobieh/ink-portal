@@ -3,16 +3,22 @@
 @tailwind utilities;
 
 :root {
-  --ink-portal-bg: #f7f7f5;
-  --ink-portal-paper: #ffffff;
-  --ink-portal-ink: #1a1a1a;
-  --ink-portal-muted: #71717a;
-  --ink-portal-border: rgba(15, 23, 42, 0.1);
-  --ink-portal-accent: #0f766e;
-  --ink-portal-accent-bright: #14b8a6;
-  --ink-portal-accent-soft: #ccfbf1;
+  --ink-portal-bg: #F6F5F1;
+  --ink-portal-paper: #FFFFFF;
+  --ink-portal-ink: #181A16;
+  --ink-portal-muted: #5C5E56;
+  --ink-portal-tertiary: #8D8F86;
+  --ink-portal-border: #E6E4DC;
+  --ink-portal-border-strong: #D2CFC4;
+  --ink-portal-accent: #0E8A6E;
+  --ink-portal-accent-hover: #0B6E58;
+  --ink-portal-accent-bright: #22A585;
+  --ink-portal-accent-soft: #E7F6F1;
+  --ink-portal-code-bg: #12211D;
+  --ink-portal-code-text: #DCEFE9;
   --ink-portal-nav-h: 64px;
   --ink-portal-display: 'Fraunces', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --ink-portal-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 html,
@@ -32,12 +38,17 @@ body {
 html.dark,
 body.dark,
 .ink-shell--dark {
-  --ink-portal-bg: #0b1220;
-  --ink-portal-paper: #111827;
-  --ink-portal-ink: #f8fafc;
-  --ink-portal-muted: #94a3b8;
-  --ink-portal-border: rgba(248, 250, 252, 0.1);
-  --ink-portal-accent-soft: rgba(45, 212, 191, 0.12);
+  --ink-portal-bg: #14161A;
+  --ink-portal-paper: #1B1E22;
+  --ink-portal-ink: #F1F0EC;
+  --ink-portal-muted: #A8AAA4;
+  --ink-portal-tertiary: #6E7169;
+  --ink-portal-border: #2A2D30;
+  --ink-portal-border-strong: #3A3D40;
+  --ink-portal-accent: #22A585;
+  --ink-portal-accent-hover: #3BC29E;
+  --ink-portal-accent-soft: rgba(34, 165, 133, 0.14);
+  --ink-portal-code-bg: #0E1613;
 }
 
 a {
@@ -480,14 +491,14 @@ body:not(.dark) .ink-login-card input {
 }
 
 .ink-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--ink-portal-mono);
   font-size: 0.8125rem;
   line-height: 1.6;
-  background: #f4f4f5 !important;
-  color: #18181b !important;
-  border: 1px solid rgb(15 23 42 / 0.08);
-  border-radius: 0.75rem;
-  padding: 1rem 1.25rem;
+  background: var(--ink-portal-code-bg) !important;
+  color: var(--ink-portal-code-text) !important;
+  border: 1px solid var(--ink-portal-border);
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
   overflow-x: auto;
   white-space: pre-wrap;
 }
@@ -495,8 +506,8 @@ body:not(.dark) .ink-login-card input {
 html.dark .ink-code,
 body.dark .ink-code,
 .ink-shell--dark .ink-code {
-  background: #0f172a !important;
-  color: #e2e8f0 !important;
+  background: var(--ink-portal-code-bg) !important;
+  color: var(--ink-portal-code-text) !important;
   border-color: rgba(248, 250, 252, 0.08);
 }
 
@@ -731,19 +742,11 @@ body.dark .ink-code,
 .ink-landing__grid {
   position: relative;
   z-index: 1;
-  max-width: 1180px;
+  max-width: 760px;
   margin: 0 auto;
   display: grid;
   gap: 2.5rem;
-  align-items: center;
-}
-
-@media (min-width: 960px) {
-  .ink-landing__grid {
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-    gap: 3rem;
-    padding-top: 1.5rem;
-  }
+  align-items: start;
 }
 
 .ink-landing__mark {
@@ -768,12 +771,13 @@ body.dark .ink-code,
   line-height: 1.08;
   letter-spacing: -0.03em;
   color: var(--ink-portal-ink);
-  max-width: 14ch;
+  max-width: 18ch;
 }
 
 .ink-landing__accent {
   position: relative;
   display: inline-block;
+  font-style: italic;
   color: var(--ink-portal-accent);
 }
 
@@ -821,7 +825,7 @@ body.dark .ink-code,
   height: 2.25rem;
   border-radius: 0.65rem;
   color: var(--ink-portal-accent);
-  background: rgb(15 118 110 / 0.08);
+  background: var(--ink-portal-accent-soft);
   flex-shrink: 0;
 }
 
@@ -1251,10 +1255,10 @@ body.dark .inkOutline,
 }
 
 .ink-lab-app {
-  background: #fff;
-  border: 1px solid #e1e4ea;
-  border-radius: 0.625rem;
-  box-shadow: 0 4px 16px rgb(23 27 36 / 0.08);
+  background: var(--ink-portal-paper);
+  border: 1px solid var(--ink-portal-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px rgb(24 26 22 / 0.07);
   overflow: visible;
 }
 
@@ -1264,7 +1268,7 @@ body.dark .inkOutline,
   justify-content: flex-end;
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
-  border-bottom: 1px solid #e1e4ea;
+  border-bottom: 1px solid var(--ink-portal-border);
 }
 
 .ink-lab-app__actions .Bear-Button,
@@ -1351,9 +1355,9 @@ body.dark .inkOutline,
 
 .ink-lab-app__ver {
   margin-left: auto;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: var(--ink-portal-mono);
   font-size: 0.625rem;
-  color: #98a2b3;
+  color: var(--ink-portal-tertiary);
 }
 
 .ink-lab-app__locked {
@@ -1362,16 +1366,59 @@ body.dark .inkOutline,
 }
 
 .ink-shell--dark .ink-lab-app {
-  background: #111827;
-  border-color: #334155;
+  background: var(--ink-portal-paper);
+  border-color: var(--ink-portal-border);
 }
 
 .ink-shell--dark .ink-lab-app__top,
 .ink-shell--dark .ink-lab-app__tabs {
-  border-color: #334155;
-  background: #111827;
+  border-color: var(--ink-portal-border);
+  background: var(--ink-portal-paper);
 }
 
 .ink-shell--dark .ink-lab-app__crumbs b {
-  color: #f8fafc;
+  color: var(--ink-portal-ink);
+}
+
+.ink-install__eyebrow {
+  display: block;
+  font-family: var(--ink-portal-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-portal-accent);
+  margin-bottom: 0.5rem;
+}
+
+.ink-install__title {
+  font-family: var(--ink-portal-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+}
+
+.ink-install__card {
+  background: var(--ink-portal-paper);
+  border: 1px solid var(--ink-portal-border);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px rgb(24 26 22 / 0.07);
+  padding: 1.375rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ink-install__card-head {
+  margin-bottom: 0.875rem;
+}
+
+.ink-install__card-title {
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+}
+
+.ink-install__dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 999px;
+  background: var(--ink-portal-accent);
 }

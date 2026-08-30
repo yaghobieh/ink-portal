@@ -36,15 +36,15 @@ export const Ai: FC = () => {
   return (
     <Layout>
       <div className="fade-in">
-        <section className="border-b border-slate-200/80 bg-white">
+        <section className="ink-home-section">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-            <Typography variant="caption" className="text-teal-700 font-mono mb-3 block">
+            <Typography variant="caption" className="ink-install__eyebrow">
               @forgedevstack/ink/plugins/ai
             </Typography>
-            <Typography variant="h1" className="text-4xl md:text-5xl font-bold tracking-tight mb-3 max-w-3xl">
+            <Typography variant="h1" className="ink-install__title text-4xl md:text-5xl tracking-tight mb-3 max-w-3xl">
               {t.ai.headline}
             </Typography>
-            <Typography variant="body1" className="text-slate-500 max-w-2xl mb-4">
+            <Typography variant="body1" className="ink-text-muted max-w-2xl mb-4">
               {t.ai.description}
             </Typography>
             <Typography variant="body2" className="text-amber-900/80 bg-amber-50 border border-amber-100 rounded-xl px-4 py-3 max-w-3xl mb-8">
@@ -69,7 +69,7 @@ export const Ai: FC = () => {
                   <Typography variant="h5" className="font-semibold mb-2">
                     {feature.title}
                   </Typography>
-                  <Typography variant="body2" className="text-slate-500">
+                  <Typography variant="body2" className="ink-text-muted">
                     {feature.body}
                   </Typography>
                 </article>

@@ -1,3 +1,6 @@
+export type LabDocId = 'design' | 'notes';
+
 export interface LabPageState {
-  value: string;
+  activeId: LabDocId;
+  docs: Record<LabDocId, string>;
 }

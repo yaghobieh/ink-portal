@@ -110,6 +110,9 @@ export interface Messages {
     title: string;
     description: string;
     install: string;
+    body: string;
+    signPadTitle: string;
+    signPadHint: string;
     next: string;
   };
   changelog: {
@@ -133,6 +136,9 @@ export interface Messages {
     markdown: { title: string; description: string };
     playground: { title: string; description: string };
     mobile: { title: string; description: string };
+    titles: { title: string; description: string };
+    sheet: { title: string; description: string };
+    graph: { title: string; description: string };
   };
   ai: {
     title: string;
@@ -198,6 +204,12 @@ export interface Messages {
     exampleAiBody: string;
     exampleCollabTitle: string;
     exampleCollabBody: string;
+    exampleTitlesTitle: string;
+    exampleTitlesBody: string;
+    exampleSheetTitle: string;
+    exampleSheetBody: string;
+    exampleGraphTitle: string;
+    exampleGraphBody: string;
     exampleOpen: string;
     aiSectionTitle: string;
     aiSectionBody: string;
@@ -657,6 +669,7 @@ export interface Messages {
     crumbsProduct: string;
     crumbsFile: string;
     share: string;
+    fullscreen: string;
     sharePdf: string;
     shareWord: string;
     shareHtml: string;

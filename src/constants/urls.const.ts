@@ -10,5 +10,14 @@ export const RAIL_URL = 'https://github.com/yaghobieh/rail';
 export const INK_EXCEL_NPM_URL = 'https://www.npmjs.com/package/@forgedevstack/ink-excel';
 export const INK_EXCEL_GITHUB_URL = 'https://github.com/yaghobieh/ink-excel';
 export const INK_EXCEL_PACKAGE_NAME = '@forgedevstack/ink-excel';
+export const INK_TITLES_NPM_URL = 'https://www.npmjs.com/package/@forgedevstack/ink-titles';
+export const INK_TITLES_GITHUB_URL = 'https://github.com/yaghobieh/ink-titles';
+export const INK_TITLES_PACKAGE_NAME = '@forgedevstack/ink-titles';
+export const INK_GRAPH_NPM_URL = 'https://www.npmjs.com/package/@forgedevstack/ink-graph';
+export const INK_GRAPH_GITHUB_URL = 'https://github.com/yaghobieh/ink-graph';
+export const INK_GRAPH_PACKAGE_NAME = '@forgedevstack/ink-graph';
+export const INK_THEME_NPM_URL = 'https://www.npmjs.com/package/@forgedevstack/ink-theme';
+export const INK_THEME_GITHUB_URL = 'https://github.com/yaghobieh/ink-theme';
+export const INK_THEME_PACKAGE_NAME = '@forgedevstack/ink-theme';
 export const BIFROST_INSTALLMENT_URL =
   import.meta.env.VITE_BIFROST_INSTALLMENT_URL || 'http://localhost:5180/installment';
