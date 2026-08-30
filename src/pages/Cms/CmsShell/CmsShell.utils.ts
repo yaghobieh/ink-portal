@@ -13,8 +13,14 @@ import {
   CMS_SIDEBAR_MAX_WIDTH_PX,
   CMS_SIDEBAR_MIN_WIDTH_PX,
   CMS_SIDEBAR_WIDTH_PX,
+  POINTER_EVENT_MOVE,
+  POINTER_EVENT_UP,
 } from './CmsShell.const';
-import type { CmsModePreference } from './CmsShell.types';
+import type {
+  CmsModePreference,
+  CmsSidebarNavItem,
+  FlattenSidebarGroupsParams,
+} from './CmsShell.types';
 
 const COLOR_SCHEME_DARK = '(prefers-color-scheme: dark)';
 
@@ -87,12 +93,12 @@ export const startHorizontalResize = (
     onWidth(nextWidth(moveEvent.clientX));
   };
   const onUp = (upEvent: globalThis.MouseEvent) => {
-    window.removeEventListener('mousemove', onMove);
-    window.removeEventListener('mouseup', onUp);
+    window.removeEventListener(POINTER_EVENT_MOVE, onMove);
+    window.removeEventListener(POINTER_EVENT_UP, onUp);
     onCommit(nextWidth(upEvent.clientX));
   };
-  window.addEventListener('mousemove', onMove);
-  window.addEventListener('mouseup', onUp);
+  window.addEventListener(POINTER_EVENT_MOVE, onMove);
+  window.addEventListener(POINTER_EVENT_UP, onUp);
 };
 
 export const loadCmsModePreference = (): CmsModePreference => {
@@ -116,6 +122,20 @@ export const resolveCmsMode = (preference: CmsModePreference): 'light' | 'dark' 
     return window.matchMedia(COLOR_SCHEME_DARK).matches ? CMS_MODE_DARK : CMS_MODE_LIGHT;
   }
   return preference;
+};
+
+export const resolveSidebarNavItems = (
+  params: FlattenSidebarGroupsParams,
+): CmsSidebarNavItem[] => {
+  const { groups, collapsed } = params;
+  if (collapsed) {
+    return groups.map((group) => ({
+      id: group.id,
+      label: group.label,
+      icon: group.icon,
+    }));
+  }
+  return groups;
 };
 
 export const avatarToneColor = (value: string): string => {

@@ -2,17 +2,17 @@ import type { BearThemeOverride, CustomVariantsMap } from '@forgedevstack/bear';
 
 export const INK_COLORS = {
   primary: {
-    50: '#f0fdfa',
-    100: '#ccfbf1',
-    200: '#99f6e4',
-    300: '#5eead4',
-    400: '#2dd4bf',
-    500: '#0f766e',
-    600: '#0d5f59',
-    700: '#0a4a45',
-    800: '#083b37',
-    900: '#062e2b',
-    950: '#04201e',
+    50: '#eaf0fe',
+    100: '#d5e0fc',
+    200: '#abc1f9',
+    300: '#7a9aef',
+    400: '#4d73dc',
+    500: '#2951c4',
+    600: '#1f3f9e',
+    700: '#1b3a8c',
+    800: '#152c6b',
+    900: '#0f1f4c',
+    950: '#0a1433',
   },
   secondary: {
     50: '#f8fafc',
@@ -37,7 +37,7 @@ export const inkTheme: BearThemeOverride = {
   typography: {
     fontFamily: {
       sans: "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-      mono: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+      mono: "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
     },
   },
   borderRadius: {
@@ -51,15 +51,15 @@ export const inkTheme: BearThemeOverride = {
 
 export const inkVariants: CustomVariantsMap = {
   ink: {
-    bg: '#0f766e',
-    bgHover: '#0d5f59',
+    bg: '#2951c4',
+    bgHover: '#1f3f9e',
     text: '#ffffff',
-    ring: '#2dd4bf',
+    ring: '#7a9aef',
   },
   inkOutline: {
     bg: 'transparent',
-    bgHover: 'rgba(15, 118, 110, 0.08)',
-    text: '#0f766e',
-    border: '#0f766e',
+    bgHover: 'rgba(41, 81, 196, 0.08)',
+    text: '#2951c4',
+    border: '#2951c4',
   },
 };

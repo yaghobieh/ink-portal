@@ -18,4 +18,5 @@ export type {
   MeUser,
   UsageResponse,
   UseAuthResult,
+  AuthSessionError,
 } from './auth.types';

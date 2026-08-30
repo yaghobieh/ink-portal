@@ -10,7 +10,7 @@ alwaysApply: true
 1. Open the Jira board for that product (CMS board key is `CMS`).
 2. Move the issue to **In Progress**.
 3. Branch from the **sprint release branch**, not from `main`.
-4. This CMS sprint is **1.1.8** → `release/1.1.8`.
+4. This CMS sprint is **1.1.10** → `release/1.1.10`.
 5. Ticket branch: `{feature|bug}/{PROJECT}-{n}`.
 
 ## Prefix
@@ -24,16 +24,16 @@ alwaysApply: true
 
 ## Stories and subtasks
 
-- Story/Feature in progress: branch `feature/CMS-86` from `release/1.1.8`.
+- Story/Feature in progress: branch `feature/CMS-136` from `release/1.1.10`.
 - Subtasks open PRs **into the story branch**, not into `main`.
-- After checks: merge the story into `release/1.1.8` (Jira → In Review).
+- After checks: merge the story into `release/1.1.10` (Jira → In Review).
 - Do not merge CMS WIP into `main` mid-sprint (publish.yml on some libs).
 
 ## Sprint end
 
-Merge `release/1.1.8` → `main`, then deploy CMS (Ink portal first) and/or publish the lib.
+Merge `release/1.1.10` → `main`, then deploy CMS (bifrost-portal first) and/or publish the lib.
 
 ## Repos
 
-- Bifrost and ink-server: `release/1.1.8` then `feature/CMS-X`.
-- Ink portal is the first CMS host. Historical `origin/release/1.1.0` is the old editor portal — do not reset or force-push it. CMS sprint work here branches `feature/CMS-X` from `release/1.1.8`.
+- Bifrost and ink-server: `release/1.1.10` then `feature/CMS-X`.
+- bifrost-portal is the first CMS host (`/cms`). Historical `origin/release/1.1.0` is the old editor portal — do not reset or force-push it. CMS sprint work here branches `feature/CMS-X` from `release/1.1.10`.

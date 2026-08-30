@@ -1,6 +1,6 @@
 import type { DragEvent, FC } from 'react';
-import { Avatar, Flex, Typography } from '@forgedevstack/bear';
-import { TASK_DRAG_TYPE, TASK_INITIALS_LENGTH, TASK_KIND_CLASS } from '../TasksPages.const';
+import { Avatar, Chip, Flex, Typography } from '@forgedevstack/bear';
+import { TASK_DRAG_TYPE, TASK_INITIALS_LENGTH } from '../TasksPages.const';
 import { userDisplayName, userInitials } from '../TasksPages.utils';
 import type { TaskBoardCardProps } from './TaskBoardCard.types';
 
@@ -33,9 +33,9 @@ export const TaskBoardCard: FC<TaskBoardCardProps> = (props) => {
       <Flex justify="between" align="center" className="ink-cms-board__card-meta">
         <Flex gap={1} className="flex-wrap">
           {task.tags.map((tag) => (
-            <span key={tag} className={`ink-cms-board__chip ${TASK_KIND_CLASS[tag] ?? EMPTY_CHIP}`}>
+            <Chip key={tag} size="sm" color="primary" variant="soft">
               {tag}
-            </span>
+            </Chip>
           ))}
         </Flex>
         <Flex gap={1}>
@@ -49,5 +49,3 @@ export const TaskBoardCard: FC<TaskBoardCardProps> = (props) => {
     </button>
   );
 };
-
-const EMPTY_CHIP = 'ink-cms-board__chip--plain';

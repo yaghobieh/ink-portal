@@ -1,5 +1,6 @@
 import { INK_API_URL } from '@const/billing.const';
-import { requestWithError } from '../../http';
+import { ROUTES, CONTENT_TYPE_JSON, HTTP_METHOD_POST, HTTP_METHOD_PUT } from '@const/index';
+import { useApi } from '@sdk/http';
 import { authHeaders } from '../auth/auth.api';
 import type {
   CmsPageItem,
@@ -8,47 +9,75 @@ import type {
   ContentStatus,
   PagesListResponse,
 } from './content.types';
-
-export const CMS_CONTENT_PATH = '/api/cms/content';
-export const CMS_PAGES_PATH = '/api/cms/pages';
+import {
+  CMS_CONTENT_PATH,
+  CMS_PAGES_PATH,
+  CMS_PAGE_CONTENT_PATH,
+  CMS_PAGE_UPDATE_PATH,
+} from './content.const';
 
 export const fetchContentRequest = async (token: string): Promise<ContentItem[]> => {
-  if (!INK_API_URL || !token) return [];
-  const response = await requestWithError(
+  if (!token) return [];
+  const response = await useApi(
     `${INK_API_URL}${CMS_CONTENT_PATH}`,
     { headers: authHeaders(token) },
-    { message: 'Failed to load content' },
+    { code: 'content', message: 'Failed to load content' },
   );
   if (!response.ok) return [];
-  const data = (await response.json()) as ContentListResponse;
-  return data.items ?? [];
+  try {
+    const data = (await response.json()) as ContentListResponse;
+    if (!data || !Array.isArray(data.items)) return [];
+    return data.items;
+  } catch {
+    return [];
+  }
 };
 
 export const fetchContentByCollectionRequest = async (
   token: string,
   collection: string,
 ): Promise<ContentItem[]> => {
-  if (!INK_API_URL || !token || !collection) return [];
-  const response = await requestWithError(
+  if (!token || !collection) return [];
+  const response = await useApi(
     `${INK_API_URL}${CMS_CONTENT_PATH}/${collection}`,
     { headers: authHeaders(token) },
-    { message: 'Failed to load collection' },
+    { message: 'Failed to load collection', code: 'content' },
   );
   if (!response.ok) return [];
-  const data = (await response.json()) as ContentListResponse;
-  return data.items ?? [];
+  try {
+    const data = (await response.json()) as ContentListResponse;
+    if (!data || !Array.isArray(data.items)) return [];
+    return data.items;
+  } catch {
+    return [];
+  }
 };
 
 export const fetchPagesRequest = async (token: string): Promise<CmsPageItem[]> => {
-  if (!INK_API_URL || !token) return [];
-  const response = await requestWithError(
+  if (!token) return [];
+  const response = await useApi(
     `${INK_API_URL}${CMS_PAGES_PATH}`,
     { headers: authHeaders(token) },
-    { message: 'Failed to load pages' },
+    { message: 'Failed to load pages', code: 'pages', href: ROUTES.CMS_CONTENT },
   );
   if (!response.ok) return [];
   const data = (await response.json()) as PagesListResponse;
   return data.pages ?? [];
+};
+
+export const fetchPageContentRequest = async (
+  token: string,
+  id: string,
+): Promise<CmsPageItem | null> => {
+  if (!token || !id) return null;
+  const response = await useApi(
+    `${INK_API_URL}${CMS_PAGE_CONTENT_PATH}/${id}`,
+    { headers: authHeaders(token) },
+    { message: 'Failed to load page content', code: 'page-content' },
+  );
+  if (!response.ok) return null;
+  const data = (await response.json()) as { page?: CmsPageItem };
+  return data.page ?? null;
 };
 
 export const saveContentRequest = async (
@@ -62,18 +91,18 @@ export const saveContentRequest = async (
     status: ContentStatus;
   },
 ): Promise<ContentItem | null> => {
-  if (!INK_API_URL || !token) return null;
-  const response = await requestWithError(
+  if (!token) return null;
+  const response = await useApi(
     `${INK_API_URL}${CMS_CONTENT_PATH}`,
     {
-      method: 'POST',
+      method: HTTP_METHOD_POST,
       headers: {
         ...authHeaders(token),
-        'Content-Type': 'application/json',
+        'Content-Type': CONTENT_TYPE_JSON,
       },
       body: JSON.stringify(input),
     },
-    { mode: 'modal', message: 'Failed to save content' },
+    { message: 'Failed to save content' },
   );
   if (!response.ok) return null;
   const data = (await response.json()) as { item?: ContentItem };
@@ -90,14 +119,14 @@ export const updatePageRequest = async (
     mediaUrl?: string | null;
   },
 ): Promise<CmsPageItem | null> => {
-  if (!INK_API_URL || !token) return null;
-  const response = await requestWithError(
-    `${INK_API_URL}${CMS_PAGES_PATH}/${input.id}`,
+  if (!token) return null;
+  const response = await useApi(
+    `${INK_API_URL}${CMS_PAGE_UPDATE_PATH}/${input.id}`,
     {
-      method: 'PUT',
+      method: HTTP_METHOD_PUT,
       headers: {
         ...authHeaders(token),
-        'Content-Type': 'application/json',
+        'Content-Type': CONTENT_TYPE_JSON,
       },
       body: JSON.stringify({
         title: input.title,
@@ -106,7 +135,7 @@ export const updatePageRequest = async (
         mediaUrl: input.mediaUrl ?? null,
       }),
     },
-    { mode: 'modal', message: 'Failed to update page' },
+    { message: 'Failed to update page', code: 'page-content' },
   );
   if (!response.ok) return null;
   const data = (await response.json()) as { page?: CmsPageItem };

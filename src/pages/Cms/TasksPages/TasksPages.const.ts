@@ -1,12 +1,14 @@
 import { CMS_AVATAR_INITIALS_LENGTH } from '@const/numbers.const';
 
-export const TASK_STORAGE_KEY = 'ink-cms-tasks';
+export const TASK_STORAGE_KEY = 'ink-cms-tasks-v2';
 export const TASK_BOARD_STORAGE_KEY = 'ink-cms-task-board';
 export const TASK_DRAG_TYPE = 'text/plain';
 
 export const TASK_STATUS = {
   TODO: 'todo',
-  DOING: 'doing',
+  IN_PROGRESS: 'in-progress',
+  DECLINE: 'decline',
+  IN_REVIEW: 'in-review',
   DONE: 'done',
 } as const;
 
@@ -25,6 +27,7 @@ export const TASK_KIND_CLASS: Record<string, string> = {
 };
 
 export const TASK_PERMISSION = {
+  CREATE: 'task:create',
   EDIT: 'task:edit',
   STATUS: 'task:status',
   FIELDS: 'task:fields',
@@ -33,6 +36,8 @@ export const TASK_PERMISSION = {
 export const TASK_INITIALS_LENGTH = CMS_AVATAR_INITIALS_LENGTH;
 export const TASK_EDITOR_MIN_HEIGHT_PX = 180;
 export const TASK_CREATE_MODAL_ID = 'ink-cms-task-create';
+export const TASK_ISSUE_MODAL_ID = 'ink-cms-task-issue';
+export const TASK_BOARD_SETTINGS_ID = 'ink-cms-task-board-settings';
 export const TASK_TITLE_INPUT_ID = 'ink-cms-task-title';
 export const TASK_SUBTITLE_INPUT_ID = 'ink-cms-task-subtitle';
 export const TASK_TAG_INPUT_ID = 'ink-cms-task-tag';
@@ -42,6 +47,8 @@ export const TASK_FIELD_OPTION_ID = 'ink-cms-task-field-option';
 
 export const TASK_DEFAULT_STATUSES = [
   { id: TASK_STATUS.TODO, labelKey: 'todo' as const },
-  { id: TASK_STATUS.DOING, labelKey: 'doing' as const },
+  { id: TASK_STATUS.IN_PROGRESS, labelKey: 'inProgress' as const },
+  { id: TASK_STATUS.DECLINE, labelKey: 'decline' as const },
+  { id: TASK_STATUS.IN_REVIEW, labelKey: 'inReview' as const },
   { id: TASK_STATUS.DONE, labelKey: 'done' as const },
 ] as const;

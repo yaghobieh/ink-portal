@@ -73,11 +73,13 @@ export const CMS_SEARCH_INPUT_ID = 'ink-cms-search';
 export const CMS_RAIL_SEARCH_ID = 'ink-cms-rail-search';
 export const CMS_SEARCH_KEY = 'k';
 export const CMS_KEY_ENTER = 'Enter';
+export const POINTER_EVENT_MOVE = 'mousemove';
+export const POINTER_EVENT_UP = 'mouseup';
 
 export const CMS_BOTTOM_NAV_IDS = [
   CMS_NAV_IDS.DASHBOARD,
   CMS_NAV_IDS.PAGES,
-  CMS_NAV_IDS.AI_USAGE,
+  CMS_NAV_IDS.PLANS,
   CMS_NAV_IDS.BUNDLES,
   CMS_NAV_IDS.SETTINGS,
 ] as const;
@@ -93,3 +95,6 @@ export const CMS_AVATAR_PALETTE = [
   '#D97706',
   '#0369A1',
 ] as const;
+
+export const CMS_CREW_PENDING_PREFIX = 'pending:';
+export const CMS_CREW_DRAWER_OPEN = 'crew-open';

@@ -1,3 +1,5 @@
+import { DOCS_CLOUDINARY_IMAGES } from './docsCloudinary.const';
+
 export type DocsPageMedia = {
   guid: string;
   gifSrc: string;
@@ -11,7 +13,7 @@ const DOC_MEDIA_HEIGHT = 400;
 
 const media = (slug: string, caption: string): DocsPageMedia => ({
   guid: `ink-doc-${slug}-v2`,
-  gifSrc: `/docs/${slug}.svg`,
+  gifSrc: DOCS_CLOUDINARY_IMAGES[slug] || `/docs/${slug}.svg`,
   caption,
   width: DOC_MEDIA_WIDTH,
   height: DOC_MEDIA_HEIGHT,
@@ -35,7 +37,7 @@ export const DOCS_PAGE_MEDIA: Record<string, DocsPageMedia> = {
   plugins: media('plugins', 'Drag & drop a .ink package onto the editor'),
   ai: media('ai', 'Ink AI generate and Tab autocomplete'),
   angular: media('angular', 'Host Ink inside an Angular shell'),
-  wordpress: media('wordpress', 'WordPress bridge for Ink content'),
+  wordpress: media('wordpress', 'Host bridge for Ink content'),
   accessibility: media('accessibility', 'Keyboard and screen-reader friendly chrome'),
   collaboration: media('collaboration', 'Collaboration and live co-edit path'),
   premium: media('premium', 'Premium license unlocks and entitlements'),

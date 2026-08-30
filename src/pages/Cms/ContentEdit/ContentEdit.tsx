@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@forgedevstack/bear';
 import { InkEditor } from '@forgedevstack/ink';
+import { cmsInkAiProps } from '@/ai/index';
 import { useAuth } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { DRAG_WIDGET_MIME, EMPTY_STRING, ROUTES, cmsBuilderPath, CMS_EDIT_SIDE_MAX_PX, CMS_EDIT_SIDE_MIN_PX, CMS_EDIT_SIDE_WIDTH_KEY, CMS_EDIT_SIDE_WIDTH_PX } from '@const/index';
@@ -66,16 +67,17 @@ import {
   appendWidgetHtml,
   joinScheduleAt,
   loadSeoCollapsed,
+  nowScheduleAt,
   payloadString,
   resolveEditTarget,
   saveSeoCollapsed,
   splitScheduleAt,
 } from './ContentEdit.utils';
-import { CastPageFields } from './CastPageFields';
+import { CastPageFields } from './helpers/CastPageFields';
 import {
   CAST_VALUE_SUMMARY_JOIN,
   CAST_VALUE_SUMMARY_SEP,
-} from './CastPageFields.const';
+} from './helpers/CastPageFields';
 import {
   castFieldsFromPayload,
   castValuesFromPayload,
@@ -136,7 +138,7 @@ export const ContentEdit: FC = () => {
   const [ogTitle, setOgTitle] = useState(EMPTY_STRING);
   const [ogDescription, setOgDescription] = useState(EMPTY_STRING);
   const [ogImage, setOgImage] = useState(EMPTY_STRING);
-  const [scheduleAt, setScheduleAt] = useState(EMPTY_STRING);
+  const [scheduleAt, setScheduleAt] = useState(nowScheduleAt);
   const [revisions, setRevisions] = useState<ContentRevision[]>([]);
   const [preview, setPreview] = useState(false);
   const [saveOk, setSaveOk] = useState(false);
@@ -185,7 +187,7 @@ export const ContentEdit: FC = () => {
     setOgTitle(payloadString(target.payload, PAYLOAD_KEY_OG_TITLE));
     setOgDescription(payloadString(target.payload, PAYLOAD_KEY_OG_DESCRIPTION));
     setOgImage(payloadString(target.payload, PAYLOAD_KEY_OG_IMAGE));
-    setScheduleAt(payloadString(target.payload, PAYLOAD_KEY_SCHEDULE));
+    setScheduleAt(payloadString(target.payload, PAYLOAD_KEY_SCHEDULE) || nowScheduleAt());
     const templateItem = findLinkedTemplate(items, target.payload, target.id);
     const templateFields = castFieldsFromPayload(templateItem?.payload);
     setPageFields(pageOwnedCastFields(castFieldsFromPayload(target.payload), templateFields));
@@ -513,7 +515,8 @@ export const ContentEdit: FC = () => {
                       colorMode="light"
                       variant="document"
                       minHeight={CONTENT_EDIT_EDITOR_MIN_HEIGHT_PX}
-                      features={{ blocks: true, slash: true, table: true }}
+                      features={{ blocks: true, slash: true, table: true, ai: true }}
+                      ai={cmsInkAiProps()}
                     />
                   </div>
                 )}

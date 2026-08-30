@@ -1,5 +1,3 @@
-import { ENABLE_LAB } from './env.const';
-
 export const ROUTES = {
   HOME: '/',
   DOCS: '/docs',
@@ -58,9 +56,6 @@ export const cmsBuilderPath = (query?: { doc?: string; layout?: string }): strin
   return search ? `${ROUTES.CMS_BUILDER}?${search}` : ROUTES.CMS_BUILDER;
 };
 
-export const INK_VERSION = '1.1.7';
-export const PORTAL_VERSION = '1.1.7';
-
 const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },
   { id: 'demos' as const, href: ROUTES.DEMOS },
@@ -68,6 +63,6 @@ const NAV_LINKS_BASE = [
   { id: 'plugins' as const, href: `${ROUTES.DOCS}/plugins` },
 ];
 
-export const NAV_LINKS = ENABLE_LAB
+export const NAV_LINKS = false
   ? [...NAV_LINKS_BASE, { id: 'lab' as const, href: ROUTES.LAB }]
   : NAV_LINKS_BASE;

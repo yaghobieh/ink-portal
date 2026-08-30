@@ -14,8 +14,8 @@ import { PORTAL_OPENAI_KEY, PORTAL_OPENAI_PROXY_BASE_URL } from './portalAi.cons
 let registered = false;
 
 export const resolvePortalAiProviderId = (): string => {
-  if (PORTAL_OPENAI_KEY) return INK_AI_OPENAI_PROVIDER_ID;
   if (INK_API_URL) return INK_AI_INK_SERVER_PROVIDER_ID;
+  if (PORTAL_OPENAI_KEY) return INK_AI_OPENAI_PROVIDER_ID;
   return INK_AI_DEMO_PROVIDER_ID;
 };
 

@@ -4,7 +4,7 @@ import { Badge, Button, Card, Flex, Spinner, Typography } from '@forgedevstack/b
 import { useAuth } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { EMPTY_STRING } from '@const/index';
-import { NUMBER_ZERO } from '@const/numbers';
+import { NUMBER_ZERO } from '@const/numbers.const';
 import { authNucleus, mediaNucleus } from '@sdk/index';
 import { CmsShell, CMS_NAV_IDS } from '../CmsShell';
 import { MEDIA_ACCEPT, MEDIA_FILE_INPUT_ID } from './MediaPages.const';
@@ -20,10 +20,9 @@ export const MediaPages: FC = () => {
   const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
-    if (activeToken) {
-      void fetchMedia(activeToken);
-    }
-  }, [activeToken, fetchMedia]);
+    if (!activeToken) return;
+    void fetchMedia(activeToken);
+  }, [activeToken]);
 
   const processFiles = async (files: FileList | null) => {
     if (!activeToken || !files || files.length === NUMBER_ZERO) return;

@@ -9,6 +9,7 @@ import {
   Flex,
   Input,
   Typography,
+  useBearMode,
 } from '@forgedevstack/bear';
 import { useAuth } from '@hooks/index';
 import { useI18n } from '@i18n/index';
@@ -23,13 +24,11 @@ import type { CrewUser } from '../CrewPages/CrewPages.const';
 import { CmsGridTable, CmsShell, CMS_NAV_IDS } from '../CmsShell';
 import { loadCmsThemeColors } from '../SettingsPages';
 import {
-  loadCmsModePreference,
-  resolveCmsMode,
-} from '../CmsShell/CmsShell.utils';
-import {
   CALENDAR_DEFAULT_DURATION_MS,
   CALENDAR_EMPTY,
   CALENDAR_PAGE_ID,
+  CALENDAR_THEME_DARK,
+  CALENDAR_THEME_LIGHT,
   CALENDAR_TITLE_INPUT_ID,
 } from './CalendarPages.const';
 import { eventToInput, toCalendarEvents, toCalendarPeople } from './CalendarPages.utils';
@@ -44,8 +43,9 @@ type MeetingRow = {
 export const CalendarPages: FC = () => {
   const { t } = useI18n();
   const { token } = useAuth();
+  const { mode } = useBearMode();
   const colors = loadCmsThemeColors();
-  const calendarMode = resolveCmsMode(loadCmsModePreference());
+  const calendarMode = mode === 'dark' ? 'dark' : 'light';
   const [users, setUsers] = useState<CrewUser[]>([]);
   const [meetings, setMeetings] = useState<CalendarEvent[]>([]);
   const [draftTitle, setDraftTitle] = useState(CALENDAR_EMPTY);
@@ -110,19 +110,17 @@ export const CalendarPages: FC = () => {
     start: new Date(meeting.start).toLocaleString(),
     people: (meeting.peopleIds ?? []).length,
   }));
-  const calendarTheme =
-    calendarMode === 'dark'
-      ? {
-          primary: colors.accent || colors.primary,
-          today: colors.accent || colors.primary,
-          event: colors.accent || colors.primary,
-        }
-      : {
-          primary: colors.accent || colors.primary,
-          background: colors.background,
-          today: colors.accent || colors.primary,
-          event: colors.accent || colors.primary,
-        };
+  const accent = colors.accent || colors.primary;
+  const surface = calendarMode === 'dark' ? CALENDAR_THEME_DARK : CALENDAR_THEME_LIGHT;
+  const calendarTheme = {
+    primary: accent,
+    today: accent,
+    event: accent,
+    background: surface.background,
+    text: surface.text,
+    muted: surface.muted,
+    border: surface.border,
+  };
 
   return (
     <CmsShell activeNavId={CMS_NAV_IDS.CALENDAR}>

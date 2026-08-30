@@ -2,6 +2,7 @@ import { useEffect, useState, type FC } from 'react';
 import { useNucleus } from '@forgedevstack/synapse';
 import { Badge, Button, Card, Flex, Spinner, Typography } from '@forgedevstack/bear';
 import { InkEditor, type InkEditorVariant } from '@forgedevstack/ink';
+import { cmsInkAiProps } from '@/ai/index';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { useAuth } from '@hooks/index';
 import { useI18n } from '@i18n/index';
@@ -122,7 +123,8 @@ export const EditorsPages: FC = () => {
               variant={activeVariant as InkEditorVariant}
               colorMode="light"
               minHeight={EDITOR_PREVIEW_MIN_HEIGHT_PX}
-              features={{ blocks: true, slash: true, table: true }}
+              features={{ blocks: true, slash: true, table: true, ai: true }}
+              ai={cmsInkAiProps()}
             />
           </div>
         </Card>

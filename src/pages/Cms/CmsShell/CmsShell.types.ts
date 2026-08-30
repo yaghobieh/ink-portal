@@ -17,3 +17,8 @@ export type CmsSidebarNavItem = {
 };
 
 export type CmsModePreference = 'light' | 'dark' | 'system';
+
+export type FlattenSidebarGroupsParams = {
+  groups: CmsSidebarNavItem[];
+  collapsed: boolean;
+};

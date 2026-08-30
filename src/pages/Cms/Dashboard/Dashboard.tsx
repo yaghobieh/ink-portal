@@ -1,15 +1,18 @@
-import { useEffect, type CSSProperties, type FC } from 'react';
+import { useEffect, useState, type CSSProperties, type FC } from 'react';
 import { useNucleus } from '@forgedevstack/synapse';
-import { Badge, Card, Flex, Spinner, Typography } from '@forgedevstack/bear';
-import { GridTable } from '@forgedevstack/grid-table';
-import type { ColumnDefinition } from '@forgedevstack/grid-table';
+import { BearIcons, Badge, Button, Card, Flex, Progress, Spinner, Typography } from '@forgedevstack/bear';
+import { useNavigate } from '@forgedevstack/forge-compass/react';
 import { useAuth } from '@hooks/index';
 import { useI18n } from '@i18n/index';
-import { NUMBER_ZERO } from '@const/numbers';
+import { NUMBER_ZERO } from '@const/numbers.const';
+import { CMS_KPI_ICON_SIZE, ROUTES } from '@const/index';
 import { authNucleus, cmsNucleus } from '@sdk/index';
-import type { CmsIntegrationRow } from '@sdk/index';
 import { CmsShell, CMS_NAV_IDS } from '../CmsShell';
+import { loadOnboardingDone, saveOnboardingDone } from '@utils';
+import { loadCmsSite } from '../SettingsPages';
+import { CMS_NAV_ROUTES } from '../CmsShell/CmsShell.const';
 import {
+  CMS_KPI_TONES,
   CMS_PERCENT_BASE,
   FALLBACK_ANALYTICS,
   WEEKDAY_KEYS,
@@ -19,39 +22,76 @@ import {
 
 export const Dashboard: FC = () => {
   const { t } = useI18n();
+  const { navigate } = useNavigate();
   const { token: providerToken } = useAuth();
   const { token } = useNucleus(authNucleus);
-  const { analytics, loading, error, fetchDashboard } = useNucleus(cmsNucleus);
+  const { analytics, loading } = useNucleus(cmsNucleus);
   const activeToken = token || providerToken;
+  const [showOnboarding, setShowOnboarding] = useState(() => !loadOnboardingDone());
+  const site = loadCmsSite();
 
   useEffect(() => {
-    if (activeToken) {
-      void fetchDashboard(activeToken);
-    }
-  }, [activeToken, fetchDashboard]);
+    if (!activeToken) return;
+    void cmsNucleus.get().fetchDashboard(activeToken);
+  }, [activeToken]);
 
   const data = analytics ? { ...FALLBACK_ANALYTICS, ...analytics } : FALLBACK_ANALYTICS;
   const weeklyMax = Math.max(...data.weekly, NUMBER_ZERO);
+  const weeklyTotal = data.weekly.reduce((sum, value) => sum + value, NUMBER_ZERO);
+  const peakIndex = data.weekly.findIndex((value) => value === weeklyMax);
+  const publishRate =
+    data.documents > NUMBER_ZERO
+      ? Math.round((data.published / data.documents) * CMS_PERCENT_BASE)
+      : NUMBER_ZERO;
   const distributionTotal = data.distribution.reduce((sum, slice) => sum + slice.value, NUMBER_ZERO);
+  const usagePercent =
+    data.tokensLimit > NUMBER_ZERO
+      ? (data.tokensUsed / data.tokensLimit) * CMS_PERCENT_BASE
+      : NUMBER_ZERO;
 
-  const collectionColumns: ColumnDefinition<CmsIntegrationRow>[] = [
-    { id: 'application', accessor: 'application', header: t.dashboard.colCollection, sortable: true },
-    { id: 'type', accessor: 'type', header: t.dashboard.colPublishedMix, sortable: true },
-    { id: 'rate', accessor: 'rate', header: t.dashboard.colRate, sortable: true },
-    { id: 'profit', accessor: 'profit', header: t.dashboard.colItems, sortable: true },
-  ];
+  const onSkipTour = () => {
+    saveOnboardingDone();
+    setShowOnboarding(false);
+  };
+
+  const onOpenBuilder = () => {
+    saveOnboardingDone();
+    setShowOnboarding(false);
+    navigate(CMS_NAV_ROUTES[CMS_NAV_IDS.BUILDER] || ROUTES.CMS_BUILDER);
+  };
 
   return (
     <CmsShell activeNavId={CMS_NAV_IDS.DASHBOARD}>
-      <Flex direction="column" gap={4} className="ink-cms-dashboard">
-        <div>
-          <Typography variant="h2" className="ink-cms-dashboard__title mb-1">
-            {t.dashboard.title}
-          </Typography>
-          <Typography variant="body2" className="ink-cms__muted mb-0">
-            {t.dashboard.subtitle}
-          </Typography>
-        </div>
+      <Flex direction="column" gap={0} className="ink-cms-page">
+        <Typography variant="h2" className="ink-cms-page__title mb-0">
+          {t.dashboard.title}
+        </Typography>
+        <Typography variant="body2" className="ink-cms-page__sub mb-0">
+          {t.dashboard.subtitle}
+        </Typography>
+
+        {showOnboarding ? (
+          <Card className="ink-cms-card ink-cms-onboarding-banner">
+            <Flex justify="between" align="center" gap={3} className="ink-cms-onboarding-banner__row">
+              <div>
+                <Typography variant="h4" className="mb-1">
+                  {t.cmsOnboarding.title}
+                </Typography>
+                <Typography variant="body2" className="ink-cms__muted mb-0">
+                  {t.cmsOnboarding.body}
+                </Typography>
+              </div>
+              <Flex gap={2}>
+                <Button variant="ink" onClick={onOpenBuilder}>
+                  {t.cmsOnboarding.step1Cta}
+                </Button>
+                <Button variant="outline" onClick={onSkipTour}>
+                  {t.cmsOnboarding.skipTour}
+                </Button>
+              </Flex>
+            </Flex>
+          </Card>
+        ) : null}
 
         {loading ? (
           <Flex align="center" gap={2}>
@@ -62,156 +102,193 @@ export const Dashboard: FC = () => {
           </Flex>
         ) : null}
 
-        {error ? (
-          <Typography variant="body2" className="ink-cms-dashboard__error mb-0">
-            {t.dashboard.error}
-          </Typography>
-        ) : null}
-
-        <div className="ink-cms-dashboard__kpis ink-cms-dashboard__kpis--wide">
-          <Card className="ink-cms-card">
-            <Typography variant="caption" className="ink-cms__muted mb-1">
-              {t.dashboard.documents}
-            </Typography>
-            <Typography variant="h3" className="mb-0">
-              {formatNumber(data.documents)}
-            </Typography>
+        <div className="ink-cms-stat-row">
+          <Card className={`ink-cms-card ink-cms-stat ink-cms-stat--${CMS_KPI_TONES.PAGES}`}>
+            <div className="ink-cms-stat__top">
+              <span className="ink-cms-stat__label">{t.dashboard.documents}</span>
+              <span className="ink-cms-stat__ic">
+                <BearIcons.FileTextIcon size={CMS_KPI_ICON_SIZE} />
+              </span>
+            </div>
+            <div className="ink-cms-stat__num">{formatNumber(data.documents)}</div>
           </Card>
-          <Card className="ink-cms-card">
-            <Typography variant="caption" className="ink-cms__muted mb-1">
-              {t.dashboard.publishedCount}
-            </Typography>
-            <Typography variant="h3" className="mb-0">
+          <Card className={`ink-cms-card ink-cms-stat ink-cms-stat--${CMS_KPI_TONES.PUBLISHED}`}>
+            <div className="ink-cms-stat__top">
+              <span className="ink-cms-stat__label">{t.dashboard.publishedCount}</span>
+              <span className="ink-cms-stat__ic">
+                <BearIcons.CheckIcon size={CMS_KPI_ICON_SIZE} />
+              </span>
+            </div>
+            <div className="ink-cms-stat__num ink-cms-stat__num--success">
               {formatNumber(data.published)}
-            </Typography>
+            </div>
           </Card>
-          <Card className="ink-cms-card">
-            <Typography variant="caption" className="ink-cms__muted mb-1">
-              {t.dashboard.drafts}
-            </Typography>
-            <Typography variant="h3" className="mb-0">
+          <Card className={`ink-cms-card ink-cms-stat ink-cms-stat--${CMS_KPI_TONES.DRAFTS}`}>
+            <div className="ink-cms-stat__top">
+              <span className="ink-cms-stat__label">{t.dashboard.drafts}</span>
+              <span className="ink-cms-stat__ic">
+                <BearIcons.EditIcon size={CMS_KPI_ICON_SIZE} />
+              </span>
+            </div>
+            <div className="ink-cms-stat__num ink-cms-stat__num--warning">
               {formatNumber(data.drafts)}
-            </Typography>
+            </div>
           </Card>
-          <Card className="ink-cms-card">
-            <Typography variant="caption" className="ink-cms__muted mb-1">
-              {t.dashboard.templatesCount}
-            </Typography>
-            <Typography variant="h3" className="mb-0">
-              {formatNumber(data.templates)}
-            </Typography>
+          <Card className={`ink-cms-card ink-cms-stat ink-cms-stat--${CMS_KPI_TONES.TEMPLATES}`}>
+            <div className="ink-cms-stat__top">
+              <span className="ink-cms-stat__label">{t.dashboard.templatesCount}</span>
+              <span className="ink-cms-stat__ic">
+                <BearIcons.LayersIcon size={CMS_KPI_ICON_SIZE} />
+              </span>
+            </div>
+            <div className="ink-cms-stat__num">{formatNumber(data.templates)}</div>
           </Card>
-          <Card className="ink-cms-card">
-            <Typography variant="caption" className="ink-cms__muted mb-1">
-              {t.dashboard.mediaCount}
-            </Typography>
-            <Typography variant="h3" className="mb-0">
-              {formatNumber(data.media)}
-            </Typography>
+          <Card className={`ink-cms-card ink-cms-stat ink-cms-stat--${CMS_KPI_TONES.MEDIA}`}>
+            <div className="ink-cms-stat__top">
+              <span className="ink-cms-stat__label">{t.dashboard.mediaCount}</span>
+              <span className="ink-cms-stat__ic">
+                <BearIcons.ImageIcon size={CMS_KPI_ICON_SIZE} />
+              </span>
+            </div>
+            <div className="ink-cms-stat__num">{formatNumber(data.media)}</div>
           </Card>
-          <Card className="ink-cms-card">
-            <Typography variant="caption" className="ink-cms__muted mb-1">
-              {t.dashboard.tablesCount}
-            </Typography>
-            <Typography variant="h3" className="mb-0">
-              {formatNumber(data.tables)}
-            </Typography>
+          <Card className={`ink-cms-card ink-cms-stat ink-cms-stat--${CMS_KPI_TONES.TOKENS}`}>
+            <div className="ink-cms-stat__top">
+              <span className="ink-cms-stat__label">{t.dashboard.tokens}</span>
+              <span className="ink-cms-stat__ic">
+                <BearIcons.BarChartIcon size={CMS_KPI_ICON_SIZE} />
+              </span>
+            </div>
+            <div className="ink-cms-stat__num">{formatNumber(data.tokensUsed)}</div>
+          </Card>
+          <Card className={`ink-cms-card ink-cms-stat ink-cms-stat--${CMS_KPI_TONES.TABLES}`}>
+            <div className="ink-cms-stat__top">
+              <span className="ink-cms-stat__label">{t.dashboard.tablesCount}</span>
+              <span className="ink-cms-stat__ic">
+                <BearIcons.DatabaseIcon size={CMS_KPI_ICON_SIZE} />
+              </span>
+            </div>
+            <div className="ink-cms-stat__num">{formatNumber(data.tables)}</div>
+          </Card>
+          <Card className={`ink-cms-card ink-cms-stat ink-cms-stat--${CMS_KPI_TONES.CREW}`}>
+            <div className="ink-cms-stat__top">
+              <span className="ink-cms-stat__label">{t.dashboard.crewCount}</span>
+              <span className="ink-cms-stat__ic">
+                <BearIcons.UsersIcon size={CMS_KPI_ICON_SIZE} />
+              </span>
+            </div>
+            <div className="ink-cms-stat__num">{formatNumber(data.crew)}</div>
+          </Card>
+          <Card className={`ink-cms-card ink-cms-stat ink-cms-stat--${CMS_KPI_TONES.ALERTS}`}>
+            <div className="ink-cms-stat__top">
+              <span className="ink-cms-stat__label">{t.dashboard.unreadAlerts}</span>
+              <span className="ink-cms-stat__ic">
+                <BearIcons.BellIcon size={CMS_KPI_ICON_SIZE} />
+              </span>
+            </div>
+            <div className="ink-cms-stat__num">{formatNumber(data.unreadNotifications)}</div>
           </Card>
         </div>
 
-        <div className="ink-cms-dashboard__charts">
-          <Card className="ink-cms-card ink-cms-dashboard__sales">
-            <Flex justify="between" align="center" className="mb-4">
-              <Typography variant="h4" className="mb-0">
-                {t.dashboard.tokens}
-              </Typography>
-              <Typography variant="h5" className="mb-0">
-                {formatNumber(data.tokensUsed)} / {formatNumber(data.tokensLimit)}
-              </Typography>
-            </Flex>
-            <Badge variant="info" className="text-xs">
-              {data.usageRate.toFixed(1)}%
-            </Badge>
-          </Card>
-
+        <div className="ink-cms-dash-row">
           <Card className="ink-cms-card">
-            <Typography variant="h4" className="mb-4">
-              {t.dashboard.activity}
-            </Typography>
-            <div className="ink-cms-bars ink-cms-bars--weekly">
-              {data.weekly.map((value, index) => {
-                const height = barHeightPercent(value, weeklyMax);
-                const style = { '--ink-cms-bar-h': `${height}%` } as CSSProperties;
-                return (
-                  <div key={WEEKDAY_KEYS[index]} className="ink-cms-bars__col">
-                    <div className="ink-cms-bars__track">
-                      <span className="ink-cms-bars__fill" style={style} />
-                    </div>
-                    <Typography variant="caption" className="ink-cms__muted mb-0">
-                      {t.dashboard.weekdays[WEEKDAY_KEYS[index]]}
-                    </Typography>
-                  </div>
-                );
-              })}
-            </div>
-          </Card>
-
-          <Card className="ink-cms-card">
-            <Typography variant="h4" className="mb-4">
-              {t.dashboard.distribution}
-            </Typography>
+            <div className="ink-cms-card__title">{t.dashboard.publishedMix}</div>
             {data.distribution.length === NUMBER_ZERO ? (
               <Typography variant="body2" className="ink-cms__muted mb-0">
                 {t.dashboard.listEmpty}
               </Typography>
             ) : (
-              <div className="ink-cms-rings">
+              <div className="ink-cms-mix">
                 {data.distribution.map((slice) => {
                   const percent =
                     distributionTotal > NUMBER_ZERO
                       ? Math.round((slice.value / distributionTotal) * CMS_PERCENT_BASE)
                       : NUMBER_ZERO;
-                  const style = {
-                    '--ink-cms-ring': `${percent}`,
-                  } as CSSProperties;
+                  const style = { width: `${percent}%` } as CSSProperties;
                   return (
-                    <div key={slice.label} className="ink-cms-rings__item">
-                      <div className="ink-cms-rings__ring" style={style}>
-                        <Typography variant="body2" className="mb-0 font-medium">
-                          {percent}%
-                        </Typography>
+                    <div key={slice.label} className="ink-cms-mix__item">
+                      <span className="ink-cms-mix__nm">{slice.label}</span>
+                      <div className="ink-cms-mix__track">
+                        <span className="ink-cms-mix__fill" style={style} />
                       </div>
-                      <Typography variant="caption" className="ink-cms__muted mb-0">
-                        {slice.label}
-                      </Typography>
-                      <Typography variant="body2" className="mb-0">
-                        {formatNumber(slice.value)}
-                      </Typography>
+                      <span className="ink-cms-mix__ct">{formatNumber(slice.value)}</span>
                     </div>
                   );
                 })}
               </div>
             )}
           </Card>
+          <Card className="ink-cms-card">
+            <Flex justify="between" align="center" className="mb-2">
+              <div className="ink-cms-card__title">{t.dashboard.activity}</div>
+              {weeklyMax > NUMBER_ZERO ? (
+                <Badge variant="info">
+                  {t.dashboard.peakDay} {t.dashboard.weekdays[WEEKDAY_KEYS[Math.max(peakIndex, NUMBER_ZERO)]]}
+                </Badge>
+              ) : null}
+            </Flex>
+            <Typography variant="caption" className="ink-cms__muted mb-2 block">
+              {formatNumber(weeklyTotal)} {t.dashboard.editsCount} · {t.dashboard.weekHint}
+            </Typography>
+            <div className="ink-cms-week">
+              {data.weekly.map((value, index) => {
+                const height = barHeightPercent(value, weeklyMax);
+                const style = { height: `${height}%` } as CSSProperties;
+                const isPeak = weeklyMax > NUMBER_ZERO && value === weeklyMax;
+                return (
+                  <div key={WEEKDAY_KEYS[index]} className="ink-cms-week__col">
+                    <span className="ink-cms-week__val">{formatNumber(value)}</span>
+                    <span
+                      className={`ink-cms-week__fill${isPeak ? ' ink-cms-week__fill--hi' : ''}`}
+                      style={style}
+                    />
+                    <span className="ink-cms-week__lbl">
+                      {t.dashboard.weekdays[WEEKDAY_KEYS[index]]}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
         </div>
 
-        <Card className="ink-cms-card">
-          <Typography variant="h4" className="mb-4">
-            {t.dashboard.collections}
-          </Typography>
-          <GridTable
-            data={data.integrations}
-            columns={collectionColumns}
-            showPagination={false}
-            showFilter={false}
-            emptyContent={
-              <Typography variant="body2" className="ink-cms__muted mb-0">
-                {t.dashboard.listEmpty}
-              </Typography>
-            }
-            tableEffects={{ hover: true, sort: true, row: true }}
-          />
-        </Card>
+        <div className="ink-cms-bottom-row">
+          <Card className="ink-cms-card">
+            <div className="ink-cms-card__title">{t.dashboard.aiUsageTitle}</div>
+            <div className="ink-cms-progress">
+              <span className="ink-cms-progress__fill" style={{ width: `${usagePercent}%` }} />
+            </div>
+            <div className="ink-cms-progress__meta">
+              <span>
+                {formatNumber(data.tokensUsed)} / {formatNumber(data.tokensLimit)}{' '}
+                {t.dashboard.tokensMeta}
+              </span>
+              <span>{usagePercent.toFixed(1)}%</span>
+            </div>
+            <Typography variant="caption" className="ink-cms__muted mb-2 block">
+              {t.dashboard.publishedRate}
+            </Typography>
+            <Progress value={publishRate} />
+            <Button
+              size="sm"
+              variant="outline"
+              className="ink-cms-btn-ghost"
+              onClick={() => navigate(ROUTES.CMS_PLANS)}
+            >
+              {t.dashboard.viewUsage}
+            </Button>
+          </Card>
+          <div className="ink-cms-focus">
+            <div>
+              <div className="ink-cms-focus__eyebrow">{t.dashboard.siteFocus}</div>
+              <div className="ink-cms-focus__title">{site.siteName || t.cmsShell.brand}</div>
+              <div className="ink-cms-focus__desc">{t.dashboard.siteFocusBody}</div>
+            </div>
+            <Button variant="ink" className="ink-cms-focus__cta" onClick={onOpenBuilder}>
+              {t.dashboard.openBuilder}
+            </Button>
+          </div>
+        </div>
       </Flex>
     </CmsShell>
   );

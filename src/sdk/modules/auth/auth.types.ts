@@ -29,6 +29,37 @@ export type AuthMeResponse = {
   user: AuthUser;
 };
 
+export type AuthSessionError = {
+  url: string;
+  status: number;
+  reason: string;
+  response: string;
+};
+
+export type AuthOtpChannel = 'email' | 'phone';
+
+export type AuthPasswordOtpRequest = {
+  channel: AuthOtpChannel;
+  phone?: string;
+};
+
+export type AuthPasswordOtpResponse = {
+  sent: boolean;
+  channel: AuthOtpChannel;
+  destination: string;
+};
+
+export type AuthPasswordChangeRequest = {
+  otp: string;
+  password: string;
+};
+
+export type FetchMeResult = {
+  user: AuthUser | null;
+  unauthorized: boolean;
+  error: AuthSessionError | null;
+};
+
 export type AuthState = {
   token: string | null;
   user: AuthUser | null;

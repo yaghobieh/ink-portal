@@ -1,0 +1,12 @@
+export const CMS_DASHBOARD_PATH = '/api/cms/get-live-analytics';
+export const CMS_NOTIFICATIONS_PATH = '/api/cms/get-notifications';
+export const CMS_NOTIFICATION_READ_PATH = '/api/cms/mark-notification-read';
+export const CMS_TASK_NOTIFY_PATH = '/api/cms/tasks/notify';
+export const CMS_MEETINGS_PATH = '/api/cms/meetings';
+export const CMS_USERS_PATH = '/api/cms/users';
+export const CMS_USER_CREATE_PATH = '/api/cms/create-user';
+export const CMS_USER_ROLE_PATH = '/api/cms/update-user-role';
+export const CMS_ROLES_PATH = '/api/cms/roles';
+export const CMS_ROLE_CREATE_PATH = '/api/cms/create-role';
+export const CMS_ROLE_UPDATE_PATH = '/api/cms/update-role';
+export const CMS_ROLE_DELETE_PATH = '/api/cms/delete-role';

@@ -1,231 +1,128 @@
-import { useEffect, useState, type DragEvent, type FC, type MouseEvent } from 'react';
-import { useNavigate } from '@forgedevstack/forge-compass/react';
-import { useNucleus } from '@forgedevstack/synapse';
-import { BearIcons, Button, Card, Flex, Select, Typography } from '@forgedevstack/bear';
+import { type DragEvent, type FC, type MouseEvent } from 'react';
+import { BearIcons, Button, Card, Dropdown, Flex, Input, Tab, TabList, TabPanel, Tabs, Typography } from '@forgedevstack/bear';
 import { InkEditor } from '@forgedevstack/ink';
-import { useAuth } from '@hooks/index';
-import { useI18n } from '@i18n/index';
-import {
-  BUILDER_QUERY_DOC,
-  BUILDER_QUERY_LAYOUT,
-  DRAG_WIDGET_MIME,
-  ROUTES,
-  cmsBuilderPath,
-} from '@const/index';
+import { cmsInkAiProps } from '@/ai/index';
 import { CMS_ICON_SIZE } from '@const/numbers.const';
-import { authNucleus, contentNucleus } from '@sdk/index';
-import { saveContentRequest } from '@sdk/modules/content';
+import { ROUTES } from '@const/index';
 import { CmsShell, CMS_NAV_IDS } from '../CmsShell';
-import { BEAR_WIDGET_CATALOG } from '../ContentEdit/ContentEdit.const';
-import { CONTENT_COLLECTION_DOCS, CONTENT_COLLECTION_PAGES } from '../ContentPages/ContentPages.const';
-import { isBifDynamicInstalled } from '../ExtensionsPages';
-import { PAGE_LAYOUT_TEMPLATES, TEMPLATES_COLLECTION } from '../TemplatesPages/TemplatesPages.const';
 import {
   BUILDER_INK_MIN_HEIGHT_PX,
   BUILDER_INSPECTOR_NONE,
+  BUILDER_INSPECTOR_TAB,
+  BUILDER_LAYER_MAX_DEPTH,
+  BUILDER_MENU_ACTION,
   BUILDER_MENU_OFFSET_PX,
+  BUILDER_PREVIEW_MIN_WIDTH_PX,
+  BUILDER_STAGE_TAB,
+  BUILDER_STYLE_EMPTY,
+  BUILDER_THREE_COLUMNS,
+  BUILDER_TWO_COLUMNS,
+  BUILDER_VIEWPORT,
+  BUILDER_VIEWPORT_WIDTH_PX,
+  AI_STYLE_SUGGESTIONS,
   CANVAS_KIND,
   DEFAULT_INK_FALLBACK,
+  EMPTY_NODE_STYLES,
   LAYOUT_BLOCKS,
-  LAYOUT_MIME,
+  STYLE_FIELD_KEYS,
 } from './BuilderPages.const';
-import type { CanvasKind, CanvasMenuState, CanvasNode } from './BuilderPages.types';
-import {
-  canvasFromPayload,
-  cloneCanvasTree,
-  createLayoutNode,
-  createWidgetNode,
-  duplicateNode,
-  findNode,
-  insertNode,
-  isContainerKind,
-  loadBuilderTree,
-  moveNode,
-  removeNode,
-  saveBuilderTree,
-  updateNodeHtml,
-  withCanvasPayload,
-  wrapNode,
-} from './BuilderPages.utils';
+import type { BuilderInspectorTab, CanvasNode } from './BuilderPages.types';
+import { nodeStyleObject, updateNodeCss, updateNodeHtml, updateNodeJs, updateNodeLabel, updateNodeStyles } from './BuilderPages.utils';
+import { BuilderBoardNiche } from './BuilderBoardNiche';
+import { BuilderCodeField } from './BuilderCodeField';
+import { useBuilderPages } from './hooks';
 
 export const BuilderPages: FC = () => {
-  const { t } = useI18n();
-  const { navigate } = useNavigate();
-  const { token: providerToken } = useAuth();
-  const { token } = useNucleus(authNucleus);
-  const { items, fetchContent } = useNucleus(contentNucleus);
-  const activeToken = token || providerToken;
-  const installed = isBifDynamicInstalled();
-  const [tree, setTree] = useState<CanvasNode[]>(() => loadBuilderTree());
-  const [selectedId, setSelectedId] = useState(BUILDER_INSPECTOR_NONE);
-  const [dropParentId, setDropParentId] = useState(BUILDER_INSPECTOR_NONE);
-  const [menu, setMenu] = useState<CanvasMenuState | null>(null);
-  const [saved, setSaved] = useState(false);
-  const [targetId, setTargetId] = useState(BUILDER_INSPECTOR_NONE);
-
-  useEffect(() => {
-    if (activeToken) {
-      void fetchContent(activeToken);
-    }
-  }, [activeToken, fetchContent]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const docId = params.get(BUILDER_QUERY_DOC) || BUILDER_INSPECTOR_NONE;
-    const layoutId = params.get(BUILDER_QUERY_LAYOUT);
-    if (layoutId) {
-      const layout = PAGE_LAYOUT_TEMPLATES.find((item) => item.id === layoutId);
-      if (layout) {
-        setTree(cloneCanvasTree(layout.tree));
-        setTargetId(BUILDER_INSPECTOR_NONE);
-        setSaved(false);
-      }
-      return;
-    }
-    if (docId) setTargetId(docId);
-  }, []);
-
-  useEffect(() => {
-    if (!targetId) return;
-    const item = items.find((entry) => entry.id === targetId);
-    if (!item) return;
-    const canvas = canvasFromPayload(item.payload);
-    if (canvas) {
-      setTree(cloneCanvasTree(canvas));
-      setSaved(false);
-    }
-  }, [items, targetId]);
-
-  const editableItems = items.filter(
-    (item) =>
-      item.collection === CONTENT_COLLECTION_PAGES ||
-      item.collection === TEMPLATES_COLLECTION ||
-      item.collection === CONTENT_COLLECTION_DOCS,
-  );
-  const targetOptions = [
-    { value: BUILDER_INSPECTOR_NONE, label: t.cmsBuilder.scratch },
-    ...editableItems.map((item) => ({
-      value: item.id,
-      label: `${item.title || item.slug} (${item.collection})`,
-    })),
-  ];
-
-  const selected = selectedId ? findNode(tree, selectedId) : null;
-
-  const apply = (next: CanvasNode[]) => {
-    setTree(next);
-    setSaved(false);
-    setMenu(null);
-  };
-
-  const addLayout = (kind: CanvasKind) => {
-    const block = LAYOUT_BLOCKS.find((item) => item.id === kind);
-    if (!block) return;
-    const node = createLayoutNode(kind, block.label);
-    apply(insertNode(tree, node, dropParentId || undefined));
-    setSelectedId(node.id);
-  };
-
-  const addWidget = (widgetId: string) => {
-    const node = createWidgetNode(widgetId);
-    if (!node) return;
-    apply(insertNode(tree, node, dropParentId || undefined));
-    setSelectedId(node.id);
-  };
-
-  const onDragStartWidget = (event: DragEvent<HTMLButtonElement>, widgetId: string) => {
-    event.dataTransfer.setData(DRAG_WIDGET_MIME, widgetId);
-    event.dataTransfer.effectAllowed = 'copy';
-  };
-
-  const onDragStartLayout = (event: DragEvent<HTMLButtonElement>, kind: CanvasKind) => {
-    event.dataTransfer.setData(LAYOUT_MIME, kind);
-    event.dataTransfer.effectAllowed = 'copy';
-  };
-
-  const acceptDrop = (event: DragEvent<HTMLElement>, parentId?: string) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const layoutKind = event.dataTransfer.getData(LAYOUT_MIME) as CanvasKind;
-    if (layoutKind) {
-      const block = LAYOUT_BLOCKS.find((item) => item.id === layoutKind);
-      if (!block) return;
-      const node = createLayoutNode(layoutKind, block.label);
-      apply(insertNode(tree, node, parentId));
-      setSelectedId(node.id);
-      return;
-    }
-    const widgetId = event.dataTransfer.getData(DRAG_WIDGET_MIME);
-    if (widgetId) {
-      const node = createWidgetNode(widgetId);
-      if (!node) return;
-      apply(insertNode(tree, node, parentId));
-      setSelectedId(node.id);
-    }
-  };
-
-  const onContextMenu = (event: MouseEvent<HTMLElement>, nodeId: string) => {
-    event.preventDefault();
-    event.stopPropagation();
-    setSelectedId(nodeId);
-    setMenu({
-      nodeId,
-      x: event.clientX + BUILDER_MENU_OFFSET_PX,
-      y: event.clientY + BUILDER_MENU_OFFSET_PX,
-    });
-  };
-
-  const runMenu = (action: string) => {
-    if (!menu) return;
-    if (action === 'duplicate') apply(duplicateNode(tree, menu.nodeId));
-    if (action === 'delete') {
-      apply(removeNode(tree, menu.nodeId));
-      setSelectedId(BUILDER_INSPECTOR_NONE);
-    }
-    if (action === 'wrap-flex') apply(wrapNode(tree, menu.nodeId, CANVAS_KIND.FLEX, 'Flex'));
-    if (action === 'wrap-grid') apply(wrapNode(tree, menu.nodeId, CANVAS_KIND.GRID, 'Grid'));
-    if (action === 'add-section') {
-      const node = createLayoutNode(CANVAS_KIND.SECTION, 'Section');
-      apply(insertNode(tree, node, menu.nodeId));
-    }
-    if (action === 'move-up') apply(moveNode(tree, menu.nodeId, -1));
-    if (action === 'move-down') apply(moveNode(tree, menu.nodeId, 1));
-  };
-
-  const onSave = async () => {
-    saveBuilderTree(tree);
-    if (activeToken && targetId) {
-      const item = items.find((entry) => entry.id === targetId);
-      if (item) {
-        await saveContentRequest(activeToken, {
-          collection: item.collection,
-          slug: item.slug,
-          locale: item.locale,
-          title: item.title,
-          status: item.status,
-          payload: withCanvasPayload(item.payload, tree),
-        });
-        await fetchContent(activeToken);
-      }
-    }
-    setSaved(true);
-  };
-
-  const onTargetChange = (value: string) => {
-    setTargetId(value);
-    navigate(value ? cmsBuilderPath({ doc: value }) : ROUTES.CMS_BUILDER);
-    if (!value) {
-      setTree(loadBuilderTree());
-    }
-  };
+  const {
+    t,
+    installed,
+    tree,
+    selectedId,
+    setSelectedId,
+    setDropParentId,
+    menu,
+    setMenu,
+    saved,
+    setSaved,
+    targetId,
+    viewport,
+    setViewport,
+    preview,
+    setPreview,
+    inspectorTab,
+    setInspectorTab,
+    pageCode,
+    setPageCode,
+    customLabel,
+    setCustomLabel,
+    customHtml,
+    setCustomHtml,
+    previewWidth,
+    setPreviewWidth,
+    stageTab,
+    paletteWidth,
+    inspectorWidth,
+    selected,
+    selectedStyles,
+    targetOptions,
+    contentWidgets,
+    formWidgets,
+    layers,
+    apply,
+    addLayout,
+    addWidget,
+    addColumns,
+    addCustomWidget,
+    onDragStartWidget,
+    onDragStartLayout,
+    acceptDrop,
+    onContextMenu,
+    runMenu,
+    onSave,
+    onSaveAsTemplate,
+    onTargetChange,
+    onStageTab,
+    onPaletteResize,
+    onInspectorResize,
+    isContainerKind,
+    navigate,
+  } = useBuilderPages();
 
   const renderNode = (node: CanvasNode) => {
+
     const selectedClass = node.id === selectedId ? ' ink-cms-canvas-node--selected' : '';
     const layoutClass = `ink-cms-canvas-node ink-cms-canvas-node--${node.kind}${selectedClass}`;
+    const dynamicStyle = nodeStyleObject(node.styles);
+    const onResizeStart = (event: MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const startX = event.clientX;
+      const startY = event.clientY;
+      const startWidth = event.currentTarget.parentElement?.offsetWidth || 0;
+      const startHeight = event.currentTarget.parentElement?.offsetHeight || 0;
+      const onMove = (moveEvent: globalThis.MouseEvent) => {
+        apply(
+          updateNodeStyles(tree, node.id, {
+            ...EMPTY_NODE_STYLES,
+            ...node.styles,
+            width: `${Math.max(BUILDER_PREVIEW_MIN_WIDTH_PX / 4, startWidth + moveEvent.clientX - startX)}px`,
+            height: `${Math.max(40, startHeight + moveEvent.clientY - startY)}px`,
+          }),
+        );
+      };
+      const onUp = () => {
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', onUp);
+      };
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+    };
     return (
       <div
         key={node.id}
         className={layoutClass}
+        data-node={node.id}
+        style={dynamicStyle}
         onClick={(event) => {
           event.stopPropagation();
           setSelectedId(node.id);
@@ -239,9 +136,12 @@ export const BuilderPages: FC = () => {
           if (isContainerKind(node.kind)) acceptDrop(event, node.id);
         }}
       >
-        <Typography variant="caption" className="ink-cms-canvas-node__label mb-0">
-          {node.label}
-        </Typography>
+        {preview ? null : (
+          <Typography variant="caption" className="ink-cms-canvas-node__label mb-0">
+            {node.label}
+          </Typography>
+        )}
+        {node.css ? <style>{`[data-node="${node.id}"]{${node.css}}`}</style> : null}
         {node.kind === CANVAS_KIND.INK ? (
           <InkEditor
             value={node.html || DEFAULT_INK_FALLBACK}
@@ -249,15 +149,32 @@ export const BuilderPages: FC = () => {
             colorMode="light"
             variant="document"
             minHeight={BUILDER_INK_MIN_HEIGHT_PX}
-            features={{ blocks: true, slash: true }}
+            features={{ blocks: true, slash: true, ai: true }}
+            ai={cmsInkAiProps()}
           />
         ) : node.html ? (
           <div dangerouslySetInnerHTML={{ __html: node.html }} />
         ) : null}
         {node.children.map(renderNode)}
+        {preview || node.id !== selectedId ? null : (
+          <button
+            type="button"
+            className="ink-cms-canvas-node__resize"
+            aria-label={t.cmsBuilder.resizeWidget}
+            onMouseDown={onResizeStart}
+          />
+        )}
       </div>
     );
   };
+
+  const stageViewportClass =
+    viewport === BUILDER_VIEWPORT.TABLET
+      ? ' ink-cms-builder__stage--tablet'
+      : viewport === BUILDER_VIEWPORT.MOBILE
+        ? ' ink-cms-builder__stage--mobile'
+        : '';
+  const stagePreviewClass = preview ? ' ink-cms-builder__stage--preview' : '';
 
   return (
     <CmsShell activeNavId={CMS_NAV_IDS.BUILDER}>
@@ -270,6 +187,7 @@ export const BuilderPages: FC = () => {
             {t.cmsBuilder.subtitle}
           </Typography>
         </div>
+        <BuilderBoardNiche />
         {!installed ? (
           <Card className="ink-cms-card">
             <Typography variant="h4" className="mb-2">
@@ -288,7 +206,13 @@ export const BuilderPages: FC = () => {
             </Button>
           </Card>
         ) : (
-          <div className="ink-cms-builder__layout">
+          <div
+            className="ink-cms-builder__layout"
+            style={{
+              gridTemplateColumns: `${paletteWidth}px minmax(0, 1fr) ${inspectorWidth}px`,
+            }}
+          >
+            <div className="ink-cms-builder__pane ink-cms-builder__pane--palette">
             <Card className="ink-cms-card ink-cms-builder__palette">
               <Typography variant="h4" className="mb-1">
                 {t.cmsBuilder.palette}
@@ -296,7 +220,10 @@ export const BuilderPages: FC = () => {
               <Typography variant="caption" className="ink-cms__muted mb-3 block">
                 {t.cmsBuilder.layoutHint}
               </Typography>
-              <Flex direction="column" gap={2} className="mb-4">
+              <Typography variant="caption" className="ink-cms-builder__group mb-2 block">
+                {t.cmsBuilder.paletteGroupLayout}
+              </Typography>
+              <div className="ink-cms-widget-grid mb-4">
                 {LAYOUT_BLOCKS.map((block) => (
                   <button
                     key={block.id}
@@ -311,12 +238,30 @@ export const BuilderPages: FC = () => {
                     </Typography>
                   </button>
                 ))}
-              </Flex>
-              <Typography variant="caption" className="ink-cms__muted mb-3 block">
-                {t.contentEdit.widgetsHint}
+                <button
+                  type="button"
+                  className="ink-cms-widget-chip"
+                  onClick={() => addColumns(BUILDER_TWO_COLUMNS)}
+                >
+                  <Typography variant="body2" className="mb-0 font-medium">
+                    {t.cmsBuilder.presetTwoColumns}
+                  </Typography>
+                </button>
+                <button
+                  type="button"
+                  className="ink-cms-widget-chip"
+                  onClick={() => addColumns(BUILDER_THREE_COLUMNS)}
+                >
+                  <Typography variant="body2" className="mb-0 font-medium">
+                    {t.cmsBuilder.presetThreeColumns}
+                  </Typography>
+                </button>
+              </div>
+              <Typography variant="caption" className="ink-cms-builder__group mb-2 block">
+                {t.cmsBuilder.paletteGroupContent}
               </Typography>
-              <Flex direction="column" gap={2}>
-                {BEAR_WIDGET_CATALOG.map((widget) => (
+              <div className="ink-cms-widget-grid mb-4">
+                {contentWidgets.map((widget) => (
                   <button
                     key={widget.id}
                     type="button"
@@ -328,38 +273,176 @@ export const BuilderPages: FC = () => {
                     <Typography variant="body2" className="mb-0 font-medium">
                       {widget.label}
                     </Typography>
-                    <Typography variant="caption" className="ink-cms__muted mb-0">
-                      {widget.bearComponent}
+                  </button>
+                ))}
+              </div>
+              <Typography variant="caption" className="ink-cms-builder__group mb-2 block">
+                {t.cmsBuilder.paletteGroupForm}
+              </Typography>
+              <div className="ink-cms-widget-grid mb-4">
+                {formWidgets.map((widget) => (
+                  <button
+                    key={widget.id}
+                    type="button"
+                    className="ink-cms-widget-chip"
+                    draggable
+                    onDragStart={(event) => onDragStartWidget(event, widget.id)}
+                    onClick={() => addWidget(widget.id)}
+                  >
+                    <Typography variant="body2" className="mb-0 font-medium">
+                      {widget.label}
                     </Typography>
                   </button>
                 ))}
-              </Flex>
-            </Card>
-            <Card className="ink-cms-card ink-cms-builder__canvas">
-              <Flex justify="between" align="center" className="mb-3 gap-2 flex-wrap">
-                <Typography variant="h4" className="mb-0">
-                  {t.cmsBuilder.canvas}
+                  </div>
+                  <Typography variant="caption" className="ink-cms-builder__group mb-2 block">
+                    {t.cmsBuilder.customWidget}
+                  </Typography>
+                  <Flex direction="column" gap={2} className="mb-4">
+                    <Input
+                      label={t.cmsBuilder.customWidgetLabel}
+                      value={customLabel}
+                      onChange={(event) => setCustomLabel(event.target.value)}
+                    />
+                    <Input
+                      label={t.cmsBuilder.customWidgetHtml}
+                      value={customHtml}
+                      onChange={(event) => setCustomHtml(event.target.value)}
+                    />
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={!customLabel.trim() || !customHtml.trim()}
+                      onClick={addCustomWidget}
+                    >
+                      {t.cmsBuilder.customWidgetAdd}
+                    </Button>
+                  </Flex>
+                  <Typography variant="h5" className="mb-2">
+                {t.cmsBuilder.layers}
+              </Typography>
+              {layers.length === 0 ? (
+                <Typography variant="caption" className="ink-cms__muted mb-0">
+                  {t.cmsBuilder.layersEmpty}
                 </Typography>
-                <Flex gap={2} align="center" className="flex-wrap">
-                  <Select
-                    id="ink-cms-builder-target"
-                    label={t.cmsBuilder.targetLabel}
-                    options={targetOptions}
-                    value={targetId}
-                    onChange={onTargetChange}
-                  />
+              ) : (
+                <div className="ink-cms-layers">
+                  {layers.map((row) => (
+                    <button
+                      key={row.id}
+                      type="button"
+                      className={`ink-cms-layers__row${row.id === selectedId ? ' ink-cms-layers__row--selected' : ''}`}
+                      data-depth={Math.min(row.depth, BUILDER_LAYER_MAX_DEPTH)}
+                      onClick={() => {
+                        setSelectedId(row.id);
+                        setDropParentId(
+                          isContainerKind(row.kind) ? row.id : BUILDER_INSPECTOR_NONE,
+                        );
+                      }}
+                    >
+                      {row.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </Card>
+            <button
+              type="button"
+              className="ink-cms-panel-resize"
+              aria-label={t.cmsBuilder.palette}
+              onMouseDown={onPaletteResize}
+            />
+            </div>
+            <Card className="ink-cms-card ink-cms-builder__canvas">
+              <div className="ink-cms-builder__toolbar">
+                <Tabs
+                  value={stageTab}
+                  defaultTab={BUILDER_STAGE_TAB.CANVAS}
+                  variant="line"
+                  onChange={onStageTab}
+                >
+                  <TabList>
+                    <Tab id={BUILDER_STAGE_TAB.CANVAS}>{t.cmsBuilder.canvas}</Tab>
+                    <Tab id={BUILDER_STAGE_TAB.CONTENT}>{t.cmsBuilder.inspectorContent}</Tab>
+                    <Tab id={BUILDER_STAGE_TAB.STYLE}>{t.cmsBuilder.inspectorStyle}</Tab>
+                    <Tab id={BUILDER_STAGE_TAB.CODE}>{t.cmsBuilder.inspectorCode}</Tab>
+                  </TabList>
+                </Tabs>
+                <div className="ink-cms-builder__toolbar-actions">
                   <Button
                     size="sm"
-                    variant="ink"
-                    icon={<BearIcons.SaveIcon size={CMS_ICON_SIZE} />}
-                    onClick={() => void onSave()}
+                    variant={viewport === BUILDER_VIEWPORT.DESKTOP ? 'ink' : 'outline'}
+                    icon={<BearIcons.DesktopIcon size={CMS_ICON_SIZE} />}
+                    aria-label={t.cmsBuilder.viewportDesktop}
+                    onClick={() => {
+                      setViewport(BUILDER_VIEWPORT.DESKTOP);
+                      setPreview(false);
+                    }}
                   >
-                    {targetId ? t.cmsBuilder.saveToContent : t.cmsBuilder.saveCanvas}
+                    {t.cmsBuilder.viewportDesktop}
                   </Button>
-                </Flex>
-              </Flex>
+                  <Button
+                    size="sm"
+                    variant={viewport === BUILDER_VIEWPORT.MOBILE ? 'ink' : 'outline'}
+                    icon={<BearIcons.PhoneIcon size={CMS_ICON_SIZE} />}
+                    aria-label={t.cmsBuilder.viewportMobile}
+                    onClick={() => {
+                      setViewport(BUILDER_VIEWPORT.MOBILE);
+                      setPreview(false);
+                    }}
+                  >
+                    {t.cmsBuilder.viewportMobile}
+                  </Button>
+                  <Dropdown
+                    placement="bottom-end"
+                    trigger={
+                      <Button size="sm" variant="outline" aria-label={t.cmsBuilder.targetLabel}>
+                        {targetOptions.find((option) => option.value === targetId)?.label ||
+                          t.cmsBuilder.scratch}
+                      </Button>
+                    }
+                    items={targetOptions.map((option) => ({
+                      key: option.value || 'scratch',
+                      label: option.label,
+                      onClick: () => onTargetChange(option.value),
+                    }))}
+                  />
+                  <Dropdown
+                    placement="bottom-end"
+                    trigger={
+                      <Button
+                        size="sm"
+                        variant="ink"
+                        icon={<BearIcons.SaveIcon size={CMS_ICON_SIZE} />}
+                        aria-label={t.cmsBuilder.saveCanvas}
+                      >
+                        {targetId ? t.cmsBuilder.saveToContent : t.cmsBuilder.saveCanvas}
+                      </Button>
+                    }
+                    items={[
+                      {
+                        key: 'save',
+                        label: targetId ? t.cmsBuilder.saveToContent : t.cmsBuilder.saveCanvas,
+                        onClick: () => void onSave(),
+                      },
+                      {
+                        key: 'template',
+                        label: t.cmsBuilder.saveAsTemplate,
+                        onClick: () => void onSaveAsTemplate(),
+                      },
+                    ]}
+                  />
+                </div>
+              </div>
+              <div className="ink-cms-preview-shell">
               <div
-                className="ink-cms-builder__stage"
+                className={`ink-cms-builder__stage${stageViewportClass}${stagePreviewClass}`}
+                style={{
+                  ...(viewport === BUILDER_VIEWPORT.DESKTOP
+                    ? undefined
+                    : { maxWidth: `${BUILDER_VIEWPORT_WIDTH_PX[viewport]}px` }),
+                  ...(previewWidth ? { width: `${previewWidth}px`, maxWidth: `${previewWidth}px` } : {}),
+                }}
                 onClick={() => {
                   setSelectedId(BUILDER_INSPECTOR_NONE);
                   setDropParentId(BUILDER_INSPECTOR_NONE);
@@ -376,6 +459,7 @@ export const BuilderPages: FC = () => {
                   });
                 }}
               >
+                {pageCode.css ? <style>{pageCode.css}</style> : null}
                 {tree.length === 0 ? (
                   <Typography variant="body2" className="ink-cms__muted mb-0">
                     {t.cmsBuilder.empty}
@@ -384,31 +468,186 @@ export const BuilderPages: FC = () => {
                   tree.map(renderNode)
                 )}
               </div>
+              <button
+                type="button"
+                className="ink-cms-preview-resize"
+                aria-label={t.cmsBuilder.viewportLabel}
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  const startX = event.clientX;
+                  const startWidth =
+                    previewWidth || event.currentTarget.parentElement?.clientWidth || BUILDER_PREVIEW_MIN_WIDTH_PX;
+                  const onMove = (moveEvent: globalThis.MouseEvent) => {
+                    setPreviewWidth(
+                      Math.max(BUILDER_PREVIEW_MIN_WIDTH_PX, startWidth + moveEvent.clientX - startX),
+                    );
+                  };
+                  const onUp = () => {
+                    window.removeEventListener('mousemove', onMove);
+                    window.removeEventListener('mouseup', onUp);
+                  };
+                  window.addEventListener('mousemove', onMove);
+                  window.addEventListener('mouseup', onUp);
+                }}
+              />
+              </div>
               {saved ? (
                 <Typography variant="caption" className="ink-cms-save-ok mb-0">
                   {t.cmsBuilder.saved}
                 </Typography>
               ) : null}
             </Card>
+            <div className="ink-cms-builder__pane ink-cms-builder__pane--inspector">
+            <button
+              type="button"
+              className="ink-cms-panel-resize"
+              aria-label={t.cmsBuilder.inspector}
+              onMouseDown={onInspectorResize}
+            />
             <Card className="ink-cms-card ink-cms-builder__inspector">
               <Typography variant="h4" className="mb-2">
                 {t.cmsBuilder.inspector}
               </Typography>
-              {selected ? (
-                <Flex direction="column" gap={1}>
-                  <Typography variant="body2" className="mb-0 font-medium">
-                    {selected.label}
-                  </Typography>
-                  <Typography variant="caption" className="ink-cms__muted mb-0">
-                    {selected.kind}
-                  </Typography>
-                </Flex>
-              ) : (
-                <Typography variant="caption" className="ink-cms__muted mb-0">
-                  {t.cmsBuilder.inspectorEmpty}
-                </Typography>
-              )}
+              <Tabs
+                value={inspectorTab}
+                defaultTab={BUILDER_INSPECTOR_TAB.CONTENT}
+                variant="line"
+                onChange={(tabId) => setInspectorTab(tabId as BuilderInspectorTab)}
+              >
+                <TabList className="mb-3">
+                  <Tab id={BUILDER_INSPECTOR_TAB.CONTENT}>{t.cmsBuilder.inspectorContent}</Tab>
+                  <Tab id={BUILDER_INSPECTOR_TAB.STYLE}>{t.cmsBuilder.inspectorStyle}</Tab>
+                  <Tab id={BUILDER_INSPECTOR_TAB.CODE}>{t.cmsBuilder.inspectorCode}</Tab>
+                </TabList>
+                <TabPanel tabId={BUILDER_INSPECTOR_TAB.CONTENT}>
+                  {selected ? (
+                    <Flex direction="column" gap={2}>
+                      <Input
+                        label={t.cmsBuilder.inspectorLabel}
+                        value={selected.label}
+                        onChange={(event) =>
+                          apply(updateNodeLabel(tree, selected.id, event.target.value))
+                        }
+                      />
+                      {selected.html !== undefined && selected.kind !== CANVAS_KIND.INK ? (
+                        <Input
+                          label={t.cmsBuilder.inspectorHtml}
+                          value={selected.html}
+                          onChange={(event) =>
+                            apply(updateNodeHtml(tree, selected.id, event.target.value))
+                          }
+                        />
+                      ) : null}
+                      <Typography variant="caption" className="ink-cms-builder__group mb-0 block">
+                        {t.cmsBuilder.aiLive}
+                      </Typography>
+                      <div className="ink-cms-ai-hints">
+                      {AI_STYLE_SUGGESTIONS.map((hint) => (
+                        <button
+                          key={hint.id}
+                          type="button"
+                          className="ink-cms-ai-hint"
+                          onClick={() =>
+                            apply(
+                              updateNodeStyles(tree, selected.id, {
+                                ...selectedStyles,
+                                ...hint.styles,
+                              }),
+                            )
+                          }
+                        >
+                          <BearIcons.StarIcon size={CMS_ICON_SIZE} />
+                          {t.cmsBuilder.aiHints[hint.id]}
+                        </button>
+                      ))}
+                      </div>
+                      <Typography variant="caption" className="ink-cms__muted mb-0">
+                        {selected.kind}
+                      </Typography>
+                    </Flex>
+                  ) : (
+                    <Typography variant="caption" className="ink-cms__muted mb-0">
+                      {t.cmsBuilder.inspectorEmpty}
+                    </Typography>
+                  )}
+                </TabPanel>
+                <TabPanel tabId={BUILDER_INSPECTOR_TAB.STYLE}>
+                  {selected ? (
+                    <Flex direction="column" gap={2}>
+                      {STYLE_FIELD_KEYS.map((key) => (
+                        <Input
+                          key={key}
+                          label={t.cmsBuilder.styleFields[key]}
+                          value={selectedStyles[key]}
+                          onChange={(event) =>
+                            apply(
+                              updateNodeStyles(tree, selected.id, {
+                                ...selectedStyles,
+                                [key]: event.target.value,
+                              }),
+                            )
+                          }
+                        />
+                      ))}
+                    </Flex>
+                  ) : (
+                    <Typography variant="caption" className="ink-cms__muted mb-0">
+                      {t.cmsBuilder.inspectorEmpty}
+                    </Typography>
+                  )}
+                </TabPanel>
+                <TabPanel tabId={BUILDER_INSPECTOR_TAB.CODE}>
+                  <Flex direction="column" gap={2}>
+                    {selected ? (
+                      <>
+                        {selected.html !== undefined && selected.kind !== CANVAS_KIND.INK ? (
+                          <BuilderCodeField
+                            label={t.cmsBuilder.inspectorHtml}
+                            value={selected.html}
+                            language="html"
+                            onChange={(value) => apply(updateNodeHtml(tree, selected.id, value))}
+                          />
+                        ) : null}
+                        <BuilderCodeField
+                          label={t.cmsBuilder.inspectorCss}
+                          value={selected.css || BUILDER_STYLE_EMPTY}
+                          language="css"
+                          onChange={(value) => apply(updateNodeCss(tree, selected.id, value))}
+                        />
+                        <BuilderCodeField
+                          label={t.cmsBuilder.inspectorJs}
+                          value={selected.js || BUILDER_STYLE_EMPTY}
+                          language="javascript"
+                          onChange={(value) => apply(updateNodeJs(tree, selected.id, value))}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <BuilderCodeField
+                          label={t.cmsBuilder.pageCss}
+                          value={pageCode.css}
+                          language="css"
+                          onChange={(value) => {
+                            setPageCode({ ...pageCode, css: value });
+                            setSaved(false);
+                          }}
+                        />
+                        <BuilderCodeField
+                          label={t.cmsBuilder.pageJs}
+                          value={pageCode.js}
+                          language="javascript"
+                          onChange={(value) => {
+                            setPageCode({ ...pageCode, js: value });
+                            setSaved(false);
+                          }}
+                        />
+                      </>
+                    )}
+                  </Flex>
+                </TabPanel>
+              </Tabs>
             </Card>
+            </div>
           </div>
         )}
         {menu ? (
@@ -419,25 +658,25 @@ export const BuilderPages: FC = () => {
           >
             {menu.nodeId ? (
               <>
-                <button type="button" onClick={() => runMenu('duplicate')}>
+                <button type="button" onClick={() => runMenu(BUILDER_MENU_ACTION.DUPLICATE)}>
                   {t.cmsBuilder.menuDuplicate}
                 </button>
-                <button type="button" onClick={() => runMenu('wrap-flex')}>
+                <button type="button" onClick={() => runMenu(BUILDER_MENU_ACTION.WRAP_FLEX)}>
                   {t.cmsBuilder.menuWrapFlex}
                 </button>
-                <button type="button" onClick={() => runMenu('wrap-grid')}>
+                <button type="button" onClick={() => runMenu(BUILDER_MENU_ACTION.WRAP_GRID)}>
                   {t.cmsBuilder.menuWrapGrid}
                 </button>
-                <button type="button" onClick={() => runMenu('add-section')}>
+                <button type="button" onClick={() => runMenu(BUILDER_MENU_ACTION.ADD_SECTION)}>
                   {t.cmsBuilder.menuAddSection}
                 </button>
-                <button type="button" onClick={() => runMenu('move-up')}>
+                <button type="button" onClick={() => runMenu(BUILDER_MENU_ACTION.MOVE_UP)}>
                   {t.cmsBuilder.menuMoveUp}
                 </button>
-                <button type="button" onClick={() => runMenu('move-down')}>
+                <button type="button" onClick={() => runMenu(BUILDER_MENU_ACTION.MOVE_DOWN)}>
                   {t.cmsBuilder.menuMoveDown}
                 </button>
-                <button type="button" onClick={() => runMenu('delete')}>
+                <button type="button" onClick={() => runMenu(BUILDER_MENU_ACTION.DELETE)}>
                   {t.cmsBuilder.menuDelete}
                 </button>
               </>

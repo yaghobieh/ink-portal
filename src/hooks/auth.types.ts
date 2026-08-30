@@ -50,11 +50,20 @@ export interface CmsPage {
   updatedAt: string;
 }
 
+export interface AuthSessionError {
+  url: string;
+  status: number;
+  reason: string;
+  response: string;
+}
+
 export interface UseAuthResult {
   token: string | null;
   user: MeUser | null;
   userLoading: boolean;
   isAuthenticated: boolean;
+  sessionError: AuthSessionError | null;
+  retrySession: () => void;
   setToken: (token: string) => void;
   clearToken: () => void;
   setUserFromLogin: (user: MeUser | null) => void;

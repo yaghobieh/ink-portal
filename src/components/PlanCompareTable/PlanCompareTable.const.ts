@@ -1,4 +1,4 @@
-import { NUMBER_ZERO } from '@const/numbers';
+import { NUMBER_ZERO } from '@const/numbers.const';
 
 export const COMPARE_YES = '√';
 export const COMPARE_NO = '—';

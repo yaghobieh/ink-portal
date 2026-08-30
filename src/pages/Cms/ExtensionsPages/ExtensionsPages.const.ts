@@ -4,8 +4,14 @@ import type { ExtensionItem, ExtensionKind, ExtensionTabId } from './ExtensionsP
 export const EXTENSIONS_STORAGE_KEY = CMS_EXTENSIONS_STORAGE_KEY;
 export const THEMING_EXTENSION_ID = 'cms-theming';
 export const BIF_DYNAMIC_EXTENSION_ID = 'bif-dynamic';
+export const CAST_EXTENSION_ID = 'cast';
+export const CALENDAR_EXTENSION_ID = 'cms-calendar';
+export const CREW_CHAT_EXTENSION_ID = 'cms-crew-chat';
 export const FORM_PLUGIN_EXTENSION_ID = 'forma-forms';
 export const EXTENSION_INSTALL_DELAY_MS = 700;
+export const EXTENSION_HIGHLIGHT_PREVIEW = 3;
+export const EXTENSION_MODAL_SIZE = 'md';
+export const EXTENSION_BIF_MARK = '◆';
 export const EXTENSION_FILTER_ALL = CMS_FILTER_ALL;
 export const EXTENSION_SEARCH_EMPTY = EMPTY_STRING;
 export const EXTENSION_PRICE_FREE = 'free';
@@ -25,6 +31,8 @@ export const EXTENSION_KINDS = {
   BRIDGE: 'bridge',
   BUILDER: 'builder',
   FORM: 'form',
+  FIELDS: 'fields',
+  CALENDAR: 'calendar',
 } as const satisfies Record<string, ExtensionKind>;
 
 export const EXTENSION_SEARCH_INPUT_ID = 'ink-cms-store-search';
@@ -67,9 +75,9 @@ export const EXTENSION_CATALOG: ExtensionItem[] = [
   {
     id: BIF_DYNAMIC_EXTENSION_ID,
     name: 'bifDynamic',
-    description: 'Visual canvas builder for CMS pages. Drag widgets, style sections, publish layouts.',
+    description: 'Visual Stage canvas for CMS pages. Drag widgets, style sections, publish layouts.',
     longDescription:
-      'Open a full-width canvas with a widget palette and inspector. Drop Bear widgets onto sections, preview, and save the layout. Install to unlock the Builder side-nav.',
+      'Open a full-width Stage canvas with a widget palette and inspector. Drop Bear widgets onto sections, preview, and save the layout. Install to unlock Stage in the side-nav.',
     highlights: ['Drag-and-drop canvas', 'Widget palette', 'Section inspector', 'Publish-ready HTML'],
     previewSrc: PREVIEW_BUILDER,
     version: '1.0.0',
@@ -83,6 +91,27 @@ export const EXTENSION_CATALOG: ExtensionItem[] = [
     price: EXTENSION_PRICE_FREE,
     likes: 2460,
     installs: 3810,
+    isNew: true,
+  },
+  {
+    id: CAST_EXTENSION_ID,
+    name: 'Cast',
+    description: 'Typed field groups per page — text, email, image, rich — designed and stored with the site.',
+    longDescription:
+      'Define reusable field groups, attach them page by page, and persist values to the database. Cast is the Forge CMS field layer for structured inputs without a separate form product.',
+    highlights: ['Field groups', 'Per-page values', 'Text / email / image / rich', 'Saved to the CMS database'],
+    previewSrc: PREVIEW_EDITOR,
+    version: '0.1.0',
+    kind: EXTENSION_KINDS.FIELDS,
+    tags: ['fields', 'plugin'],
+    status: 'available',
+    author: INK_AUTHOR,
+    git: INK_GIT,
+    website: INK_SITE,
+    dependencies: ['@forgedevstack/bear'],
+    price: EXTENSION_PRICE_FREE,
+    likes: 410,
+    installs: 180,
     isNew: true,
   },
   {
@@ -225,5 +254,47 @@ export const EXTENSION_CATALOG: ExtensionItem[] = [
     price: EXTENSION_PRICE_FREE,
     likes: 330,
     installs: 1510,
+  },
+  {
+    id: CALENDAR_EXTENSION_ID,
+    name: 'Calendar',
+    description: 'Meetings, tagged users, and notify-on-invite from the CMS calendar.',
+    longDescription:
+      'Open month, week, day, and agenda views. Tag crew users on a meeting and they receive a CMS notification.',
+    highlights: ['All calendar views', 'Tag users', 'Notify on save', 'Meeting list'],
+    previewSrc: PREVIEW_HERO,
+    version: '1.0.1',
+    kind: EXTENSION_KINDS.CALENDAR,
+    tags: ['calendar', 'meetings'],
+    status: 'available',
+    author: INK_AUTHOR,
+    git: INK_GIT,
+    website: INK_SITE,
+    dependencies: ['@forgedevstack/calendar'],
+    price: EXTENSION_PRICE_FREE,
+    likes: 410,
+    installs: 220,
+    isNew: true,
+  },
+  {
+    id: CREW_CHAT_EXTENSION_ID,
+    name: 'Crew Chat',
+    description: 'Live rooms with the online crew. Private or tagged rooms, saved in Redis, with sound.',
+    longDescription:
+      'Click Online in the sidenav, pick people, and open a room. Messages stay live. Profile settings add sound, color, and snackbar when you are not in the thread.',
+    highlights: ['Online roster', 'Private + tagged rooms', 'Redis history', 'Sound per room'],
+    previewSrc: PREVIEW_HERO,
+    version: '1.0.0',
+    kind: EXTENSION_KINDS.COLLAB,
+    tags: ['chat', 'collab', 'rooms'],
+    status: 'installed',
+    author: INK_AUTHOR,
+    git: BIFROST_GIT,
+    website: INK_SITE,
+    dependencies: ['@forgedevstack/bear'],
+    price: EXTENSION_PRICE_FREE,
+    likes: 180,
+    installs: 90,
+    isNew: true,
   },
 ];

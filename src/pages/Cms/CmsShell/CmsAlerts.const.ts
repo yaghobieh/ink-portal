@@ -9,14 +9,14 @@ import type { CmsAlertDef, CmsAlertFilter, CmsAlertId } from './CmsAlerts.types'
 export const CMS_ALERT_IDS = {
   DOCUMENT: 'alert-document',
   TOOLBAR: 'alert-toolbar',
-  DATABASE: 'alert-database',
+  CALENDAR: 'alert-calendar',
   BUILDER: 'alert-builder',
 } as const satisfies Record<string, CmsAlertId>;
 
 export const CMS_ALERTS: CmsAlertDef[] = [
   { id: CMS_ALERT_IDS.DOCUMENT, href: ROUTES.CMS_TEMPLATES, severity: 'warning' },
   { id: CMS_ALERT_IDS.TOOLBAR, href: ROUTES.CMS_CONTENT, severity: 'info' },
-  { id: CMS_ALERT_IDS.DATABASE, href: ROUTES.CMS_DATABASE, severity: 'error' },
+  { id: CMS_ALERT_IDS.CALENDAR, href: ROUTES.CMS_CALENDAR, severity: 'info' },
   { id: CMS_ALERT_IDS.BUILDER, href: ROUTES.CMS_BUILDER, severity: 'success' },
 ];
 

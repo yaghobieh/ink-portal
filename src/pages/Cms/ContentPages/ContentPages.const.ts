@@ -9,7 +9,10 @@ export const CONTENT_COLLECTION_DOCS = 'docs';
 export const CONTENT_COLLECTION_PAGES = 'pages';
 export const CONTENT_COLLECTION_TEMPLATES = 'templates';
 export const CONTENT_COLLECTION_PAGE_META = 'page-meta';
-export const CONTENT_LIST_COLLECTIONS = [CONTENT_COLLECTION_PAGES] as const;
+export const CONTENT_LIST_COLLECTIONS = [
+  CONTENT_COLLECTION_DOCS,
+  CONTENT_COLLECTION_PAGES,
+] as const;
 
 export const DOCUMENT_TEMPLATE_ID = 'document';
 export const DOCUMENT_SLUG_PREFIX = 'document-';
@@ -76,3 +79,12 @@ export const CONTENT_MORE_MENU_MIN_WIDTH = 160;
 
 export const CONTENT_NEW_PAGE_MENU_MIN_WIDTH = 220;
 export const SAVED_TEMPLATES_DIVIDER_KEY = 'saved-templates-divider';
+export const CONTENT_ROW_ID_ACCESSOR = 'id';
+export const CONTENT_STATUS_CLASS = {
+  [CONTENT_STATUS_PUBLISHED]: 'ink-cms-status ink-cms-status--published',
+  [CONTENT_STATUS_DRAFT]: 'ink-cms-status ink-cms-status--draft',
+} as const;
+export const CONTENT_STATUS_CLASS_FALLBACK = 'ink-cms-status';
+export const CONTENT_ERROR_CLASS = 'ink-cms-dashboard__error mb-0';
+export const CONTENT_EMPTY_CLASS = 'ink-cms__muted mb-0';
+export const CONTENT_TABLE_WRAP_CLASS = 'ink-cms-card ink-cms-pages-wrap';

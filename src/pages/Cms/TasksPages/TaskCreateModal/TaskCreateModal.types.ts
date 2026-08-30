@@ -9,4 +9,6 @@ export type TaskCreateModalProps = {
   board: TaskBoardConfig;
   onCreateTag: (tag: string) => void;
   defaultStatus: TaskStatusId;
+  colorMode: 'light' | 'dark';
+  canEdit: boolean;
 };

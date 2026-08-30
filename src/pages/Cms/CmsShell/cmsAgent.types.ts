@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export type CmsAgentApplyDetail = {
   templateId: string;
 };
@@ -8,6 +10,9 @@ export type CmsAgentBarProps = {
 
 export type CmsAgentDockProps = {
   side: 'left' | 'right';
-  onApply: (templateId: string) => void;
-  onCreate: () => void;
+  onOpenAi: () => void;
+  onOpenCrew: () => void;
+  crewUnread: number;
+  crewOpen: boolean;
+  crewPanel: ReactNode;
 };

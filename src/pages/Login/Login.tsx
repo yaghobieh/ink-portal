@@ -1,7 +1,6 @@
 import { useEffect, useState, type FC, type FormEvent } from 'react';
 import { useNavigate } from '@forgedevstack/forge-compass/react';
-import { Button, Flex, Input, Spinner, Typography } from '@forgedevstack/bear';
-import { Layout } from '@components/Layout';
+import { Alert, Button, Flex, Input, Spinner, Typography } from '@forgedevstack/bear';
 import {
   AUTH_BEARER_PREFIX,
   AUTH_GITHUB_PATH,
@@ -24,18 +23,20 @@ import {
   LOGIN_INITIAL_STATE,
   LOGIN_PASSWORD_INITIAL,
   LOGIN_STATS_INITIAL_STATE,
-  LOGIN_USERNAME_INITIAL,
 } from './Login.const';
 import { formatTokenUsage, formatUsagePeriod } from './Login.utils';
 import type { LoginStatsState } from './Login.types';
+import { cmsLoginInitialPassword, cmsLoginInitialUsername } from '@pages/Cms/CmsLogin/CmsLogin.utils';
+import { GithubMark, GoogleMark } from '@pages/Cms/CmsLogin/CmsLogin.icons';
+import { CmsLoginBrand } from '@pages/Cms/CmsLogin/helpers/CmsLoginBrand';
 
 export const Login: FC = () => {
   const { t } = useI18n();
   const { token, isAuthenticated, setToken, clearToken, setUserFromLogin } = useAuth();
   const { navigate } = useNavigate();
   const [state, setState] = useState(LOGIN_INITIAL_STATE);
-  const [username, setUsername] = useState(LOGIN_USERNAME_INITIAL);
-  const [password, setPassword] = useState(LOGIN_PASSWORD_INITIAL);
+  const [username, setUsername] = useState(cmsLoginInitialUsername());
+  const [password, setPassword] = useState(cmsLoginInitialPassword());
   const [stats, setStats] = useState<LoginStatsState>(LOGIN_STATS_INITIAL_STATE);
 
   useEffect(() => {
@@ -59,12 +60,6 @@ export const Login: FC = () => {
 
     const loadStats = async () => {
       setStats({ ...LOGIN_STATS_INITIAL_STATE, loading: true });
-      if (!INK_API_URL) {
-        if (!cancelled) {
-          setStats({ ...LOGIN_STATS_INITIAL_STATE, error: true });
-        }
-        return;
-      }
 
       const headers = {
         [AUTH_HEADER_AUTHORIZATION]: `${AUTH_BEARER_PREFIX}${token}`,
@@ -118,10 +113,6 @@ export const Login: FC = () => {
     event.preventDefault();
     setState({ loading: true, error: false });
     try {
-      if (!INK_API_URL) {
-        setState({ loading: false, error: true });
-        return;
-      }
       const response = await fetch(`${INK_API_URL}${AUTH_LOGIN_PATH}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -149,10 +140,6 @@ export const Login: FC = () => {
   const startOauth = async (path: string) => {
     setState({ loading: true, error: false });
     try {
-      if (!INK_API_URL) {
-        setState({ loading: false, error: true });
-        return;
-      }
       const response = await fetch(`${INK_API_URL}${path}`);
       if (!response.ok) {
         setState({ loading: false, error: true });
@@ -177,36 +164,42 @@ export const Login: FC = () => {
     await startOauth(AUTH_GITHUB_PATH);
   };
 
+  const submitLabel = state.loading ? t.login.signingIn : t.login.signIn;
+
   return (
-    <Layout>
-      <div className="fade-in max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="ink-login-card p-8">
-          <Flex direction="column" gap={4}>
-            <Typography variant="h1" className="ink-login-card__title text-3xl font-bold tracking-tight mb-0">
-              {isAuthenticated ? t.login.statsTitle : t.login.title}
+    <div className="ink-cms-login">
+      <div className="ink-cms-login__split">
+        <CmsLoginBrand
+          brand={t.cmsShell.brand}
+          headline={t.cmsShell.loginHeadline}
+          body={t.cmsShell.loginBrandBody}
+          quote={t.cmsShell.loginQuote}
+          quoteBy={t.cmsShell.loginQuoteBy}
+        />
+        <div className="ink-cms-login__form-panel">
+          <Flex direction="column" gap={3} className="ink-cms-login__formbox">
+            <Typography variant="h3" className="ink-cms-login__title mb-0">
+              {isAuthenticated ? t.login.statsTitle : t.cmsShell.loginTitle}
             </Typography>
-            <Typography variant="body1" className="ink-login-card__body mb-0">
+            <Typography variant="body2" className="ink-cms-login__lead mb-0">
               {isAuthenticated ? t.login.statsDescription : t.login.description}
             </Typography>
-
             {isAuthenticated ? (
-              <>
-                {stats.loading ? (
+              <Flex direction="column" gap={3}>
+                {stats.loading && (
                   <Flex align="center" gap={2}>
                     <Spinner size="sm" />
                     <Typography variant="body2" className="mb-0">
                       {t.login.statsLoading}
                     </Typography>
                   </Flex>
-                ) : null}
-
-                {stats.error ? (
-                  <Typography variant="body2" className="text-red-600 mb-0">
+                )}
+                {stats.error && (
+                  <Alert severity="error" variant="outlined">
                     {t.login.statsError}
-                  </Typography>
-                ) : null}
-
-                {stats.user ? (
+                  </Alert>
+                )}
+                {stats.user && (
                   <Flex direction="column" gap={2}>
                     <Typography variant="body2" className="mb-0">
                       {t.login.name}: {stats.user.name}
@@ -218,9 +211,8 @@ export const Login: FC = () => {
                       {t.login.plan}: {stats.user.plan}
                     </Typography>
                   </Flex>
-                ) : null}
-
-                {stats.usage ? (
+                )}
+                {stats.usage && (
                   <Flex direction="column" gap={2}>
                     <Typography variant="body2" className="mb-0">
                       {t.login.tokens}:{' '}
@@ -231,18 +223,22 @@ export const Login: FC = () => {
                       {formatUsagePeriod(stats.usage.periodStart, stats.usage.periodEnd)}
                     </Typography>
                   </Flex>
-                ) : null}
-
-                <Button variant="ink" onClick={() => navigate(ROUTES.CMS)}>
+                )}
+                <Button className="ink-cms-login__submit" onClick={() => navigate(ROUTES.CMS)}>
                   {t.login.openCms}
                 </Button>
                 <Button variant="outline" onClick={clearToken}>
                   {t.login.signOut}
                 </Button>
-              </>
+              </Flex>
             ) : (
-              <>
-                <form className="ink-login-form" onSubmit={onPasswordLogin}>
+              <Flex direction="column" gap={3}>
+                {state.error && (
+                  <Alert severity="error" variant="outlined">
+                    {t.login.error}
+                  </Alert>
+                )}
+                <form className="ink-cms-login__form" onSubmit={onPasswordLogin}>
                   <Flex direction="column" gap={3}>
                     <Input
                       id="ink-login-username"
@@ -261,27 +257,45 @@ export const Login: FC = () => {
                       autoComplete="current-password"
                       required
                     />
-                    <Button type="submit" variant="ink" disabled={state.loading}>
-                      {state.loading ? t.login.signingIn : t.login.signIn}
+                    <Button type="submit" className="ink-cms-login__submit" disabled={state.loading}>
+                      {submitLabel}
                     </Button>
                   </Flex>
                 </form>
-                <Button variant="inkOutline" onClick={onGoogleLogin} disabled={state.loading}>
-                  {state.loading ? t.login.googleLoading : t.login.google}
-                </Button>
-                <Button variant="inkOutline" onClick={onGithubLogin} disabled={state.loading}>
-                  {state.loading ? t.login.googleLoading : t.login.github}
-                </Button>
-                {state.error ? (
-                  <Typography variant="body2" className="text-red-600 mb-0">
-                    {t.login.error}
+                <div className="ink-cms-login__divider">
+                  <span className="ink-cms-login__divider-line" />
+                  <Typography variant="caption" className="ink-cms-login__divider-label mb-0">
+                    {t.login.oauthDivider}
                   </Typography>
-                ) : null}
-              </>
+                  <span className="ink-cms-login__divider-line" />
+                </div>
+                <Flex direction="column" gap={2} className="ink-cms-login__oauth">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="ink-cms-login__oauth-btn"
+                    icon={<GoogleMark />}
+                    onClick={() => void onGoogleLogin()}
+                    disabled={state.loading}
+                  >
+                    {t.login.google}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="ink-cms-login__oauth-btn"
+                    icon={<GithubMark />}
+                    onClick={() => void onGithubLogin()}
+                    disabled={state.loading}
+                  >
+                    {t.login.github}
+                  </Button>
+                </Flex>
+              </Flex>
             )}
           </Flex>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };

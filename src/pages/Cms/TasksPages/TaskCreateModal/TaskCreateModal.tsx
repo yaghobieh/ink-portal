@@ -1,9 +1,14 @@
-import { useState, type FC } from 'react';
-import { Badge, Button, Chip, Dropdown, Flex, Input, Modal, Select, Typography } from '@forgedevstack/bear';
+import { useEffect, useState, type FC } from 'react';
+import { Button, Chip, Dropdown, Flex, Input, Modal, Select, Typography } from '@forgedevstack/bear';
 import { InkEditor } from '@forgedevstack/ink';
 import { useI18n } from '@i18n/index';
 import { EMPTY_STRING } from '@const/index';
-import { TASK_CREATE_MODAL_ID, TASK_EDITOR_MIN_HEIGHT_PX, TASK_SUBTITLE_INPUT_ID, TASK_TAG_INPUT_ID, TASK_TITLE_INPUT_ID } from '../TasksPages.const';
+import {
+  TASK_CREATE_MODAL_ID,
+  TASK_EDITOR_MIN_HEIGHT_PX,
+  TASK_SUBTITLE_INPUT_ID,
+  TASK_TITLE_INPUT_ID,
+} from '../TasksPages.const';
 import { userDisplayName } from '../TasksPages.utils';
 import type { TaskCreateDraft } from '../TasksPages.types';
 import type { TaskCreateModalProps } from './TaskCreateModal.types';
@@ -19,10 +24,18 @@ const emptyDraft = (status: string): TaskCreateDraft => ({
 });
 
 export const TaskCreateModal: FC<TaskCreateModalProps> = (props) => {
-  const { isOpen, onClose, onSubmit, users, board, onCreateTag, defaultStatus } = props;
+  const { isOpen, onClose, onSubmit, users, board, onCreateTag, defaultStatus, colorMode, canEdit } =
+    props;
   const { t } = useI18n();
   const [draft, setDraft] = useState<TaskCreateDraft>(() => emptyDraft(defaultStatus));
   const [tagDraft, setTagDraft] = useState(EMPTY_STRING);
+
+  useEffect(() => {
+    if (isOpen) {
+      setDraft(emptyDraft(defaultStatus));
+      setTagDraft(EMPTY_STRING);
+    }
+  }, [isOpen, defaultStatus]);
 
   const reset = (status: string) => {
     setDraft(emptyDraft(status));
@@ -67,7 +80,8 @@ export const TaskCreateModal: FC<TaskCreateModalProps> = (props) => {
         onClose();
       }}
       title={t.cmsTasks.createTitle}
-      size="lg"
+      size="xl"
+      className="ink-cms-task-modal"
       footer={
         <Flex justify="end" gap={2}>
           <Button variant="outline" onClick={onClose}>
@@ -75,7 +89,7 @@ export const TaskCreateModal: FC<TaskCreateModalProps> = (props) => {
           </Button>
           <Button
             variant="ink"
-            disabled={!draft.title.trim()}
+            disabled={!draft.title.trim() || !canEdit}
             onClick={() => {
               onSubmit(draft);
               reset(defaultStatus);
@@ -104,22 +118,34 @@ export const TaskCreateModal: FC<TaskCreateModalProps> = (props) => {
           <Typography variant="caption" className="mb-1">
             {t.cmsTasks.tags}
           </Typography>
-          <Flex gap={1} className="flex-wrap mb-2">
-            {board.tags.map((tag) => (
-              <Chip
-                key={tag}
-                variant={draft.tags.includes(tag) ? 'filled' : 'outlined'}
-                color={draft.tags.includes(tag) ? 'primary' : 'default'}
-                size="sm"
-                onClick={() => toggleTag(tag)}
-              >
-                {tag}
-              </Chip>
-            ))}
-          </Flex>
-          <Flex gap={2} align="end">
+          <Dropdown
+            searchable
+            closeOnSelect={false}
+            searchPlaceholder={t.cmsTasks.tagCreate}
+            emptyText={t.cmsTasks.pickEmpty}
+            placement="bottom-start"
+            trigger={
+              <Button size="sm" variant="outline">
+                {t.cmsTasks.tags} · {draft.tags.length}
+              </Button>
+            }
+            items={[
+              ...board.tags.map((tag) => ({
+                key: tag,
+                label: tag,
+                selected: draft.tags.includes(tag),
+                onClick: () => toggleTag(tag),
+              })),
+              { key: 'tag-div', label: EMPTY_STRING, divider: true },
+              {
+                key: 'tag-create',
+                label: t.cmsTasks.tagAdd,
+                onClick: addTag,
+              },
+            ]}
+          />
+          <Flex gap={2} align="end" className="mt-2">
             <Input
-              id={TASK_TAG_INPUT_ID}
               label={t.cmsTasks.tagCreate}
               value={tagDraft}
               onChange={(event) => setTagDraft(event.target.value)}
@@ -130,9 +156,13 @@ export const TaskCreateModal: FC<TaskCreateModalProps> = (props) => {
                 }
               }}
             />
-            <Button size="sm" variant="outline" onClick={addTag} disabled={!tagDraft.trim()}>
-              {t.cmsTasks.tagAdd}
-            </Button>
+          </Flex>
+          <Flex gap={1} className="flex-wrap mt-2">
+            {draft.tags.map((tag) => (
+              <Chip key={tag} size="sm" color="primary" variant="soft" onDelete={() => toggleTag(tag)}>
+                {tag}
+              </Chip>
+            ))}
           </Flex>
         </div>
         <div>
@@ -145,10 +175,11 @@ export const TaskCreateModal: FC<TaskCreateModalProps> = (props) => {
           <Dropdown
             searchable
             closeOnSelect={false}
+            emptyText={t.cmsTasks.pickEmpty}
             placement="bottom-start"
             trigger={
               <Button size="sm" variant="outline">
-                {t.cmsTasks.agentPick}
+                {t.cmsTasks.agentPick} · {draft.agentIds.length}
               </Button>
             }
             items={users.map((user) => ({
@@ -163,19 +194,40 @@ export const TaskCreateModal: FC<TaskCreateModalProps> = (props) => {
               const user = users.find((item) => item.id === id);
               if (!user) return null;
               return (
-                <Badge key={id} variant="info" className="text-xs">
+                <Chip
+                  key={id}
+                  size="sm"
+                  color="info"
+                  variant="soft"
+                  onDelete={() => toggleAgent(id)}
+                >
                   {userDisplayName(user)}
-                </Badge>
+                </Chip>
               );
             })}
           </Flex>
         </div>
-        <Select
-          label={t.cmsTasks.status}
-          value={draft.status}
-          onChange={(value) => setDraft((current) => ({ ...current, status: String(value) }))}
-          options={board.statuses.map((status) => ({ value: status.id, label: status.label }))}
-        />
+        <div>
+          <Typography variant="caption" className="mb-1">
+            {t.cmsTasks.status}
+          </Typography>
+          <Dropdown
+            searchable
+            emptyText={t.cmsTasks.pickEmpty}
+            placement="bottom-start"
+            trigger={
+              <Button size="sm" variant="outline">
+                {board.statuses.find((item) => item.id === draft.status)?.label || t.cmsTasks.status}
+              </Button>
+            }
+            items={board.statuses.map((status) => ({
+              key: status.id,
+              label: status.label,
+              selected: draft.status === status.id,
+              onClick: () => setDraft((current) => ({ ...current, status: status.id })),
+            }))}
+          />
+        </div>
         {board.fields.map((field) => (
           <Select
             key={field.id}
@@ -201,6 +253,7 @@ export const TaskCreateModal: FC<TaskCreateModalProps> = (props) => {
             value={draft.description}
             onChange={(value) => setDraft((current) => ({ ...current, description: value }))}
             minHeight={TASK_EDITOR_MIN_HEIGHT_PX}
+            colorMode={colorMode}
             features={{ blocks: true, slash: true }}
           />
         </div>

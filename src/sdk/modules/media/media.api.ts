@@ -1,6 +1,6 @@
 import { INK_API_URL } from '@const/billing.const';
-import { EMPTY_STRING } from '@const/index';
-import { requestWithError } from '../../http';
+import { EMPTY_STRING, HTTP_METHOD_POST, HTTP_METHOD_PUT } from '@const/index';
+import { useApi } from '@sdk/http';
 import { authHeaders } from '../auth/auth.api';
 import {
   CLOUDINARY_API_BASE,
@@ -8,6 +8,8 @@ import {
   CLOUDINARY_UPLOAD_PATH,
   CMS_MEDIA_PATH,
   CMS_MEDIA_SIGN_PATH,
+  CMS_MEDIA_UPLOAD_PATH,
+  CMS_MEDIA_CONFIG_PATH,
   DEFAULT_MEDIA_FOLDER,
   DEFAULT_MEDIA_RESOURCE_TYPE,
 } from './media.const';
@@ -18,28 +20,43 @@ import type {
   MediaListResponse,
   RegisterMediaInput,
 } from './media.types';
+import { fileToDataUrl, parseCloudinaryCloudName } from './media.utils';
 
-export { CMS_MEDIA_PATH, CMS_MEDIA_SIGN_PATH };
+export { CMS_MEDIA_PATH, CMS_MEDIA_SIGN_PATH, CMS_MEDIA_UPLOAD_PATH, CMS_MEDIA_CONFIG_PATH };
+
+let inflightMedia: { token: string; promise: Promise<{ items: MediaItem[]; source: string | null }> } | null =
+  null;
 
 export const fetchMediaRequest = async (
   token: string,
 ): Promise<{ items: MediaItem[]; source: string | null }> => {
-  if (!INK_API_URL || !token) return { items: [], source: null };
-  const response = await requestWithError(
-    `${INK_API_URL}${CMS_MEDIA_PATH}`,
-    { headers: authHeaders(token) },
-    { message: 'Failed to load media' },
-  );
-  if (!response.ok) return { items: [], source: null };
-  const data = (await response.json()) as MediaListResponse;
-  return { items: data.items ?? [], source: data.source ?? null };
+  if (!token) return { items: [], source: null };
+  if (inflightMedia && inflightMedia.token === token) {
+    return inflightMedia.promise;
+  }
+  const promise = (async () => {
+    const response = await useApi(
+      `${INK_API_URL}${CMS_MEDIA_PATH}`,
+      { headers: authHeaders(token) },
+      { message: 'Failed to load media' },
+    );
+    if (!response.ok) return { items: [], source: null };
+    const data = (await response.json()) as MediaListResponse;
+    return { items: data.items ?? [], source: data.source ?? null };
+  })().finally(() => {
+    if (inflightMedia?.promise === promise) {
+      inflightMedia = null;
+    }
+  });
+  inflightMedia = { token, promise };
+  return promise;
 };
 
 export const fetchSign = async (
   token: string,
 ): Promise<CloudinarySignResponse | null> => {
-  if (!INK_API_URL || !token) return null;
-  const response = await requestWithError(
+  if (!token) return null;
+  const response = await useApi(
     `${INK_API_URL}${CMS_MEDIA_SIGN_PATH}`,
     { headers: authHeaders(token) },
     { message: 'Failed to sign media upload' },
@@ -72,9 +89,9 @@ export const uploadToCloudinary = async (
     form.append(CLOUDINARY_FORM_KEYS.FOLDER, folder);
   }
 
-  const response = await requestWithError(
+  const response = await useApi(
     endpoint,
-    { method: 'POST', body: form },
+    { method: HTTP_METHOD_POST, body: form },
     { mode: 'modal', message: 'Cloudinary upload failed' },
   );
   if (!response.ok) return null;
@@ -85,11 +102,11 @@ export const registerMedia = async (
   token: string,
   input: RegisterMediaInput,
 ): Promise<MediaItem | null> => {
-  if (!INK_API_URL || !token) return null;
-  const response = await requestWithError(
+  if (!token) return null;
+  const response = await useApi(
     `${INK_API_URL}${CMS_MEDIA_PATH}`,
     {
-      method: 'POST',
+      method: HTTP_METHOD_POST,
       headers: {
         ...authHeaders(token),
         'Content-Type': 'application/json',
@@ -113,25 +130,75 @@ export const registerMedia = async (
   return data.item ?? null;
 };
 
+export const uploadViaServer = async (
+  token: string,
+  file: File,
+): Promise<MediaItem | null> => {
+  if (!token) return null;
+  const dataUrl = await fileToDataUrl(file);
+  const response = await useApi(
+    `${INK_API_URL}${CMS_MEDIA_UPLOAD_PATH}`,
+    {
+      method: HTTP_METHOD_POST,
+      headers: {
+        ...authHeaders(token),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dataUrl,
+        fileName: file.name,
+      }),
+    },
+    { mode: 'modal', message: 'Media upload failed' },
+  );
+  if (!response.ok) return null;
+  const data = (await response.json()) as { item?: MediaItem };
+  return data.item ?? null;
+};
+
+export const fetchMediaConfig = async (
+  token: string,
+): Promise<{ cloudName: string; configured: boolean; hasKey: boolean; hasSecret: boolean } | null> => {
+  if (!token) return null;
+  const response = await useApi(
+    `${INK_API_URL}${CMS_MEDIA_CONFIG_PATH}`,
+    { headers: authHeaders(token) },
+    { message: 'Failed to load media config' },
+  );
+  if (!response.ok) return null;
+  return (await response.json()) as {
+    cloudName: string;
+    configured: boolean;
+    hasKey: boolean;
+    hasSecret: boolean;
+  };
+};
+
+export const saveMediaCloudName = async (
+  token: string,
+  cloudName: string,
+): Promise<boolean> => {
+  if (!token) return false;
+  const response = await useApi(
+    `${INK_API_URL}${CMS_MEDIA_CONFIG_PATH}`,
+    {
+      method: HTTP_METHOD_PUT,
+      headers: {
+        ...authHeaders(token),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ cloudName: parseCloudinaryCloudName(cloudName) }),
+    },
+    { mode: 'modal', message: 'Failed to save Cloudinary cloud name' },
+  );
+  return response.ok;
+};
+
 export const uploadAndRegisterMedia = async (
   token: string,
   file: File,
 ): Promise<MediaItem | null> => {
-  const sign = await fetchSign(token);
-  if (!sign) return null;
-  const uploaded = await uploadToCloudinary(file, sign);
-  if (!uploaded?.public_id || !uploaded.secure_url) return null;
-  return registerMedia(token, {
-    publicId: uploaded.public_id,
-    url: uploaded.url || uploaded.secure_url,
-    secureUrl: uploaded.secure_url,
-    resourceType: uploaded.resource_type || DEFAULT_MEDIA_RESOURCE_TYPE,
-    format: uploaded.format ?? null,
-    bytes: uploaded.bytes ?? 0,
-    width: uploaded.width ?? null,
-    height: uploaded.height ?? null,
-    folder: sign.folder || DEFAULT_MEDIA_FOLDER,
-  });
+  return uploadViaServer(token, file);
 };
 
 export const mediaAltFromPublicId = (publicId: string): string =>

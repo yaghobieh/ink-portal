@@ -39,6 +39,8 @@ export type CmsAnalytics = {
   templates: number;
   media: number;
   tables: number;
+  crew: number;
+  unreadNotifications: number;
   tokensUsed: number;
   tokensLimit: number;
   documentsDelta: number;

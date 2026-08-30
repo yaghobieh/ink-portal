@@ -1,6 +1,6 @@
 import { useEffect, useState, type FC, type ReactNode } from 'react';
 import { useNavigate } from '@forgedevstack/forge-compass/react';
-import { Badge, BearIcons, Button, Card, DatePicker, Flex, Typography } from '@forgedevstack/bear';
+import { Badge, BearIcons, Button, Card, DateRangePicker, Flex, Typography } from '@forgedevstack/bear';
 import { useAuth } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { CMS_ICON_SIZE } from '@const/numbers.const';
@@ -97,12 +97,12 @@ export const NotificationsPages: FC = () => {
           </Flex>
           <Flex align="center" gap={2} className="flex-wrap ink-cms-notifications__actions">
             {seeAll ? null : (
-              <DatePicker
+              <DateRangePicker
                 id={NOTIFICATIONS_RANGE_ID}
-                range
-                rangeValue={range}
-                onRangeChange={(next) => setRange(next)}
+                value={{ start: range[0], end: range[1] }}
+                onChange={(next) => setRange([next.start, next.end])}
                 className="ink-cms-notifications__range"
+                size="sm"
               />
             )}
             <Button

@@ -848,6 +848,26 @@ body.dark .ink-code,
   border-radius: 1rem;
 }
 
+.ink-landing__editor--v117 {
+  overflow: visible;
+  background: #ffffff;
+  border: 1px solid #e1e4ea;
+  box-shadow: 0 4px 16px rgb(23 27 36 / 0.08);
+}
+
+.ink-landing__editor--v117 .Ink-Editor {
+  border-radius: 0.625rem;
+}
+
+.ink-home-gallery__live {
+  margin: 0 0 1.25rem;
+  background: #ffffff;
+  border: 1px solid #e1e4ea;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px rgb(23 27 36 / 0.08);
+  overflow: visible;
+}
+
 .ink-landing__editor .Ink-Editor__content h1 {
   font-family: var(--ink-portal-display);
   font-weight: 600;

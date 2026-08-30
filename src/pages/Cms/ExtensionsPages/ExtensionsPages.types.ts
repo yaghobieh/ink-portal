@@ -8,7 +8,9 @@ export type ExtensionKind =
   | 'publish'
   | 'bridge'
   | 'builder'
-  | 'form';
+  | 'form'
+  | 'fields'
+  | 'calendar';
 
 export type ExtensionPrice = 'free' | 'paid';
 

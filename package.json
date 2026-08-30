@@ -16,6 +16,7 @@
     "@forgedevstack/grid-table": "^1.1.2",
     "@forgedevstack/ink": "^1.1.7",
     "@forgedevstack/synapse": "^1.2.1",
+    "axios": "^1.19.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

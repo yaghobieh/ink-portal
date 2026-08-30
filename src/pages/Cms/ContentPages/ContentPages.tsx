@@ -14,12 +14,13 @@ import {
   CONTENT_COLLECTION_PAGES,
   CONTENT_COLUMN_IDS,
   CONTENT_DATE_LOCALE,
+  CONTENT_EMPTY_CLASS,
+  CONTENT_ERROR_CLASS,
   CONTENT_KIND_ITEM,
   CONTENT_LIST_COLLECTIONS,
-  CONTENT_MORE_MENU_MIN_WIDTH,
   CONTENT_NEW_PAGE_MENU_MIN_WIDTH,
-  CONTENT_STATUS_DRAFT,
-  CONTENT_STATUS_PUBLISHED,
+  CONTENT_ROW_ID_ACCESSOR,
+  CONTENT_TABLE_WRAP_CLASS,
   CONTENT_TEMPLATE_EMPTY,
   DOCUMENT_DEFAULT_LOCALE,
   DOCUMENT_STARTER_STATUS,
@@ -27,9 +28,12 @@ import {
 } from './ContentPages.const';
 import type { ContentTableRow } from './ContentPages.types';
 import {
+  contentStatusClass,
+  contentStatusLabel,
   formatContentUpdated,
   templateFromPayload,
 } from './ContentPages.utils';
+import { ContentRowActions } from './helpers/ContentRowActions';
 import { cloneCanvasTree, canvasFromPayload } from '../BuilderPages/BuilderPages.utils';
 import {
   PAYLOAD_KEY_CAST_FIELDS,
@@ -40,7 +44,7 @@ import {
 import {
   CAST_VALUE_SUMMARY_JOIN,
   CAST_VALUE_SUMMARY_SEP,
-} from '../ContentEdit/CastPageFields.const';
+} from '../ContentEdit/helpers/CastPageFields';
 import {
   castFieldsFromPayload,
   castValuesFromPayload,
@@ -147,20 +151,6 @@ export const ContentPages: FC = () => {
     })),
   ];
 
-  const statusClass = (status: string): string => {
-    const key = status.toLowerCase();
-    if (key === CONTENT_STATUS_PUBLISHED) return 'ink-cms-status ink-cms-status--published';
-    if (key === CONTENT_STATUS_DRAFT) return 'ink-cms-status ink-cms-status--draft';
-    return 'ink-cms-status';
-  };
-
-  const statusLabel = (status: string): string => {
-    const key = status.toLowerCase();
-    if (key === CONTENT_STATUS_PUBLISHED) return t.dashboard.contentStatusPublished;
-    if (key === CONTENT_STATUS_DRAFT) return t.dashboard.contentStatusDraft;
-    return status;
-  };
-
   return (
     <CmsShell activeNavId={CMS_NAV_IDS.PAGES}>
       <Flex direction="column" gap={0} className="ink-cms-page">
@@ -190,13 +180,13 @@ export const ContentPages: FC = () => {
           </Flex>
         </Card>
 
-        {error ? (
-          <Typography variant="body2" className="ink-cms-dashboard__error mb-0">
-            {t.dashboard.error}
+        {error && (
+          <Typography variant="body2" className={CONTENT_ERROR_CLASS}>
+            {t.dashboard.contentLoadError}
           </Typography>
-        ) : null}
+        )}
 
-        <div className="ink-cms-card ink-cms-pages-wrap">
+        <div className={CONTENT_TABLE_WRAP_CLASS}>
           <GridTable
             data={rows}
             loading={loading}
@@ -204,7 +194,7 @@ export const ContentPages: FC = () => {
             showPagination={false}
             showFilter={false}
             emptyContent={
-              <Typography variant="body2" className="ink-cms__muted mb-0">
+              <Typography variant="body2" className={CONTENT_EMPTY_CLASS}>
                 {t.dashboard.listEmpty}
               </Typography>
             }
@@ -213,77 +203,59 @@ export const ContentPages: FC = () => {
               [
                 {
                   id: CONTENT_COLUMN_IDS.TITLE,
-                  accessor: 'title',
+                  accessor: CONTENT_COLUMN_IDS.TITLE,
                   header: t.dashboard.contentColTitle,
                   sortable: true,
                   render: (value) => <b>{String(value ?? EMPTY_STRING)}</b>,
                 },
                 {
                   id: CONTENT_COLUMN_IDS.SLUG,
-                  accessor: 'slug',
+                  accessor: CONTENT_COLUMN_IDS.SLUG,
                   header: t.dashboard.contentColSlug,
                   sortable: true,
                 },
                 {
                   id: CONTENT_COLUMN_IDS.TEMPLATE,
-                  accessor: 'template',
+                  accessor: CONTENT_COLUMN_IDS.TEMPLATE,
                   header: t.dashboard.contentColTemplate,
                   render: (value) => String(value || CONTENT_TEMPLATE_EMPTY),
                 },
                 {
                   id: CONTENT_COLUMN_IDS.FIELDS,
-                  accessor: 'fields',
+                  accessor: CONTENT_COLUMN_IDS.FIELDS,
                   header: t.dashboard.contentColFields,
                   render: (value) => String(value || CONTENT_TEMPLATE_EMPTY),
                 },
                 {
                   id: CONTENT_COLUMN_IDS.STATUS,
-                  accessor: 'status',
+                  accessor: CONTENT_COLUMN_IDS.STATUS,
                   header: t.dashboard.contentColStatus,
                   render: (_value, row) => (
-                    <span className={statusClass(String(row.status))}>{statusLabel(String(row.status))}</span>
+                    <span className={contentStatusClass(String(row.status))}>
+                      {contentStatusLabel(String(row.status), t.dashboard)}
+                    </span>
                   ),
                 },
                 {
                   id: CONTENT_COLUMN_IDS.UPDATED,
-                  accessor: 'updated',
+                  accessor: CONTENT_COLUMN_IDS.UPDATED,
                   header: t.dashboard.contentColUpdated,
                   sortable: true,
                 },
                 {
                   id: CONTENT_COLUMN_IDS.ACTIONS,
-                  accessor: 'id',
+                  accessor: CONTENT_ROW_ID_ACCESSOR,
                   header: EMPTY_STRING,
                   sortable: false,
                   render: (_value, row) => (
-                    <div className="ink-cms-pages__actions">
-                      <button
-                        type="button"
-                        className="ink-cms-link"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          navigate(cmsEditPath(String(row.id)));
-                        }}
-                      >
-                        {t.dashboard.contentOpen}
-                      </button>
-                      <Dropdown
-                        placement="bottom-end"
-                        minWidth={CONTENT_MORE_MENU_MIN_WIDTH}
-                        trigger={
-                          <button type="button" className="ink-cms-icon-btn" aria-label={t.dashboard.contentMore}>
-                            ⋯
-                          </button>
-                        }
-                        items={[
-                          {
-                            key: 'stage',
-                            label: t.cmsBuilder.editInStage,
-                            onClick: () => navigate(cmsBuilderPath({ doc: String(row.id) })),
-                          },
-                        ]}
-                      />
-                    </div>
+                    <ContentRowActions
+                      id={String(row.id)}
+                      openLabel={t.dashboard.contentOpen}
+                      moreLabel={t.dashboard.contentMore}
+                      stageLabel={t.cmsBuilder.editInStage}
+                      onOpen={(id) => navigate(cmsEditPath(id))}
+                      onStage={(id) => navigate(cmsBuilderPath({ doc: id }))}
+                    />
                   ),
                 },
               ] as ColumnDefinition<ContentTableRow>[]

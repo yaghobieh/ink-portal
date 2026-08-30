@@ -1,33 +1,14 @@
 import type { ToolbarOption } from '@forgedevstack/ink';
-import { INK_SIMPLE_TOOLBAR } from '@forgedevstack/ink';
-import { EDITOR_DEMO_SRC } from './strings.const';
+import type { HomeAiFeatureBodyKey, HomeAiFeatureKey } from './home.types';
 
-export const HERO_EDITOR_HTML = `<h1>Ink Editor</h1>
-<p>A modern rich text editor built for <strong>performance</strong> and <em>simplicity</em>. Nestable blocks, slash commands, and a clean API — so writing just feels right.</p>
-<ul>
-<li><strong>Lightweight</strong> — tiny footprint, no bloat</li>
-<li><strong>Extensible</strong> — plugins for AI, comments, and more</li>
-<li><strong>Developer Friendly</strong> — TypeScript-first React API</li>
-</ul>
-<blockquote>Write less configuration. Ship more product.</blockquote>`;
+export const VERSION_PLACEHOLDER = '{version}';
+export const INK_CALLOUT_CLASS = 'Ink-callout';
 
 export const STACK_LABELS = ['React', 'Vue', 'Svelte', 'Next.js', 'Angular'] as const;
 
 export const HOME_FEATURE_IDS = ['lightweight', 'extensible', 'developer'] as const;
 
-export const HOME_AI_MEDIA_SRC = EDITOR_DEMO_SRC;
-
-export type HomeAiFeatureKey =
-  | 'aiAutocompleteTitle'
-  | 'aiGenerateTitle'
-  | 'aiHostedTitle'
-  | 'aiByoTitle';
-
-export type HomeAiFeatureBodyKey =
-  | 'aiAutocompleteBody'
-  | 'aiGenerateBody'
-  | 'aiHostedBody'
-  | 'aiByoBody';
+export const HOME_AI_GIF_SRC = '/ink-ai-demo.gif';
 
 export const HOME_AI_FEATURES: Array<{
   id: string;
@@ -59,32 +40,37 @@ export const HOME_AI_FEATURES: Array<{
 export const HOME_HERO_TOOLBAR: ToolbarOption[] = [
   'headingDropdown',
   'divider',
-  ...INK_SIMPLE_TOOLBAR,
+  'bold',
+  'italic',
+  'underline',
+  'strikethrough',
   'divider',
+  'bulletList',
+  'orderedList',
+  'checklist' as ToolbarOption,
   'blockquote',
+  'divider',
+  'image',
   'link',
+  'table',
   'code',
   'divider',
-  'signature',
-  'findReplace',
-  'horizontalRule',
+  'undo',
+  'redo',
+  'ai',
 ];
 
-export const HOME_GALLERY: Array<{
-  src: string;
-  altKey: 'galleryDemo';
-  labelKey: 'galleryDemoLabel';
-  tall: boolean;
-  wide?: boolean;
-}> = [
-  {
-    src: '/ink-editor-demo.gif',
-    altKey: 'galleryDemo',
-    labelKey: 'galleryDemoLabel',
-    tall: false,
-    wide: true,
-  },
-];
+export const HOME_HERO_FEATURES = {
+  table: true,
+  trackChanges: true,
+  comments: true,
+  ai: true,
+  blocks: true,
+  slash: true,
+  signature: true,
+  findReplace: true,
+  horizontalRule: true,
+} as const;
 
 export const HOME_GALLERY_HIGHLIGHTS = [
   {

@@ -1,8 +1,10 @@
 import { CMS_AVATAR_INITIALS_LENGTH, CMS_STORE_ICON_TONES } from '@const/numbers.const';
-import { NUMBER_ONE_THOUSAND, NUMBER_ZERO } from '@const/numbers';
-import { CMS_EXTERNAL_PLUGINS_KEY, EMPTY_STRING } from '@const/strings.const';
+import { NUMBER_ONE_THOUSAND, NUMBER_TWO, NUMBER_ZERO } from '@const/numbers.const';
+import { CMS_EXTENSIONS_EVENT, CMS_EXTERNAL_PLUGINS_KEY, EMPTY_STRING } from '@const/strings.const';
 import {
   BIF_DYNAMIC_EXTENSION_ID,
+  CAST_EXTENSION_ID,
+  CREW_CHAT_EXTENSION_ID,
   EXTENSION_CATALOG,
   EXTENSION_FILTER_ALL,
   EXTENSION_GIT_HTTPS_PREFIX,
@@ -119,6 +121,16 @@ export const isBifDynamicInstalled = (): boolean =>
     (item) => item.id === BIF_DYNAMIC_EXTENSION_ID && item.status === 'installed',
   );
 
+export const isCastInstalled = (): boolean =>
+  mergeCatalogWithInstalled().some(
+    (item) => item.id === CAST_EXTENSION_ID && item.status === 'installed',
+  );
+
+export const isCrewChatInstalled = (): boolean =>
+  mergeCatalogWithInstalled().some(
+    (item) => item.id === CREW_CHAT_EXTENSION_ID && item.status === 'installed',
+  );
+
 export const extensionInitials = (name: string): string =>
   name.trim().slice(0, CMS_AVATAR_INITIALS_LENGTH).toUpperCase();
 
@@ -163,4 +175,12 @@ export const filterStoreItems = (
       filters.git === EXTENSION_FILTER_ALL || item.git === filters.git;
     return matchesQuery && matchesKind && matchesAuthor && matchesGit;
   });
+};
+
+export const extensionMark = (name: string): string => {
+  const parts = name.trim().split(/\s+/).filter((part) => part.length > NUMBER_ZERO);
+  if (parts.length >= NUMBER_TWO) {
+    return `${parts[0].charAt(NUMBER_ZERO)}${parts[1].charAt(NUMBER_ZERO)}`.toUpperCase();
+  }
+  return name.slice(NUMBER_ZERO, CMS_AVATAR_INITIALS_LENGTH);
 };

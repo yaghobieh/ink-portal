@@ -1,4 +1,47 @@
-export type CanvasKind = 'section' | 'flex' | 'grid' | 'masonry' | 'ink' | 'widget' | 'form';
+export type CanvasKind =
+  | 'section'
+  | 'column'
+  | 'flex'
+  | 'grid'
+  | 'masonry'
+  | 'ink'
+  | 'widget'
+  | 'form';
+
+export type BuilderViewport = 'desktop' | 'tablet' | 'mobile';
+
+export type BuilderInspectorTab = 'content' | 'style' | 'code';
+
+export type BuilderStageTab = 'canvas' | BuilderInspectorTab;
+
+export type CanvasNodeStyles = {
+  padding: string;
+  margin: string;
+  width: string;
+  height: string;
+  fontSize: string;
+  fontWeight: string;
+  lineHeight: string;
+  letterSpacing: string;
+  textAlign: string;
+  border: string;
+  borderRadius: string;
+  boxShadow: string;
+  display: string;
+  flexDirection: string;
+  gap: string;
+  alignItems: string;
+  justifyContent: string;
+  opacity: string;
+  zIndex: string;
+  background: string;
+  color: string;
+};
+
+export type PageCode = {
+  css: string;
+  js: string;
+};
 
 export type CanvasNode = {
   id: string;
@@ -6,6 +49,9 @@ export type CanvasNode = {
   label: string;
   widgetId?: string;
   html?: string;
+  css?: string;
+  js?: string;
+  styles?: CanvasNodeStyles;
   children: CanvasNode[];
 };
 

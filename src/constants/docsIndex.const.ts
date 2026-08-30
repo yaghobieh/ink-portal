@@ -1,12 +1,6 @@
 import { ROUTES } from './routes.const';
 import { DEFAULT_DOCS_SLUG, DOCS_PAGES } from './docsContent.const';
-
-export interface DocsIndexEntry {
-  id: string;
-  title: string;
-  keywords: string[];
-  path: string;
-}
+import type { DocsIndexEntry } from './docsIndex.types';
 
 export const DOCS_TOC = DOCS_PAGES.map((page) => ({
   id: page.id,

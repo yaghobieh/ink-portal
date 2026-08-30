@@ -1,5 +1,5 @@
 import { INK_API_URL } from '@const/billing.const';
-import { requestWithError } from '../../http';
+import { useApi } from '@sdk/http';
 import { PAGES_PATH } from './pages.const';
 import type { CmsPageResponse, CmsPortalPage, FetchPageOptions } from './pages.types';
 
@@ -15,13 +15,13 @@ const normalizePage = (raw: CmsPortalPage | undefined | null): CmsPortalPage | n
 export const fetchCmsPageRequest = async (
   options: FetchPageOptions,
 ): Promise<CmsPortalPage | null> => {
-  if (!INK_API_URL || !options.name || !options.type) return null;
+  if (!options.name || !options.type) return null;
   const params = new URLSearchParams({
     name: options.name,
     type: options.type,
   });
   try {
-    const response = await requestWithError(
+    const response = await useApi(
       `${INK_API_URL}${PAGES_PATH}?${params.toString()}`,
       undefined,
       { message: 'Failed to load page' },
@@ -35,12 +35,11 @@ export const fetchCmsPageRequest = async (
 };
 
 export const fetchCmsPagesListRequest = async (type?: string): Promise<CmsPortalPage[]> => {
-  if (!INK_API_URL) return [];
   const params = new URLSearchParams();
   if (type) params.set('type', type);
   const suffix = params.toString() ? `?${params.toString()}` : '';
   try {
-    const response = await requestWithError(
+    const response = await useApi(
       `${INK_API_URL}${PAGES_PATH}${suffix}`,
       undefined,
       { message: 'Failed to load pages' },

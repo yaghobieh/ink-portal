@@ -4,11 +4,23 @@ import {
   CMS_PERCENT_BASE,
   CMS_RING_SIZE_PX,
 } from '@const/numbers.const';
-import { NUMBER_ZERO } from '@const/numbers';
+import { NUMBER_ZERO } from '@const/numbers.const';
 
 export { CMS_BAR_MAX_HEIGHT_PX, CMS_PERCENT_BASE, CMS_RING_SIZE_PX };
 
 export const WEEKDAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
+
+export const CMS_KPI_TONES = {
+  PAGES: 'pages',
+  PUBLISHED: 'published',
+  DRAFTS: 'drafts',
+  TEMPLATES: 'templates',
+  MEDIA: 'media',
+  TOKENS: 'tokens',
+  TABLES: 'tables',
+  CREW: 'crew',
+  ALERTS: 'alerts',
+} as const;
 
 export const FALLBACK_ANALYTICS: CmsAnalytics = {
   documents: 0,
@@ -17,6 +29,8 @@ export const FALLBACK_ANALYTICS: CmsAnalytics = {
   templates: 0,
   media: 0,
   tables: 0,
+  crew: 0,
+  unreadNotifications: 0,
   tokensUsed: 0,
   tokensLimit: 0,
   documentsDelta: 0,

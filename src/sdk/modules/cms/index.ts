@@ -1,8 +1,13 @@
 export { cmsNucleus } from './cms.reducer';
-export { CMS_DASHBOARD_PATH, fetchDashboardRequest } from './cms.api';
 export {
+  CMS_DASHBOARD_PATH,
+  CMS_MEETINGS_PATH,
+  CMS_NOTIFICATIONS_PATH,
   CMS_ROLES_PATH,
   CMS_USERS_PATH,
+} from './cms.const';
+export { fetchDashboardRequest } from './cms.api';
+export {
   createCrewRoleRequest,
   createCrewUserRequest,
   fetchCrewRoles,

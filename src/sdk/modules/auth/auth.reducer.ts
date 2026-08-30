@@ -88,13 +88,17 @@ export const authNucleus = createNucleus<AuthState>((set, get) => ({
     }
     set({ loading: true, error: false });
     try {
-      const user = await fetchMeRequest(token);
-      if (!user) {
+      const result = await fetchMeRequest(token);
+      if (result.unauthorized) {
         writeToken(null);
         set({ token: null, user: null, loading: false, error: true });
         return false;
       }
-      set({ user, loading: false, error: false });
+      if (!result.user) {
+        set({ loading: false, error: true });
+        return false;
+      }
+      set({ user: result.user, loading: false, error: false });
       return true;
     } catch {
       set({ loading: false, error: true });

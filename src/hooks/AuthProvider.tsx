@@ -1,12 +1,7 @@
 import { createContext, useContext, useEffect, useState, type FC, type ReactNode } from 'react';
-import { INK_API_URL } from '@const/index';
-import {
-  AUTH_BEARER_PREFIX,
-  AUTH_HEADER_AUTHORIZATION,
-  AUTH_ME_PATH,
-  AUTH_TOKEN_STORAGE_KEY,
-} from './auth.const';
-import type { MeResponse, MeUser, UseAuthResult } from './auth.types';
+import { AUTH_TOKEN_STORAGE_KEY } from './auth.const';
+import { fetchMeRequest } from '@sdk/modules/auth/auth.api';
+import type { AuthSessionError, MeUser, UseAuthResult } from './auth.types';
 
 const AuthContext = createContext<UseAuthResult | null>(null);
 
@@ -31,16 +26,14 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [token, setTokenState] = useState<string | null>(() => readToken());
   const [user, setUser] = useState<MeUser | null>(null);
   const [userLoading, setUserLoading] = useState(Boolean(readToken()));
+  const [sessionError, setSessionError] = useState<AuthSessionError | null>(null);
+  const [sessionTick, setSessionTick] = useState(0);
 
   useEffect(() => {
     if (!token) {
       setUser(null);
       setUserLoading(false);
-      return;
-    }
-    if (!INK_API_URL) {
-      setUser(null);
-      setUserLoading(false);
+      setSessionError(null);
       return;
     }
 
@@ -48,42 +41,36 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setUserLoading(true);
 
     const load = async () => {
-      try {
-        const response = await fetch(`${INK_API_URL}${AUTH_ME_PATH}`, {
-          headers: {
-            [AUTH_HEADER_AUTHORIZATION]: `${AUTH_BEARER_PREFIX}${token}`,
-          },
-        });
-        if (!response.ok) {
-          if (!cancelled) {
-            writeToken(null);
-            setTokenState(null);
-            setUser(null);
-            setUserLoading(false);
-          }
-          return;
-        }
-        const data = (await response.json()) as MeResponse;
-        if (!cancelled) {
-          setUser(data.user ?? null);
-          setUserLoading(false);
-        }
-      } catch {
-        if (!cancelled) {
-          setUser(null);
-          setUserLoading(false);
-        }
+      const result = await fetchMeRequest(token);
+      if (cancelled) return;
+      if (result.user) {
+        setUser(result.user);
+        setSessionError(null);
+        setUserLoading(false);
+        return;
       }
+      if (result.unauthorized) {
+        writeToken(null);
+        setTokenState(null);
+        setUser(null);
+        setSessionError(null);
+        setUserLoading(false);
+        return;
+      }
+      setUser(null);
+      setSessionError(result.error);
+      setUserLoading(false);
     };
 
     void load();
     return () => {
       cancelled = true;
     };
-  }, [token]);
+  }, [token, sessionTick]);
 
   const setToken = (value: string) => {
     writeToken(value);
+    setSessionError(null);
     setTokenState(value);
   };
 
@@ -91,17 +78,26 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     writeToken(null);
     setTokenState(null);
     setUser(null);
+    setSessionError(null);
   };
 
   const setUserFromLogin = (next: MeUser | null) => {
     setUser(next);
+    setSessionError(null);
+  };
+
+  const retrySession = () => {
+    setSessionError(null);
+    setSessionTick((current) => current + 1);
   };
 
   const value: UseAuthResult = {
     token,
     user,
     userLoading,
-    isAuthenticated: Boolean(token),
+    isAuthenticated: Boolean(token && user),
+    sessionError,
+    retrySession,
     setToken,
     clearToken,
     setUserFromLogin,

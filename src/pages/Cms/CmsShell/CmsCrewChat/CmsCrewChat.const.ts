@@ -1,0 +1,24 @@
+import { NUMBER_TWO } from '@const/numbers.const';
+
+export const CREW_CHAT_INPUT_ID = 'ink-cms-crew-chat-input';
+export const CREW_CHAT_TAG_ID = 'ink-cms-crew-chat-tag';
+export const CREW_JUMP_INPUT_ID = 'ink-cms-crew-jump';
+export const CREW_NEW_ROOM_INPUT_ID = 'ink-cms-crew-new-room';
+export const CREW_CHAT_BEEP_HZ = 880;
+export const CREW_CHAT_BEEP_MS = 140;
+export const CREW_CHAT_PRIVATE_SIZE = NUMBER_TWO;
+export const CREW_CHAT_DRAWER_SIZE = 'xl';
+export const CREW_MENTION_AT = '@';
+export const CREW_TOKEN_SPACE = ' ';
+export const CREW_NAME_TOKEN = '{name}';
+export const CREW_CHANNEL_SLUG_SPACE = /\s+/g;
+export const CREW_CHANNEL_SLUG_KEEP = /[^a-z0-9-]/g;
+export const CREW_CHANNEL_SLUG_DASH = '-';
+export const CREW_DEFAULT_EMOJI = '🙂';
+export const CREW_SCROLL_STICK_PX = 64;
+export const CREW_EMOJI_PICKER_MAX_HEIGHT = 220;
+export const CREW_EMOJI_PICKER_SIZE = 'sm' as const;
+export const CREW_BLOB_CLASS = 'ink-cms-crew-blob';
+export const CREW_BLOB_LEFT_CLASS = 'ink-cms-crew-blob ink-cms-crew-blob--left';
+export const CREW_BLOB_CLOSE_CLASS = 'ink-cms-crew-blob__close';
+export const CREW_PANEL_CLASS = 'ink-cms-crew';

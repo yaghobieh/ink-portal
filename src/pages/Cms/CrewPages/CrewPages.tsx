@@ -1,11 +1,11 @@
 import { useEffect, useState, type FC } from 'react';
 import { useNucleus } from '@forgedevstack/synapse';
 import {
-  Badge,
   Button,
   Card,
   Flex,
   Input,
+  Select,
   Typography,
 } from '@forgedevstack/bear';
 import { useI18n } from '@i18n/index';
@@ -14,11 +14,13 @@ import { authNucleus } from '@sdk/index';
 import {
   createCrewRoleRequest,
   createCrewUserRequest,
+  deleteCrewRoleRequest,
   fetchCrewRoles,
   fetchCrewUsers,
   updateCrewRoleRequest,
+  updateCrewUserRoleRequest,
 } from '@sdk/modules/cms';
-import { CmsShell, CMS_NAV_IDS } from '../CmsShell';
+import { CmsGridTable, CmsShell, CMS_NAV_IDS } from '../CmsShell';
 import {
   CREW_PERMISSIONS,
   DEFAULT_CREW_ROLES,
@@ -44,6 +46,7 @@ export const CrewPages: FC = () => {
     'page:edit',
   ]);
   const [editingRoleId, setEditingRoleId] = useState(EMPTY_STRING);
+  const [editingUserId, setEditingUserId] = useState(EMPTY_STRING);
   const [loadError, setLoadError] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -139,6 +142,38 @@ export const CrewPages: FC = () => {
     setSelectedPermissions(role.permissions);
   };
 
+  const cancelEditRole = () => {
+    setEditingRoleId(EMPTY_STRING);
+    setRoleName(EMPTY_STRING);
+    setRoleDescription(EMPTY_STRING);
+  };
+
+  const saveUserRole = async (userId: string, nextRoleId: string) => {
+    if (!token || !nextRoleId) return;
+    setSaving(true);
+    const updated = await updateCrewUserRoleRequest(token, userId, nextRoleId);
+    setSaving(false);
+    if (!updated) {
+      setLoadError(true);
+      return;
+    }
+    setUsers((current) => current.map((user) => (user.id === updated.id ? updated : user)));
+    setEditingUserId(EMPTY_STRING);
+  };
+
+  const removeRole = async (role: CrewRole) => {
+    if (!token || role.system) return;
+    setSaving(true);
+    const ok = await deleteCrewRoleRequest(token, role.id);
+    setSaving(false);
+    if (!ok) {
+      setLoadError(true);
+      return;
+    }
+    setRoles((current) => current.filter((item) => item.id !== role.id));
+    if (editingRoleId === role.id) cancelEditRole();
+  };
+
   return (
     <CmsShell activeNavId={CMS_NAV_IDS.CREW}>
       <Flex direction="column" gap={4}>
@@ -188,48 +223,58 @@ export const CrewPages: FC = () => {
                 onChange={(event) => setPassword(event.target.value)}
                 autoComplete="new-password"
               />
-              <label className="ink-cms__muted text-sm" htmlFor="crew-user-role">
-                {t.cmsCrew.userRole}
-              </label>
-              <select
+              <Select
                 id="crew-user-role"
-                className="ink-cms-select"
+                label={t.cmsCrew.userRole}
+                options={roles.map((role) => ({ value: role.id, label: role.name }))}
                 value={roleId}
-                onChange={(event) => setRoleId(event.target.value)}
-              >
-                {roles.map((role) => (
-                  <option key={role.id} value={role.id}>
-                    {role.name}
-                  </option>
-                ))}
-              </select>
+                onChange={(value) => setRoleId(value)}
+                fullWidth
+              />
               <Button size="sm" variant="ink" onClick={() => void createUser()} disabled={saving}>
                 {t.cmsCrew.createUser}
               </Button>
             </Flex>
-            <Flex direction="column" gap={2}>
-              {users.map((user) => (
-                <Card key={user.id} className="ink-cms-card ink-cms-card--nested">
-                  <Flex justify="between" align="center" className="gap-2 flex-wrap">
-                    <div>
-                      <Typography variant="body2" className="mb-0 font-medium">
-                        {user.name}
-                      </Typography>
-                      <Typography variant="caption" className="ink-cms__muted mb-0">
-                        {user.username} · {user.email}
-                      </Typography>
-                    </div>
-                    <Flex gap={1} className="flex-wrap">
-                      {user.roleIds.map((id) => (
-                        <Badge key={id} variant="info" className="text-xs">
-                          {roles.find((role) => role.id === id)?.name || id}
-                        </Badge>
-                      ))}
-                    </Flex>
-                  </Flex>
-                </Card>
-              ))}
-            </Flex>
+            <CmsGridTable
+              data={users.map((user) => ({
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                username: user.username,
+                roles: user.roleIds
+                  .map((id) => roles.find((role) => role.id === id)?.name || id)
+                  .join(', '),
+              }))}
+              columns={[
+                { id: 'name', accessor: 'name', header: t.cmsCrew.userName, sortable: true },
+                { id: 'username', accessor: 'username', header: t.cmsCrew.userUsername, sortable: true },
+                { id: 'email', accessor: 'email', header: t.cmsCrew.userEmail, sortable: true },
+                { id: 'roles', accessor: 'roles', header: t.cmsCrew.userRole },
+                {
+                  id: 'edit',
+                  accessor: 'id',
+                  header: t.cmsCrew.editRole,
+                  render: (_value, row) =>
+                    editingUserId === row.id ? (
+                      <Select
+                        options={roles.map((role) => ({ value: role.id, label: role.name }))}
+                        value={
+                          users.find((user) => user.id === row.id)?.roleIds[0] || roleId
+                        }
+                        onChange={(value) => void saveUserRole(String(row.id), value)}
+                      />
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setEditingUserId(String(row.id))}
+                      >
+                        {t.cmsCrew.editRole}
+                      </Button>
+                    ),
+                },
+              ]}
+            />
           </Card>
 
           <Card className="ink-cms-card">
@@ -267,39 +312,62 @@ export const CrewPages: FC = () => {
                   );
                 })}
               </Flex>
-              <Button size="sm" variant="ink" onClick={() => void createRole()} disabled={saving}>
-                {editingRoleId ? t.cmsCrew.saveRole : t.cmsCrew.createRole}
-              </Button>
+              <Flex gap={2}>
+                <Button size="sm" variant="ink" onClick={() => void createRole()} disabled={saving}>
+                  {editingRoleId ? t.cmsCrew.saveRole : t.cmsCrew.createRole}
+                </Button>
+                {editingRoleId ? (
+                  <Button size="sm" variant="outline" onClick={cancelEditRole} disabled={saving}>
+                    {t.cmsCrew.cancelRole}
+                  </Button>
+                ) : null}
+              </Flex>
             </Flex>
-            <Flex direction="column" gap={2}>
-              {roles.map((role) => (
-                <Card key={role.id} className="ink-cms-card ink-cms-card--nested">
-                  <Flex justify="between" align="start" className="gap-2">
-                    <div>
-                      <Typography variant="body2" className="mb-0 font-medium">
-                        {role.name}
-                      </Typography>
-                      <Typography variant="caption" className="ink-cms__muted mb-2 block">
-                        {role.description}
-                      </Typography>
-                      <Typography variant="caption" className="mb-0">
-                        {role.permissions.length} {t.cmsCrew.permissionsCount}
-                      </Typography>
-                    </div>
-                    <Flex gap={1} className="flex-wrap">
-                      {role.system ? (
-                        <Badge variant="neutral" className="text-xs">
-                          {t.cmsCrew.systemRole}
-                        </Badge>
-                      ) : null}
-                      <Button size="sm" variant="outline" onClick={() => startEditRole(role)}>
-                        {t.cmsCrew.editRole}
-                      </Button>
-                    </Flex>
-                  </Flex>
-                </Card>
-              ))}
-            </Flex>
+            <CmsGridTable
+              data={roles.map((role) => ({
+                id: role.id,
+                name: role.name,
+                description: role.description,
+                permissions: String(role.permissions.length),
+                system: role.system ? t.cmsCrew.systemRole : EMPTY_STRING,
+              }))}
+              columns={[
+                { id: 'name', accessor: 'name', header: t.cmsCrew.roleName, sortable: true },
+                { id: 'description', accessor: 'description', header: t.cmsCrew.roleDescription },
+                { id: 'permissions', accessor: 'permissions', header: t.cmsCrew.permissions },
+                { id: 'system', accessor: 'system', header: t.cmsCrew.systemRole },
+                {
+                  id: 'actions',
+                  accessor: 'id',
+                  header: t.cmsCrew.editRole,
+                  render: (_value, row) => {
+                    const role = roles.find((item) => item.id === row.id);
+                    if (!role) return null;
+                    return (
+                      <Flex gap={1}>
+                        <Button
+                          size="sm"
+                          variant={editingRoleId === role.id ? 'ink' : 'outline'}
+                          onClick={() => startEditRole(role)}
+                        >
+                          {t.cmsCrew.editRole}
+                        </Button>
+                        {role.system ? null : (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => void removeRole(role)}
+                            disabled={saving}
+                          >
+                            {t.cmsCrew.deleteRole}
+                          </Button>
+                        )}
+                      </Flex>
+                    );
+                  },
+                },
+              ]}
+            />
           </Card>
         </div>
       </Flex>

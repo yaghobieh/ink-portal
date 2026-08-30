@@ -33,7 +33,7 @@ export const completeCmsChat = async (
   token: string,
   prompt: string,
 ): Promise<CmsChatCompleteResult> => {
-  if (!INK_API_URL || !token) {
+  if (!token) {
     return { ok: false, text: '', status: 0 };
   }
   const response = await fetch(`${INK_API_URL}${AI_COMPLETE_PATH}`, {

@@ -11,16 +11,17 @@ import {
   useBear,
 } from '@forgedevstack/bear';
 import { PluginCatalogRow } from '@components/PluginCatalogRow';
+import { fetchPluginCatalog } from '@sdk/modules/plugins';
+import { fetchVersionInfo, type VersionInfo } from '@sdk/modules/version';
+import type { InkPluginCatalogEntry } from '@const/plugins.const';
 import { useAuth, useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import type { Locale } from '@i18n/types';
 import {
   CHANGELOG_ENTRIES,
   DOCS_INDEX,
-  ENABLE_PUBLIC_LOGIN,
+  EMPTY_STRING,
   GITHUB_URL,
-  INK_PLUGIN_CATALOG,
-  INK_VERSION,
   LOGO_SRC,
   NAV_LINKS,
   NPM_URL,
@@ -40,6 +41,9 @@ const CHANGELOG_PREVIEW_COUNT = 4;
 const LOCALE_META: Record<Locale, { flag: string; label: string }> = {
   en: { flag: '\u{1F1FA}\u{1F1F8}', label: 'English' },
   es: { flag: '\u{1F1EA}\u{1F1F8}', label: 'Español' },
+  he: { flag: '\u{1F1EE}\u{1F1F1}', label: 'עברית' },
+  fr: { flag: '\u{1F1EB}\u{1F1F7}', label: 'Français' },
+  de: { flag: '\u{1F1E9}\u{1F1EA}', label: 'Deutsch' },
 };
 
 export const Navbar: FC = () => {
@@ -53,7 +57,18 @@ export const Navbar: FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
+  const [plugins, setPlugins] = useState<InkPluginCatalogEntry[]>([]);
+  const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null);
   const isDark = mode === 'dark';
+  const inkVersion = versionInfo?.ink || versionInfo?.version || EMPTY_STRING;
+
+  useEffect(() => {
+    void fetchPluginCatalog().then((items) => setPlugins(items));
+  }, []);
+
+  useEffect(() => {
+    void fetchVersionInfo().then((info) => setVersionInfo(info));
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -92,7 +107,9 @@ export const Navbar: FC = () => {
     onClick: () => setLocale(loc),
   }));
 
-  const latestChangelog = CHANGELOG_ENTRIES.find((entry) => entry.version.startsWith(INK_VERSION))
+  const latestChangelog = CHANGELOG_ENTRIES.find((entry) =>
+    inkVersion ? entry.version.startsWith(inkVersion) : false,
+  )
     ?? CHANGELOG_ENTRIES[0];
   const changelogItems = [
     ...(latestChangelog?.items.slice(0, CHANGELOG_PREVIEW_COUNT).map((item, index) => ({
@@ -108,10 +125,10 @@ export const Navbar: FC = () => {
   ];
 
   const pluginItems = [
-    ...INK_PLUGIN_CATALOG.map((plugin) => ({
+    ...plugins.map((plugin) => ({
       key: plugin.id,
       label: plugin.packageName,
-      description: t.nav.pluginPackInk,
+      description: plugin.description || t.nav.pluginPackInk,
       onClick: () => window.location.assign(docsPath('plugins')),
     })),
     {
@@ -158,7 +175,7 @@ export const Navbar: FC = () => {
             trigger={
               <button type="button" className="ink-version-trigger hidden md:inline-flex">
                 <Badge variant="info" className="text-xs font-mono">
-                  v{INK_VERSION}
+                  v{inkVersion}
                 </Badge>
               </button>
             }
@@ -201,7 +218,7 @@ export const Navbar: FC = () => {
                   }
                   header={
                     <div className="ink-plugins-dropdown__header ink-plugins-dropdown__stack">
-                      {INK_PLUGIN_CATALOG.map((plugin) => (
+                      {plugins.map((plugin) => (
                         <PluginCatalogRow
                           key={plugin.id}
                           name={plugin.packageName}
@@ -305,7 +322,14 @@ export const Navbar: FC = () => {
             className="ink-navbar__icon-btn"
             icon={isDark ? <BearIcons.SunIcon size="sm" /> : <BearIcons.MoonIcon size="sm" />}
           />
-          {ENABLE_PUBLIC_LOGIN && isAuthenticated ? (
+          {false && !isAuthenticated ? (
+            <Link to={ROUTES.LOGIN_PUBLIC} className="hidden sm:inline-flex">
+              <Button size="sm" variant="inkOutline">
+                {t.nav.login}
+              </Button>
+            </Link>
+          ) : null}
+          {false && isAuthenticated ? (
             <Link to={ROUTES.CMS} className="hidden sm:inline-flex">
               <Button size="sm" variant="inkOutline">
                 {accountLabel}
@@ -367,7 +391,7 @@ export const Navbar: FC = () => {
                   <Typography variant="body2" className="block px-3 py-2 font-semibold">
                     {t.nav.plugins}
                   </Typography>
-                  {INK_PLUGIN_CATALOG.map((plugin) => (
+                  {plugins.map((plugin) => (
                     <div key={plugin.id} className="px-3 py-2">
                       <PluginCatalogRow
                         name={plugin.packageName}
@@ -395,7 +419,14 @@ export const Navbar: FC = () => {
               </Link>
             );
           })}
-          {ENABLE_PUBLIC_LOGIN && isAuthenticated ? (
+          {false && !isAuthenticated ? (
+            <Link to={ROUTES.LOGIN_PUBLIC} onClick={() => setMenuOpen(false)}>
+              <Typography variant="body2" className="block px-3 py-2 rounded-lg ink-nav-mobile-link">
+                {t.nav.login}
+              </Typography>
+            </Link>
+          ) : null}
+          {false && isAuthenticated ? (
             <Link to={ROUTES.CMS} onClick={() => setMenuOpen(false)}>
               <Typography variant="body2" className="block px-3 py-2 rounded-lg ink-nav-mobile-link">
                 {accountLabel}

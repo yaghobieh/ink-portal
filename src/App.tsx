@@ -1,7 +1,7 @@
 import { CompassProvider, Routes } from '@forgedevstack/forge-compass/react';
 import { ThemeSync } from '@components/ThemeSync';
 import { AuthProvider, InkPremiumProvider } from '@hooks/index';
-import { ENABLE_LAB, ROUTES } from '@const/index';
+import { ROUTES } from '@const/index';
 import { Home } from '@pages/Home';
 import { Docs } from '@pages/Docs';
 import { Playground } from '@pages/Playground';
@@ -78,7 +78,7 @@ const routes = [
   { path: ROUTES.CMS_NOTIFICATIONS, name: 'cms-notifications', component: withCmsGate(NotificationsPages) },
   { path: ROUTES.CMS_TASKS, name: 'cms-tasks', component: withCmsGate(TasksPages) },
   { path: ROUTES.LOGIN_PUBLIC, name: 'login', component: Login },
-  ...(ENABLE_LAB ? [{ path: ROUTES.LAB, name: 'lab', component: Lab }] : []),
+  ...(false ? [{ path: ROUTES.LAB, name: 'lab', component: Lab }] : []),
   { path: '*', name: 'catch-all', component: NotFound },
 ];
 

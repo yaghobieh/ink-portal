@@ -3,7 +3,6 @@ import type { CrewPermission, CrewRole, CrewUser } from '../CrewPages/CrewPages.
 import {
   TASK_BOARD_STORAGE_KEY,
   TASK_DEFAULT_TAGS,
-  TASK_KIND,
   TASK_PERMISSION,
   TASK_STATUS,
   TASK_STORAGE_KEY,
@@ -13,85 +12,7 @@ import type { CmsTask, TaskBoardConfig, TaskCreateDraft, TaskStatusConfig } from
 const createId = (prefix: string): string =>
   `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-const seedTasks = (): CmsTask[] => [
-  {
-    id: createId('task'),
-    title: 'Fix login redirect loop',
-    subtitle: EMPTY_STRING,
-    description: EMPTY_STRING,
-    tags: [TASK_KIND.BUG],
-    agentIds: [],
-    status: TASK_STATUS.TODO,
-    fieldValues: {},
-    movedAt: new Date().toISOString(),
-  },
-  {
-    id: createId('task'),
-    title: 'Write onboarding docs',
-    subtitle: EMPTY_STRING,
-    description: EMPTY_STRING,
-    tags: [TASK_KIND.CHORE],
-    agentIds: [],
-    status: TASK_STATUS.TODO,
-    fieldValues: {},
-    movedAt: new Date().toISOString(),
-  },
-  {
-    id: createId('task'),
-    title: 'Design empty states for Store grid',
-    subtitle: EMPTY_STRING,
-    description: EMPTY_STRING,
-    tags: [TASK_KIND.FEATURE],
-    agentIds: [],
-    status: TASK_STATUS.TODO,
-    fieldValues: {},
-    movedAt: new Date().toISOString(),
-  },
-  {
-    id: createId('task'),
-    title: 'Wire up Stage inspector API',
-    subtitle: EMPTY_STRING,
-    description: EMPTY_STRING,
-    tags: [TASK_KIND.FEATURE],
-    agentIds: [],
-    status: TASK_STATUS.DOING,
-    fieldValues: {},
-    movedAt: new Date().toISOString(),
-  },
-  {
-    id: createId('task'),
-    title: 'Extension marketplace filters',
-    subtitle: EMPTY_STRING,
-    description: EMPTY_STRING,
-    tags: [TASK_KIND.FEATURE],
-    agentIds: [],
-    status: TASK_STATUS.DOING,
-    fieldValues: {},
-    movedAt: new Date().toISOString(),
-  },
-  {
-    id: createId('task'),
-    title: 'Notifications popover',
-    subtitle: EMPTY_STRING,
-    description: EMPTY_STRING,
-    tags: [TASK_KIND.FEATURE],
-    agentIds: [],
-    status: TASK_STATUS.DONE,
-    fieldValues: {},
-    movedAt: new Date().toISOString(),
-  },
-  {
-    id: createId('task'),
-    title: 'Fix table row hover state',
-    subtitle: EMPTY_STRING,
-    description: EMPTY_STRING,
-    tags: [TASK_KIND.CHORE],
-    agentIds: [],
-    status: TASK_STATUS.DONE,
-    fieldValues: {},
-    movedAt: new Date().toISOString(),
-  },
-];
+const seedTasks = (): CmsTask[] => [];
 
 const readStringArray = (value: unknown): string[] => {
   if (!Array.isArray(value)) return [];
@@ -117,7 +38,12 @@ const normalizeTask = (item: unknown): CmsTask | null => {
     description: typeof raw.description === 'string' ? raw.description : EMPTY_STRING,
     tags: readStringArray(raw.tags),
     agentIds,
-    status: typeof raw.status === 'string' ? raw.status : TASK_STATUS.TODO,
+    status:
+      raw.status === 'doing'
+        ? TASK_STATUS.IN_PROGRESS
+        : typeof raw.status === 'string'
+          ? raw.status
+          : TASK_STATUS.TODO,
     fieldValues,
     movedAt: typeof raw.movedAt === 'string' ? raw.movedAt : new Date().toISOString(),
   };
@@ -125,12 +51,16 @@ const normalizeTask = (item: unknown): CmsTask | null => {
 
 export const defaultBoardConfig = (labels: {
   todo: string;
-  doing: string;
+  inProgress: string;
+  decline: string;
+  inReview: string;
   done: string;
 }): TaskBoardConfig => ({
   statuses: [
     { id: TASK_STATUS.TODO, label: labels.todo },
-    { id: TASK_STATUS.DOING, label: labels.doing },
+    { id: TASK_STATUS.IN_PROGRESS, label: labels.inProgress },
+    { id: TASK_STATUS.DECLINE, label: labels.decline },
+    { id: TASK_STATUS.IN_REVIEW, label: labels.inReview },
     { id: TASK_STATUS.DONE, label: labels.done },
   ],
   fields: [],
@@ -169,7 +99,7 @@ export const loadTasks = (): CmsTask[] => {
     const parsed = JSON.parse(raw) as unknown;
     if (!Array.isArray(parsed)) return seedTasks();
     const tasks = parsed.map(normalizeTask).filter((item): item is CmsTask => Boolean(item));
-    return tasks.length > 0 ? tasks : seedTasks();
+    return tasks;
   } catch {
     return seedTasks();
   }

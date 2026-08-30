@@ -1,4 +1,5 @@
 import { EMPTY_STRING } from '@const/index';
+import { isPlainObject, isStringValue } from '@utils';
 import type { ContentItem } from '@sdk/modules/content';
 import { CONTENT_COLLECTION_TEMPLATES } from '../ContentPages/ContentPages.const';
 import { fieldsFromPayload } from '../CastPages/CastPages.utils';
@@ -26,13 +27,11 @@ export const castValuesFromPayload = (
 ): Record<string, string> => {
   if (!payload) return {};
   const raw = payload[PAYLOAD_KEY_CAST_VALUES];
-  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
-  return Object.fromEntries(
-    Object.entries(raw as Record<string, unknown>).map(([key, value]) => [
-      key,
-      typeof value === 'string' ? value : EMPTY_STRING,
-    ]),
-  );
+  if (!isPlainObject(raw)) return {};
+  return Object.entries(raw).reduce<Record<string, string>>((acc, [key, value]) => {
+    acc[key] = isStringValue(value) ? value : EMPTY_STRING;
+    return acc;
+  }, {});
 };
 
 export const mergeCastFields = (templateFields: CastField[], pageFields: CastField[]): CastField[] => {
@@ -53,10 +52,10 @@ export const findLinkedTemplate = (
   currentId?: string,
 ): ContentItem | undefined => {
   if (!payload) return undefined;
-  const templateRef =
-    typeof payload[PAYLOAD_KEY_TEMPLATE] === 'string' ? payload[PAYLOAD_KEY_TEMPLATE] : EMPTY_STRING;
-  const layoutRef =
-    typeof payload[PAYLOAD_KEY_LAYOUT] === 'string' ? payload[PAYLOAD_KEY_LAYOUT] : EMPTY_STRING;
+  const templateValue = payload[PAYLOAD_KEY_TEMPLATE];
+  const layoutValue = payload[PAYLOAD_KEY_LAYOUT];
+  const templateRef = isStringValue(templateValue) ? templateValue : EMPTY_STRING;
+  const layoutRef = isStringValue(layoutValue) ? layoutValue : EMPTY_STRING;
   const ref = templateRef || layoutRef;
   if (!ref) return undefined;
   return items.find((item) => {

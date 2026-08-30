@@ -21,6 +21,8 @@
       "@hooks": ["src/hooks"],
       "@hooks/*": ["src/hooks/*"],
       "@i18n/*": ["src/i18n/*"],
+      "@utils": ["src/utils"],
+      "@utils/*": ["src/utils/*"],
       "@config": ["src/config"],
       "@config/*": ["src/config/*"],
       "@sdk": ["src/sdk"],

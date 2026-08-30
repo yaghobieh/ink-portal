@@ -10,7 +10,7 @@ import {
   DOC_DEMO_TRACK,
 } from '@const/docsDemos.const';
 import type { DocDemoBlock } from '@const/docsContent.types';
-import { NUMBER_TWO, NUMBER_THREE, NUMBER_FOUR } from '@const/numbers';
+import { NUMBER_TWO, NUMBER_THREE, NUMBER_FOUR } from '@const/numbers.const';
 
 export const DOCS_JSON_INDENT = NUMBER_TWO;
 

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FC, type MouseEvent } from 'react';
 import { useNavigate } from '@forgedevstack/forge-compass/react';
 import { useNucleus } from '@forgedevstack/synapse';
 import {
+  Alert,
   AppBar,
   Avatar,
   BearIcons,
@@ -22,11 +23,16 @@ import {
   CMS_MODE_SYSTEM,
   CMS_PROFILE_EVENT,
   CMS_SITE_EVENT,
+  CMS_CHAT_PREFS_EVENT,
+  CMS_NOTIFY_PREFS_EVENT,
+  CMS_EXTENSIONS_EVENT,
+  CMS_CREW_OPEN_EVENT,
   EMPTY_STRING,
   LOGO_SRC,
   ROUTES,
   cmsBuilderPath,
 } from '@const/index';
+import { NUMBER_ONE } from '@const/numbers.const';
 import { CMS_LOGO_SIZE_PX } from '@const/numbers.const';
 import { authNucleus } from '@sdk/index';
 import { setDefaultApiErrorMode } from '@sdk/http';
@@ -35,11 +41,19 @@ import {
   loadCmsProfile,
   loadCmsSite,
   loadCmsThemeColors,
+  loadUserChatPrefs,
+  loadUserNotifyPrefs,
+  saveUserChatPrefs,
 } from '../SettingsPages';
+import { SETTINGS_CHAT_SHOW } from '../SettingsPages/SettingsPages.const';
+import { isCrewChatInstalled } from '../ExtensionsPages';
+import { playChatSound, shouldPlayChatSound } from './CmsCrewChat/cmsChatSound.utils';
 import { CmsAgentBar } from './CmsAgentBar';
 import { CmsAgentDock } from './CmsAgentDock';
 import { CmsAlerts } from './CmsAlerts';
 import { CmsChat } from './CmsChat';
+import { CmsCrewChat } from './CmsCrewChat';
+import { CmsOnlineStatus } from './CmsOnlineStatus';
 import { CmsGlowLoader } from '../CmsGlowLoader';
 import { CmsHealthDot } from './CmsHealthDot';
 import { dispatchAgentApply } from './cmsAgent.utils';
@@ -54,6 +68,8 @@ import {
   CMS_SEARCH_KEY,
   CMS_KEY_ENTER,
   CMS_SIDEBAR_COLLAPSED_WIDTH_PX,
+  CMS_CREW_PENDING_PREFIX,
+  CMS_CREW_DRAWER_OPEN,
 } from './CmsShell.const';
 import type { CmsModePreference, CmsShellProps, CmsSidebarNavItem } from './CmsShell.types';
 import {
@@ -62,12 +78,15 @@ import {
   loadSidebarCollapsed,
   loadSidebarWidth,
   resolveCmsMode,
+  resolveSidebarNavItems,
   saveCmsModePreference,
   saveSidebarCollapsed,
   saveSidebarWidth,
 } from './CmsShell.utils';
 import { ErrorHost } from './ErrorHost';
 import { useCmsLive } from './CmsLiveProvider';
+import { CMS_LIVE_LOCAL_ROOM_PREFIX } from './CmsLive.const';
+import { findDirectRoom, findServerMatch } from './CmsLive.utils';
 
 const initialsFromName = (name: string): string => {
   const trimmed = name.trim();
@@ -96,8 +115,9 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
     loadCmsModePreference(),
   );
   const [chatOpen, setChatOpen] = useState(false);
+  const [crewRoomId, setCrewRoomId] = useState<string | null>(null);
   const [flyoutId, setFlyoutId] = useState<string | null>(null);
-  const { onlineUsers } = useCmsLive();
+  const { onlineUsers, rooms, createRoom, sendChat, selfId, tasks } = useCmsLive();
   const [site, setSite] = useState(() => loadCmsSite());
   const [searchQuery, setSearchQuery] = useState(EMPTY_STRING);
   const resolvedMode = resolveCmsMode(modePreference);
@@ -145,17 +165,92 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
 
   const [profile, setProfile] = useState(() => loadCmsProfile());
   const displayUser = user ?? providerUser;
+  const currentUserId = selfId || displayUser?.id || EMPTY_STRING;
+  const prefsUserKey = displayUser?.email || displayUser?.username || EMPTY_STRING;
+  const [chatPrefs, setChatPrefs] = useState(() => loadUserChatPrefs(prefsUserKey));
+  const [notifyPrefs, setNotifyPrefs] = useState(() => loadUserNotifyPrefs(prefsUserKey));
+  const [chatToast, setChatToast] = useState<{ text: string; roomId: string } | null>(null);
+  const lastChatRef = useRef<Record<string, string>>({});
+  const chatPrimedRef = useRef(false);
+  const [chatInstalled, setChatInstalled] = useState(() => isCrewChatInstalled());
+  const canCrewChat = chatInstalled;
+
+  useEffect(() => {
+    setChatPrefs(loadUserChatPrefs(prefsUserKey));
+    setNotifyPrefs(loadUserNotifyPrefs(prefsUserKey));
+  }, [prefsUserKey]);
+
+  useEffect(() => {
+    const onExtensions = () => setChatInstalled(isCrewChatInstalled());
+    const onCrewOpen = () => {
+      setChatInstalled(true);
+      setCrewRoomId((current) => current ?? CMS_CREW_DRAWER_OPEN);
+    };
+    window.addEventListener(CMS_EXTENSIONS_EVENT, onExtensions);
+    window.addEventListener(CMS_CREW_OPEN_EVENT, onCrewOpen);
+    return () => {
+      window.removeEventListener(CMS_EXTENSIONS_EVENT, onExtensions);
+      window.removeEventListener(CMS_CREW_OPEN_EVENT, onCrewOpen);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!canCrewChat) return;
+    rooms.forEach((room) => {
+      const newest = room.messages[room.messages.length - NUMBER_ONE];
+      if (!newest) return;
+      const previous = lastChatRef.current[room.id];
+      lastChatRef.current[room.id] = newest.id;
+      if (!chatPrimedRef.current) return;
+      if (newest.userId === currentUserId || previous === newest.id) return;
+      const viewing = crewRoomId === room.id;
+      if (viewing) return;
+      if (
+        chatPrefs.show === SETTINGS_CHAT_SHOW.SNACKBAR || chatPrefs.show === SETTINGS_CHAT_SHOW.BOTH
+      ) {
+        setChatToast({
+          text: notifyPrefs.showPreview ? `${newest.name}: ${newest.body}` : newest.name,
+          roomId: room.id,
+        });
+      }
+      if (shouldPlayChatSound(chatPrefs, room)) {
+        playChatSound();
+      }
+    });
+    chatPrimedRef.current = true;
+  }, [rooms, canCrewChat, chatPrefs, notifyPrefs, crewRoomId, currentUserId]);
+
+  useEffect(() => {
+    if (!crewRoomId) return;
+    if (crewRoomId.startsWith(CMS_CREW_PENDING_PREFIX)) {
+      const otherId = crewRoomId.slice(CMS_CREW_PENDING_PREFIX.length);
+      const found = findDirectRoom(rooms, currentUserId, otherId);
+      if (found) setCrewRoomId(found.id);
+      return;
+    }
+    if (crewRoomId.startsWith(CMS_LIVE_LOCAL_ROOM_PREFIX)) {
+      const local = rooms.find((room) => room.id === crewRoomId);
+      const found = local ? findServerMatch(rooms, local) : undefined;
+      if (found) setCrewRoomId(found.id);
+    }
+  }, [rooms, crewRoomId, currentUserId]);
 
   useEffect(() => {
     const onProfile = () => setProfile(loadCmsProfile());
     const onSite = () => setSite(loadCmsSite());
+    const onChatPrefs = () => setChatPrefs(loadUserChatPrefs(prefsUserKey));
+    const onNotifyPrefs = () => setNotifyPrefs(loadUserNotifyPrefs(prefsUserKey));
     window.addEventListener(CMS_PROFILE_EVENT, onProfile);
     window.addEventListener(CMS_SITE_EVENT, onSite);
+    window.addEventListener(CMS_CHAT_PREFS_EVENT, onChatPrefs);
+    window.addEventListener(CMS_NOTIFY_PREFS_EVENT, onNotifyPrefs);
     return () => {
       window.removeEventListener(CMS_PROFILE_EVENT, onProfile);
       window.removeEventListener(CMS_SITE_EVENT, onSite);
+      window.removeEventListener(CMS_CHAT_PREFS_EVENT, onChatPrefs);
+      window.removeEventListener(CMS_NOTIFY_PREFS_EVENT, onNotifyPrefs);
     };
-  }, []);
+  }, [prefsUserKey]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -221,10 +316,10 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
       href: CMS_NAV_ROUTES[CMS_NAV_IDS.DASHBOARD],
     },
     {
-      id: CMS_NAV_IDS.AI_USAGE,
-      label: t.cmsShell.aiUsage,
+      id: CMS_NAV_IDS.PLANS,
+      label: t.cmsShell.plans,
       icon: <BearIcons.BarChartIcon size={CMS_ICON_SIZE} />,
-      href: CMS_NAV_ROUTES[CMS_NAV_IDS.AI_USAGE],
+      href: CMS_NAV_ROUTES[CMS_NAV_IDS.PLANS],
     },
     {
       id: CMS_NAV_IDS.PAGES,
@@ -335,13 +430,10 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
       children: generalChildren,
     },
   ].filter((group) => (group.children?.length ?? 0) > 0);
-  const sidebarItems: CmsSidebarNavItem[] = collapsed
-    ? sidebarGroups.map((group) => ({
-        id: group.id,
-        label: group.label,
-        icon: group.icon,
-      }))
-    : sidebarGroups;
+  const sidebarItems: CmsSidebarNavItem[] = resolveSidebarNavItems({
+    groups: sidebarGroups,
+    collapsed,
+  });
   const leafItems = sidebarGroups.flatMap((group) => group.children ?? []);
   const flyoutGroup = sidebarGroups.find((group) => group.id === flyoutId);
 
@@ -408,9 +500,21 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
     navigate(cmsBuilderPath({ layout: templateId }));
   };
 
-  const onAgentCreate = () => {
-    navigate(ROUTES.CMS_CONTENT);
+  const openCrewWithUser = (id: string) => {
+    const roomId = createRoom([id, currentUserId]);
+    setCrewRoomId(roomId || `${CMS_CREW_PENDING_PREFIX}${id}`);
   };
+
+  const openCrewInbox = () => {
+    setCrewRoomId((current) => (current ? null : CMS_CREW_DRAWER_OPEN));
+  };
+
+  const crewUnread = rooms.reduce((total, room) => {
+    const newest = room.messages[room.messages.length - NUMBER_ONE];
+    if (!newest || newest.userId === currentUserId) return total;
+    if (crewRoomId === room.id) return total;
+    return total + 1;
+  }, 0);
 
   const showAgentBar =
     site.showAgent &&
@@ -431,6 +535,7 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
       data-color-mode={resolvedMode}
     >
       <div className="ink-cms__rail">
+      <div className="ink-cms__rail-stack">
       <Sidebar
         items={sidebarItems}
         activeItemId={activeNavId}
@@ -462,38 +567,32 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
             </Flex>
           </Flex>
         }
-        footer={
+      />
+      <div className="ink-cms__rail-footer">
           <Flex direction="column" gap={2} className="ink-cms__footer">
-            {collapsed ? null : (
-              <Flex direction="column" gap={1}>
-                <Typography variant="caption" className="ink-cms__muted mb-0">
-                  {t.cmsShell.online} · {onlineUsers.length}
+            <Flex align="center" gap={2} className="ink-cms__footer-user">
+              <span className="ink-cms__avatar-swatch">
+                <Avatar src={avatarSrc} initials={avatarInitials} size="sm" />
+              </span>
+              {collapsed ? null : (
+                <Typography variant="caption" className="ink-cms__footer-name mb-0">
+                  {displayName}
                 </Typography>
-                <Flex gap={1} className="flex-wrap">
-                  {onlineUsers.map((person) => (
-                    <Avatar
-                      key={person.id}
-                      initials={initialsFromName(person.name)}
-                      size="sm"
-                    />
-                  ))}
-                </Flex>
-              </Flex>
-            )}
-            <span className="ink-cms__avatar-swatch">
-              <Avatar src={avatarSrc} initials={avatarInitials} size="sm" />
-            </span>
+              )}
+            </Flex>
             <Button
               size="sm"
               variant="outline"
+              className="ink-cms__logout"
               icon={<BearIcons.LogoutIcon size={CMS_ICON_SIZE} />}
+              aria-label={t.cmsShell.signOut}
               onClick={onSignOut}
             >
-              {t.cmsShell.signOut}
+              {collapsed ? EMPTY_STRING : t.cmsShell.signOut}
             </Button>
           </Flex>
-        }
-      />
+      </div>
+      </div>
       {collapsed ? null : (
         <button
           type="button"
@@ -530,10 +629,11 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
             className="ink-cms__appbar"
             leftContent={
               <div className="ink-cms__search-wrap">
-                <span className="ink-cms__search-icon" aria-hidden="true" />
                 <Input
                   id={CMS_SEARCH_INPUT_ID}
                   size="sm"
+                  fullWidth
+                  prefix={<BearIcons.SearchIcon size={CMS_ICON_SIZE} />}
                   placeholder={t.cmsShell.search}
                   className="ink-cms__search"
                   aria-label={t.cmsShell.search}
@@ -577,6 +677,11 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
             rightContent={
               <Flex align="center" gap={3}>
                 <CmsHealthDot />
+                <CmsOnlineStatus
+                  users={onlineUsers}
+                  currentUserId={currentUserId}
+                  onOpenUser={openCrewWithUser}
+                />
                 <Button
                   variant="ghost"
                   size="sm"
@@ -593,13 +698,6 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
                   onClick={() =>
                     onThemeSelect(resolvedMode === CMS_MODE_DARK ? CMS_MODE_LIGHT : CMS_MODE_DARK)
                   }
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  icon={<BearIcons.ChatIcon size={CMS_ICON_SIZE} />}
-                  aria-label={t.cmsShell.chat}
-                  onClick={() => setChatOpen(true)}
                 />
                 <CmsAlerts onOpen={() => undefined} />
                 <Dropdown
@@ -670,20 +768,85 @@ export const CmsShell: FC<CmsShellProps> = (props) => {
           />
         ) : null}
         <ErrorHost />
+        {chatToast ? (
+          <div className="ink-cms-error-toast">
+            <Alert
+              severity="info"
+              variant="filled"
+              closable
+              onClose={() => setChatToast(null)}
+              title={t.cmsShell.chatSnackbar}
+            >
+              <button
+                type="button"
+                className="ink-cms-error-toast__open"
+                onClick={() => {
+                  setCrewRoomId(chatToast.roomId);
+                  setChatToast(null);
+                }}
+              >
+                {chatToast.text}
+              </button>
+            </Alert>
+          </div>
+        ) : null}
         <main className="ink-cms__content fade-in">{children}</main>
       </div>
-      {site.showAgent ? (
-        <CmsAgentDock
-          side={site.chatSide}
-          onApply={onAgentApply}
-          onCreate={onAgentCreate}
-        />
-      ) : null}
+      <CmsAgentDock
+        side={site.chatSide}
+        onOpenAi={() => setChatOpen(true)}
+        onOpenCrew={openCrewInbox}
+        crewUnread={crewUnread}
+        crewOpen={Boolean(crewRoomId)}
+        crewPanel={
+          <CmsCrewChat
+            isOpen={Boolean(crewRoomId)}
+            onClose={() => setCrewRoomId(null)}
+            room={rooms.find((item) => item.id === crewRoomId) ?? null}
+            rooms={rooms}
+            onlineUsers={onlineUsers}
+            currentUserId={currentUserId}
+            token={activeToken}
+            tasks={tasks ?? []}
+            onSend={sendChat}
+            onOpenUser={openCrewWithUser}
+            onOpenRoom={(id) => setCrewRoomId(id)}
+            onEnsureChannel={(tag, extraIds) =>
+              createRoom([currentUserId, ...(extraIds ?? [])], tag)
+            }
+            side={site.chatSide}
+            color={chatPrefs.color}
+            roomSoundOn={
+              Boolean(crewRoomId) &&
+              crewRoomId !== CMS_CREW_DRAWER_OPEN &&
+              chatPrefs.roomSounds[crewRoomId ?? EMPTY_STRING] !== false
+            }
+            onToggleRoomSound={() => {
+              if (!crewRoomId || !prefsUserKey) return;
+              const muted = chatPrefs.roomSounds[crewRoomId] === false;
+              const roomSounds = { ...chatPrefs.roomSounds };
+              if (muted) {
+                delete roomSounds[crewRoomId];
+              } else {
+                roomSounds[crewRoomId] = false;
+              }
+              const next = { ...chatPrefs, roomSounds };
+              setChatPrefs(next);
+              saveUserChatPrefs(prefsUserKey, next);
+            }}
+          />
+        }
+      />
       <CmsChat
         isOpen={chatOpen}
         onClose={() => setChatOpen(false)}
         token={activeToken}
         side={site.chatSide}
+        crewAvailable={canCrewChat}
+        onOpenCrew={() => {
+          setChatOpen(false);
+          setCrewRoomId(CMS_CREW_DRAWER_OPEN);
+        }}
       />
     </div>
   );

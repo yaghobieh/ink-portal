@@ -1,12 +1,17 @@
 import { BEAR_WIDGET_CATALOG } from '../ContentEdit/ContentEdit.const';
+import { loadCustomWidgets } from './customWidgets.utils';
 import {
+  BUILDER_CANVAS_EMPTY,
   BUILDER_CANVAS_KEY,
+  BUILDER_LAYER_DEPTH_STEP,
+  BUILDER_LAYER_ROOT_DEPTH,
   CANVAS_KIND,
   DEFAULT_FORM_HTML,
   DEFAULT_INK_HTML,
   EMPTY_CANVAS_TREE,
+  LAYOUT_BLOCKS,
 } from './BuilderPages.const';
-import type { CanvasKind, CanvasNode } from './BuilderPages.types';
+import type { CanvasKind, CanvasNode, CanvasNodeStyles, PageCode } from './BuilderPages.types';
 
 const createId = (): string => `n-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -27,7 +32,9 @@ export const createLayoutNode = (kind: CanvasKind, label: string): CanvasNode =>
 });
 
 export const createWidgetNode = (widgetId: string): CanvasNode | null => {
-  const widget = BEAR_WIDGET_CATALOG.find((entry) => entry.id === widgetId);
+  const widget =
+    BEAR_WIDGET_CATALOG.find((entry) => entry.id === widgetId) ||
+    loadCustomWidgets().find((entry) => entry.id === widgetId);
   if (!widget) return null;
   return {
     id: createId(),
@@ -109,9 +116,64 @@ export const findNode = (nodes: CanvasNode[], nodeId: string): CanvasNode | null
 
 export const isContainerKind = (kind: CanvasKind): boolean =>
   kind === CANVAS_KIND.SECTION ||
+  kind === CANVAS_KIND.COLUMN ||
   kind === CANVAS_KIND.FLEX ||
   kind === CANVAS_KIND.GRID ||
   kind === CANVAS_KIND.MASONRY;
+
+export const updateNodeLabel = (nodes: CanvasNode[], nodeId: string, label: string): CanvasNode[] =>
+  mapTree(nodes, (current) => current.id === nodeId, (current) => [{ ...current, label }]);
+
+export const updateNodeStyles = (
+  nodes: CanvasNode[],
+  nodeId: string,
+  styles: CanvasNodeStyles,
+): CanvasNode[] =>
+  mapTree(nodes, (current) => current.id === nodeId, (current) => [{ ...current, styles }]);
+
+export const updateNodeCss = (nodes: CanvasNode[], nodeId: string, css: string): CanvasNode[] =>
+  mapTree(nodes, (current) => current.id === nodeId, (current) => [{ ...current, css }]);
+
+export const updateNodeJs = (nodes: CanvasNode[], nodeId: string, js: string): CanvasNode[] =>
+  mapTree(nodes, (current) => current.id === nodeId, (current) => [{ ...current, js }]);
+
+export const createColumnsSection = (columnCount: number): CanvasNode => {
+  const columns: CanvasNode[] = Array.from({ length: columnCount }, () =>
+    createLayoutNode(CANVAS_KIND.COLUMN, 'Column'),
+  );
+  return {
+    id: createId(),
+    kind: CANVAS_KIND.SECTION,
+    label: 'Section',
+    children: columns,
+  };
+};
+
+export type BuilderLayerRow = {
+  id: string;
+  label: string;
+  kind: CanvasKind;
+  depth: number;
+};
+
+export const flattenLayers = (
+  nodes: CanvasNode[],
+  depth = BUILDER_LAYER_ROOT_DEPTH,
+): BuilderLayerRow[] =>
+  nodes.flatMap((node) => [
+    { id: node.id, label: node.label, kind: node.kind, depth },
+    ...flattenLayers(node.children, depth + BUILDER_LAYER_DEPTH_STEP),
+  ]);
+
+export const nodeStyleObject = (styles?: CanvasNodeStyles): Record<string, string> => {
+  if (!styles) return {};
+  const next: Record<string, string> = {};
+  (Object.keys(styles) as Array<keyof CanvasNodeStyles>).forEach((key) => {
+    const value = styles[key];
+    if (value) next[key] = value;
+  });
+  return next;
+};
 
 export const loadBuilderTree = (): CanvasNode[] => {
   try {
@@ -157,7 +219,27 @@ export const canvasFromPayload = (payload: Record<string, unknown> | undefined):
 export const withCanvasPayload = (
   payload: Record<string, unknown>,
   tree: CanvasNode[],
+  code?: PageCode,
 ): Record<string, unknown> => ({
   ...payload,
   canvas: tree,
+  code: code ?? payload.code,
 });
+
+export const codeFromPayload = (payload: Record<string, unknown> | undefined): PageCode => {
+  if (!payload) {
+    return { css: BUILDER_CANVAS_EMPTY, js: BUILDER_CANVAS_EMPTY };
+  }
+  const code = payload.code;
+  if (!code || typeof code !== 'object') {
+    return { css: BUILDER_CANVAS_EMPTY, js: BUILDER_CANVAS_EMPTY };
+  }
+  const record = code as Record<string, unknown>;
+  return {
+    css: typeof record.css === 'string' ? record.css : BUILDER_CANVAS_EMPTY,
+    js: typeof record.js === 'string' ? record.js : BUILDER_CANVAS_EMPTY,
+  };
+};
+
+export const layoutBlockLabel = (kind: CanvasKind): string =>
+  LAYOUT_BLOCKS.find((block) => block.id === kind)?.label ?? BUILDER_CANVAS_EMPTY;

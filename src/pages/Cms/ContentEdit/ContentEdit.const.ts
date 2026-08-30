@@ -1,222 +1,280 @@
-import { DATA_BEAR_WIDGET_ATTR } from '@const/strings.const';
+import {
+  HTML_TAG_H2,
+  HTML_TAG_P,
+  HERO_IMG_SRC,
+} from '@const/strings.const';
+import {
+  NUMBER_FOUR_HUNDRED_TWENTY,
+  NUMBER_THREE_HUNDRED_EIGHTY,
+  NUMBER_THREE_HUNDRED_TWENTY,
+  NUMBER_TWELVE,
+} from '@const/numbers.const';
+import { bearWidgetHtml } from './bearWidget.utils';
 import type { BearWidgetDef } from './ContentEdit.types';
 
-export const CONTENT_EDIT_EDITOR_MIN_HEIGHT_PX = 420;
-export const CONTENT_EDIT_DRAWER_WIDTH_PX = 380;
-export const CONTENT_EDIT_PREVIEW_MIN_HEIGHT_PX = 320;
+export const CONTENT_EDIT_EDITOR_MIN_HEIGHT_PX = NUMBER_FOUR_HUNDRED_TWENTY;
+export const CONTENT_EDIT_DRAWER_WIDTH_PX = NUMBER_THREE_HUNDRED_EIGHTY;
+export const CONTENT_EDIT_PREVIEW_MIN_HEIGHT_PX = NUMBER_THREE_HUNDRED_TWENTY;
+
+export const BEAR_WIDGET_COMPONENT = {
+  TYPOGRAPHY: 'Typography',
+  CARD: 'Card',
+  FLEX: 'Flex',
+  GRID: 'Grid',
+  BUTTON: 'Button',
+  ALERT: 'Alert',
+  BADGE: 'Badge',
+  CHIP: 'Chip',
+  AVATAR: 'Avatar',
+  DIVIDER: 'Divider',
+  INPUT: 'Input',
+  SELECT: 'Select',
+  CHECKBOX: 'Checkbox',
+  SWITCH: 'Switch',
+  TABS: 'Tabs',
+  ACCORDION: 'Accordion',
+  PROGRESS: 'Progress',
+  RATING: 'Rating',
+  SPINNER: 'Spinner',
+  TABLE: 'Table',
+  CAROUSEL: 'Carousel',
+  IMAGE: 'Image',
+  QUOTE: 'Quote',
+  STAT: 'Stat',
+  CAST: 'Cast',
+  CODE_EDITOR: 'CodeEditor',
+  DRAWER: 'Drawer',
+  MODAL: 'Modal',
+  DROPDOWN: 'Dropdown',
+  FILE_UPLOAD: 'FileUpload',
+  COLOR_PICKER: 'ColorPicker',
+  DATE_PICKER: 'DatePicker',
+  PAGINATION: 'Pagination',
+  APP_BAR: 'AppBar',
+  GRID_TABLE: 'GridTable',
+} as const;
 
 export const BEAR_WIDGET_CATALOG: readonly BearWidgetDef[] = [
   {
     id: 'typography',
-    label: 'Typography',
-    bearComponent: 'Typography',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Typography"><strong>Heading</strong> — body text block.</p>`,
+    label: BEAR_WIDGET_COMPONENT.TYPOGRAPHY,
+    bearComponent: BEAR_WIDGET_COMPONENT.TYPOGRAPHY,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.TYPOGRAPHY, '<strong>Heading</strong> — body text block.'),
   },
   {
     id: 'card',
-    label: 'Card',
-    bearComponent: 'Card',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Card" class="ink-cms-widget-card"><p><strong>Card</strong></p><p>Card body content.</p></div>`,
+    label: BEAR_WIDGET_COMPONENT.CARD,
+    bearComponent: BEAR_WIDGET_COMPONENT.CARD,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.CARD, '<p><strong>Card</strong></p><p>Card body content.</p>'),
   },
   {
     id: 'flex',
-    label: 'Flex',
-    bearComponent: 'Flex',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Flex" class="ink-cms-widget-flex"><p>Flex item A</p><p>Flex item B</p></div>`,
+    label: BEAR_WIDGET_COMPONENT.FLEX,
+    bearComponent: BEAR_WIDGET_COMPONENT.FLEX,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.FLEX, '<p>Flex item A</p><p>Flex item B</p>'),
   },
   {
     id: 'grid',
-    label: 'Grid',
-    bearComponent: 'Grid',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Grid" class="ink-cms-widget-grid-block"><p>Grid A</p><p>Grid B</p><p>Grid C</p></div>`,
+    label: BEAR_WIDGET_COMPONENT.GRID,
+    bearComponent: BEAR_WIDGET_COMPONENT.GRID,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.GRID, '<p>Grid A</p><p>Grid B</p><p>Grid C</p>'),
   },
   {
     id: 'button',
-    label: 'Button',
-    bearComponent: 'Button',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Button"><a href="#">Button</a></p>`,
+    label: BEAR_WIDGET_COMPONENT.BUTTON,
+    bearComponent: BEAR_WIDGET_COMPONENT.BUTTON,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.BUTTON, '<a href="#">Button</a>'),
   },
   {
     id: 'alert',
-    label: 'Alert',
-    bearComponent: 'Alert',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Alert" class="ink-cms-widget-alert" role="alert"><strong class="ink-cms-widget-alert__title">Alert</strong><p class="ink-cms-widget-alert__body">Important notice.</p></div>`,
+    label: BEAR_WIDGET_COMPONENT.ALERT,
+    bearComponent: BEAR_WIDGET_COMPONENT.ALERT,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.ALERT, '<strong>Alert</strong><p>Important notice.</p>'),
   },
   {
     id: 'badge',
-    label: 'Badge',
-    bearComponent: 'Badge',
-    html: `<p><span ${DATA_BEAR_WIDGET_ATTR}="Badge"><strong>Badge</strong></span></p>`,
+    label: BEAR_WIDGET_COMPONENT.BADGE,
+    bearComponent: BEAR_WIDGET_COMPONENT.BADGE,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.BADGE, '<strong>Badge</strong>'),
   },
   {
     id: 'chip',
-    label: 'Chip',
-    bearComponent: 'Chip',
-    html: `<p><span ${DATA_BEAR_WIDGET_ATTR}="Chip" class="ink-cms-widget-chip-token">Chip</span></p>`,
+    label: BEAR_WIDGET_COMPONENT.CHIP,
+    bearComponent: BEAR_WIDGET_COMPONENT.CHIP,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.CHIP, 'Chip'),
   },
   {
     id: 'avatar',
-    label: 'Avatar',
-    bearComponent: 'Avatar',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Avatar" class="ink-cms-widget-avatar">YA</p>`,
+    label: BEAR_WIDGET_COMPONENT.AVATAR,
+    bearComponent: BEAR_WIDGET_COMPONENT.AVATAR,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.AVATAR, 'YA'),
   },
   {
     id: 'divider',
-    label: 'Divider',
-    bearComponent: 'Divider',
-    html: `<hr ${DATA_BEAR_WIDGET_ATTR}="Divider" />`,
+    label: BEAR_WIDGET_COMPONENT.DIVIDER,
+    bearComponent: BEAR_WIDGET_COMPONENT.DIVIDER,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.DIVIDER, ''),
   },
   {
     id: 'input',
-    label: 'Input',
-    bearComponent: 'Input',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Input"><em>[Input]</em></p>`,
+    label: BEAR_WIDGET_COMPONENT.INPUT,
+    bearComponent: BEAR_WIDGET_COMPONENT.INPUT,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.INPUT, '[Input]'),
   },
   {
     id: 'select',
-    label: 'Select',
-    bearComponent: 'Select',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Select"><em>[Select]</em></p>`,
+    label: BEAR_WIDGET_COMPONENT.SELECT,
+    bearComponent: BEAR_WIDGET_COMPONENT.SELECT,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.SELECT, '[Select]'),
   },
   {
     id: 'checkbox',
-    label: 'Checkbox',
-    bearComponent: 'Checkbox',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Checkbox"><label><input type="checkbox" /> Checkbox</label></p>`,
+    label: BEAR_WIDGET_COMPONENT.CHECKBOX,
+    bearComponent: BEAR_WIDGET_COMPONENT.CHECKBOX,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.CHECKBOX, '<label><input type="checkbox" /> Checkbox</label>'),
   },
   {
     id: 'switch',
-    label: 'Switch',
-    bearComponent: 'Switch',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Switch"><label><input type="checkbox" /> Switch</label></p>`,
+    label: BEAR_WIDGET_COMPONENT.SWITCH,
+    bearComponent: BEAR_WIDGET_COMPONENT.SWITCH,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.SWITCH, '<label><input type="checkbox" /> Switch</label>'),
   },
   {
     id: 'tabs',
-    label: 'Tabs',
-    bearComponent: 'Tabs',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Tabs" class="ink-cms-widget-tabs"><span>Tab A</span><span>Tab B</span><span>Tab C</span></div>`,
+    label: BEAR_WIDGET_COMPONENT.TABS,
+    bearComponent: BEAR_WIDGET_COMPONENT.TABS,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.TABS, '<span>Tab A</span><span>Tab B</span><span>Tab C</span>'),
   },
   {
     id: 'accordion',
-    label: 'Accordion',
-    bearComponent: 'Accordion',
-    html: `<details ${DATA_BEAR_WIDGET_ATTR}="Accordion" open><summary>Accordion</summary><p>Expandable section.</p></details>`,
+    label: BEAR_WIDGET_COMPONENT.ACCORDION,
+    bearComponent: BEAR_WIDGET_COMPONENT.ACCORDION,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.ACCORDION, '<summary>Accordion</summary><p>Expandable section.</p>'),
   },
   {
     id: 'progress',
-    label: 'Progress',
-    bearComponent: 'Progress',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Progress" class="ink-cms-widget-progress"><span style="width:40%"></span></div>`,
+    label: BEAR_WIDGET_COMPONENT.PROGRESS,
+    bearComponent: BEAR_WIDGET_COMPONENT.PROGRESS,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.PROGRESS, '<span></span>'),
   },
   {
     id: 'rating',
-    label: 'Rating',
-    bearComponent: 'Rating',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Rating">★★★★☆</p>`,
+    label: BEAR_WIDGET_COMPONENT.RATING,
+    bearComponent: BEAR_WIDGET_COMPONENT.RATING,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.RATING, '★★★★☆'),
   },
   {
     id: 'spinner',
-    label: 'Spinner',
-    bearComponent: 'Spinner',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Spinner">Loading…</p>`,
+    label: BEAR_WIDGET_COMPONENT.SPINNER,
+    bearComponent: BEAR_WIDGET_COMPONENT.SPINNER,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.SPINNER, 'Loading…'),
   },
   {
     id: 'table',
-    label: 'Table',
-    bearComponent: 'Table',
-    html: `<table ${DATA_BEAR_WIDGET_ATTR}="Table" class="ink-cms-widget-table"><thead><tr><th>Col A</th><th>Col B</th></tr></thead><tbody><tr><td>One</td><td>Two</td></tr></tbody></table>`,
+    label: BEAR_WIDGET_COMPONENT.TABLE,
+    bearComponent: BEAR_WIDGET_COMPONENT.TABLE,
+    html: bearWidgetHtml(
+      BEAR_WIDGET_COMPONENT.TABLE,
+      '<thead><tr><th>Col A</th><th>Col B</th></tr></thead><tbody><tr><td>One</td><td>Two</td></tr></tbody>',
+    ),
   },
   {
     id: 'carousel',
-    label: 'Carousel',
-    bearComponent: 'Carousel',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Carousel" class="ink-cms-widget-carousel"><div class="ink-cms-widget-carousel__track"><div>Slide 1</div><div>Slide 2</div><div>Slide 3</div></div></div>`,
+    label: BEAR_WIDGET_COMPONENT.CAROUSEL,
+    bearComponent: BEAR_WIDGET_COMPONENT.CAROUSEL,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.CAROUSEL, '<div>Slide 1</div><div>Slide 2</div><div>Slide 3</div>'),
   },
   {
     id: 'image',
-    label: 'Image',
-    bearComponent: 'Image',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Image"><img src="/ink-hero.png" alt="Image" /></p>`,
+    label: BEAR_WIDGET_COMPONENT.IMAGE,
+    bearComponent: BEAR_WIDGET_COMPONENT.IMAGE,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.IMAGE, `<img src="${HERO_IMG_SRC}" alt="${BEAR_WIDGET_COMPONENT.IMAGE}" />`),
   },
   {
     id: 'quote',
-    label: 'Quote',
-    bearComponent: 'Quote',
-    html: `<blockquote ${DATA_BEAR_WIDGET_ATTR}="Quote">A pull quote for the page.</blockquote>`,
+    label: BEAR_WIDGET_COMPONENT.QUOTE,
+    bearComponent: BEAR_WIDGET_COMPONENT.QUOTE,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.QUOTE, 'A pull quote for the page.'),
   },
   {
     id: 'stat',
-    label: 'Stat',
-    bearComponent: 'Stat',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Stat" class="ink-cms-widget-stat"><strong>24</strong><span>Pages</span></div>`,
+    label: BEAR_WIDGET_COMPONENT.STAT,
+    bearComponent: BEAR_WIDGET_COMPONENT.STAT,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.STAT, '<strong>24</strong><span>Pages</span>'),
   },
   {
     id: 'cast',
-    label: 'Cast form',
-    bearComponent: 'Cast',
-    html: `<form ${DATA_BEAR_WIDGET_ATTR}="Cast" class="ink-cms-widget-form"><label>Email</label><input type="email" /><label>Name</label><input type="text" /><button type="submit">Send</button></form>`,
+    label: BEAR_WIDGET_COMPONENT.CAST,
+    bearComponent: BEAR_WIDGET_COMPONENT.CAST,
+    html: bearWidgetHtml(
+      BEAR_WIDGET_COMPONENT.CAST,
+      '<label>Email</label><input type="email" /><label>Name</label><input type="text" /><button type="submit">Send</button>',
+    ),
   },
   {
     id: 'code-editor',
-    label: 'Code editor',
-    bearComponent: 'CodeEditor',
-    html: `<pre ${DATA_BEAR_WIDGET_ATTR}="CodeEditor"><code>const page = 'Ink CMS';</code></pre>`,
+    label: BEAR_WIDGET_COMPONENT.CODE_EDITOR,
+    bearComponent: BEAR_WIDGET_COMPONENT.CODE_EDITOR,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.CODE_EDITOR, '<code>const page = \'Ink CMS\';</code>'),
   },
   {
     id: 'drawer',
-    label: 'Drawer',
-    bearComponent: 'Drawer',
-    html: `<aside ${DATA_BEAR_WIDGET_ATTR}="Drawer" class="ink-cms-widget-drawer"><strong>Drawer</strong><p>Side panel content.</p></aside>`,
+    label: BEAR_WIDGET_COMPONENT.DRAWER,
+    bearComponent: BEAR_WIDGET_COMPONENT.DRAWER,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.DRAWER, '<strong>Drawer</strong><p>Side panel content.</p>'),
   },
   {
     id: 'modal',
-    label: 'Modal',
-    bearComponent: 'Modal',
-    html: `<div ${DATA_BEAR_WIDGET_ATTR}="Modal" class="ink-cms-widget-card"><strong>Modal</strong><p>Dialog body.</p></div>`,
+    label: BEAR_WIDGET_COMPONENT.MODAL,
+    bearComponent: BEAR_WIDGET_COMPONENT.MODAL,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.MODAL, '<strong>Modal</strong><p>Dialog body.</p>'),
   },
   {
     id: 'dropdown',
-    label: 'Dropdown',
-    bearComponent: 'Dropdown',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Dropdown"><em>[Dropdown]</em></p>`,
+    label: BEAR_WIDGET_COMPONENT.DROPDOWN,
+    bearComponent: BEAR_WIDGET_COMPONENT.DROPDOWN,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.DROPDOWN, '[Dropdown]'),
   },
   {
     id: 'file-upload',
-    label: 'File upload',
-    bearComponent: 'FileUpload',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="FileUpload"><em>[File upload]</em></p>`,
+    label: BEAR_WIDGET_COMPONENT.FILE_UPLOAD,
+    bearComponent: BEAR_WIDGET_COMPONENT.FILE_UPLOAD,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.FILE_UPLOAD, '[File upload]'),
   },
   {
     id: 'color-picker',
-    label: 'Color picker',
-    bearComponent: 'ColorPicker',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="ColorPicker"><input type="color" /></p>`,
+    label: BEAR_WIDGET_COMPONENT.COLOR_PICKER,
+    bearComponent: BEAR_WIDGET_COMPONENT.COLOR_PICKER,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.COLOR_PICKER, '<input type="color" />'),
   },
   {
     id: 'date-picker',
-    label: 'Date picker',
-    bearComponent: 'DatePicker',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="DatePicker"><input type="date" /></p>`,
+    label: BEAR_WIDGET_COMPONENT.DATE_PICKER,
+    bearComponent: BEAR_WIDGET_COMPONENT.DATE_PICKER,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.DATE_PICKER, '<input type="date" />'),
   },
   {
     id: 'pagination',
-    label: 'Pagination',
-    bearComponent: 'Pagination',
-    html: `<p ${DATA_BEAR_WIDGET_ATTR}="Pagination">1 2 3</p>`,
+    label: BEAR_WIDGET_COMPONENT.PAGINATION,
+    bearComponent: BEAR_WIDGET_COMPONENT.PAGINATION,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.PAGINATION, '1 2 3'),
   },
   {
     id: 'app-bar',
-    label: 'App bar',
-    bearComponent: 'AppBar',
-    html: `<header ${DATA_BEAR_WIDGET_ATTR}="AppBar" class="ink-cms-widget-card">App bar</header>`,
+    label: BEAR_WIDGET_COMPONENT.APP_BAR,
+    bearComponent: BEAR_WIDGET_COMPONENT.APP_BAR,
+    html: bearWidgetHtml(BEAR_WIDGET_COMPONENT.APP_BAR, 'App bar'),
   },
   {
     id: 'grid-table',
-    label: 'Grid table',
-    bearComponent: 'GridTable',
-    html: `<table ${DATA_BEAR_WIDGET_ATTR}="GridTable" class="ink-cms-widget-table"><thead><tr><th>Title</th><th>Status</th></tr></thead><tbody><tr><td>Installation</td><td>Published</td></tr></tbody></table>`,
+    label: BEAR_WIDGET_COMPONENT.GRID_TABLE,
+    bearComponent: BEAR_WIDGET_COMPONENT.GRID_TABLE,
+    html: bearWidgetHtml(
+      BEAR_WIDGET_COMPONENT.GRID_TABLE,
+      '<thead><tr><th>Title</th><th>Status</th></tr></thead><tbody><tr><td>Installation</td><td>Published</td></tr></tbody>',
+    ),
   },
-] as const;
+];
 
 export const CAST_WIDGET_ID = 'cast';
 
@@ -237,7 +295,41 @@ export const CONTENT_EDIT_STATUS_ORDER = [
   CONTENT_EDIT_STATUS.ARCHIVED,
 ] as const;
 
-export const CONTENT_EDIT_REVISION_LIMIT = 12;
+export const CONTENT_EDIT_REVISION_LIMIT = NUMBER_TWELVE;
+
+export const SECTION_TYPE = {
+  HTML: 'html',
+  HEADER: 'header',
+  PARAGRAPH: 'paragraph',
+  P: 'p',
+  IMAGE: 'image',
+  CODE: 'code',
+  STEPS: 'steps',
+  LIST: 'list',
+} as const;
+
+export const PAYLOAD_HTML_KEY = 'html';
+export const PAYLOAD_SECTIONS_KEY = 'sections';
+export const PAYLOAD_BLOCKS_KEY = 'blocks';
+export const PAYLOAD_SUPPORT_KEY = 'support';
+export const PAYLOAD_HEADLINE_KEY = 'headline';
+export const PAYLOAD_TEXT_KEY = 'text';
+export const PAYLOAD_TYPE_KEY = 'type';
+export const PAYLOAD_LEVEL_KEY = 'level';
+export const PAYLOAD_SRC_KEY = 'src';
+export const PAYLOAD_ALT_KEY = 'alt';
+export const PAYLOAD_CODE_KEY = 'code';
+export const PAYLOAD_TITLE_KEY = 'title';
+export const PAYLOAD_ITEMS_KEY = 'items';
+export const PAYLOAD_ORDERED_KEY = 'ordered';
+export const PAYLOAD_BODY_KEY = 'body';
+
+export const PAYLOAD_HTML_LIST_KEYS = [PAYLOAD_SECTIONS_KEY, PAYLOAD_BLOCKS_KEY] as const;
+
+export const PAYLOAD_HTML_FALLBACK = [
+  { key: PAYLOAD_SUPPORT_KEY, tag: HTML_TAG_P },
+  { key: PAYLOAD_HEADLINE_KEY, tag: HTML_TAG_H2 },
+] as const;
 
 export const PAYLOAD_KEY_SUBTITLE = 'subtitle';
 export const PAYLOAD_KEY_SEO_TITLE = 'seoTitle';
@@ -271,5 +363,4 @@ export const CONTENT_EDIT_OG_IMAGE_ID = 'cms-edit-og-image';
 export const CONTENT_EDIT_SCHEDULE_ID = 'cms-edit-schedule';
 export const CONTENT_EDIT_SCHEDULE_DATE_ID = 'cms-edit-schedule-date';
 export const CONTENT_EDIT_SCHEDULE_TIME_ID = 'cms-edit-schedule-time';
-export const SCHEDULE_PAD_LENGTH = 2;
 export const SCHEDULE_DEFAULT_TIME = '09:00';
