@@ -4,7 +4,11 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import { existsSync } from 'fs';
 import { resolve } from 'path';
 
-const localInkRoot = resolve(__dirname, '../ink');
+const siblingInkRoot = resolve(__dirname, '../ink');
+const monorepoInkRoot = resolve(__dirname, '../../../ink');
+const localInkRoot = existsSync(resolve(siblingInkRoot, 'package.json'))
+  ? siblingInkRoot
+  : monorepoInkRoot;
 const localInkEntry = resolve(localInkRoot, 'dist/index.js');
 
 export default defineConfig(({ command, mode }) => {

@@ -1,21 +1,25 @@
 import type { ToolbarOption } from '@forgedevstack/ink';
-import { INK_SIMPLE_TOOLBAR } from '@forgedevstack/ink';
-import { EDITOR_DEMO_SRC } from './strings.const';
+import { AI_DEMO_SRC } from './strings.const';
 
-export const HERO_EDITOR_HTML = `<h1>Ink Editor</h1>
-<p>A modern rich text editor built for <strong>performance</strong> and <em>simplicity</em>. Nestable blocks, slash commands, and a clean API — so writing just feels right.</p>
+export const HERO_EDITOR_HTML = `<h1>Ink 1.1.7</h1>
+<p>A document editor with a grouped toolbar, outline rail, slash commands, and Ask Ink AI.</p>
 <ul>
-<li><strong>Lightweight</strong> — tiny footprint, no bloat</li>
-<li><strong>Extensible</strong> — plugins for AI, comments, and more</li>
-<li><strong>Developer Friendly</strong> — TypeScript-first React API</li>
+<li><b>Toolbar</b> — paragraph styles, format cluster, lists, media, undo, Ask Ink AI.</li>
+<li><b>Slash</b> — type / for headings, tables, quotes, callouts, and image.</li>
+<li><b>Outline</b> — jump headings from the rail while you write.</li>
 </ul>
-<blockquote>Write less configuration. Ship more product.</blockquote>`;
+<blockquote class="Ink-callout"><p>Write less configuration. Ship more product.</p></blockquote>
+<h2>What is new</h2>
+<p>Light heading menu. Thin-stroke icons. Status bar for words, characters, and synced.</p>
+<h3>Ask Ink AI</h3>
+<p>Rewrite, summarize, and Tab autocomplete on the canvas.</p>`;
 
 export const STACK_LABELS = ['React', 'Vue', 'Svelte', 'Next.js', 'Angular'] as const;
 
 export const HOME_FEATURE_IDS = ['lightweight', 'extensible', 'developer'] as const;
 
-export const HOME_AI_MEDIA_SRC = EDITOR_DEMO_SRC;
+export const HOME_AI_GIF_SRC = AI_DEMO_SRC;
+export const HOME_AI_MEDIA_SRC = HOME_AI_GIF_SRC;
 
 export type HomeAiFeatureKey =
   | 'aiAutocompleteTitle'
@@ -56,18 +60,52 @@ export const HOME_AI_FEATURES: Array<{
   },
 ];
 
+export const HOME_HERO_FEATURES = {
+  table: true,
+  trackChanges: true,
+  comments: true,
+  ai: true,
+  blocks: true,
+  slash: true,
+  signature: true,
+  findReplace: true,
+  horizontalRule: true,
+  htmlSource: true,
+  outline: true,
+  titles: true,
+  excel: true,
+  graph: true,
+  fullscreen: true,
+  theme: true,
+} as const;
+
 export const HOME_HERO_TOOLBAR: ToolbarOption[] = [
   'headingDropdown',
   'divider',
-  ...INK_SIMPLE_TOOLBAR,
+  'bold',
+  'italic',
+  'underline',
+  'strikethrough',
   'divider',
+  'bulletList',
+  'orderedList',
+  'checklist',
   'blockquote',
+  'divider',
+  'image',
   'link',
+  'table',
+  'titles',
+  'excel',
+  'graph',
+  'outline',
+  'theme',
+  'fullscreen',
   'code',
   'divider',
-  'signature',
-  'findReplace',
-  'horizontalRule',
+  'undo',
+  'redo',
+  'ai',
 ];
 
 export const HOME_GALLERY: Array<{
@@ -122,5 +160,23 @@ export const HOME_EXAMPLES = [
     href: '/demos/collaborative',
     titleKey: 'exampleCollabTitle' as const,
     bodyKey: 'exampleCollabBody' as const,
+  },
+  {
+    id: 'titles',
+    href: '/demos/titles',
+    titleKey: 'exampleTitlesTitle' as const,
+    bodyKey: 'exampleTitlesBody' as const,
+  },
+  {
+    id: 'sheet',
+    href: '/demos/sheet',
+    titleKey: 'exampleSheetTitle' as const,
+    bodyKey: 'exampleSheetBody' as const,
+  },
+  {
+    id: 'graph',
+    href: '/demos/graph',
+    titleKey: 'exampleGraphTitle' as const,
+    bodyKey: 'exampleGraphBody' as const,
   },
 ] as const;

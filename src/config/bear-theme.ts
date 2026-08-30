@@ -6,9 +6,9 @@ export const INK_COLORS = {
     100: '#ccfbf1',
     200: '#99f6e4',
     300: '#5eead4',
-    400: '#2dd4bf',
-    500: '#0f766e',
-    600: '#0d5f59',
+    400: '#22A585',
+    500: '#0E8A6E',
+    600: '#0B6E58',
     700: '#0a4a45',
     800: '#083b37',
     900: '#062e2b',
@@ -51,15 +51,15 @@ export const inkTheme: BearThemeOverride = {
 
 export const inkVariants: CustomVariantsMap = {
   ink: {
-    bg: '#0f766e',
-    bgHover: '#0d5f59',
+    bg: '#0E8A6E',
+    bgHover: '#0B6E58',
     text: '#ffffff',
-    ring: '#2dd4bf',
+    ring: '#22A585',
   },
   inkOutline: {
     bg: 'transparent',
-    bgHover: 'rgba(15, 118, 110, 0.08)',
-    text: '#0f766e',
-    border: '#0f766e',
+    bgHover: 'rgba(14, 138, 110, 0.08)',
+    text: '#0E8A6E',
+    border: '#0E8A6E',
   },
 };

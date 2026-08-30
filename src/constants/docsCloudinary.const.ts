@@ -1,0 +1,1 @@
+export const DOCUMENT_CLOUDINARY_IMAGE_SRC = '';

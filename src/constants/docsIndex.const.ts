@@ -17,7 +17,7 @@ export const DOCS_INDEX: DocsIndexEntry[] = [
   {
     id: 'installation',
     title: 'Installation',
-    keywords: ['install', 'npm', 'package', 'setup'],
+    keywords: ['install', 'npm', 'npx', 'plugin', 'titles', 'graph', 'theme', 'excel', 'package', 'setup'],
     path: `${ROUTES.DOCS}/installation`,
   },
   {

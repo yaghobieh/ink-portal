@@ -4,7 +4,7 @@ export const es: Messages = {
   brand: 'Ink',
   tagline: 'Un editor de texto enriquecido que se siente bien.',
   heroSupport:
-    'Chrome 1.1.7 — toolbar agrupada, outline, slash y Ask Ink AI. Ligero, tipado y listo para publicar.',
+    'Chrome 1.1.8 — toolbar agrupada, outline, slash y Ask Ink AI. Ligero, tipado y listo para publicar.',
   ctaDocs: 'Documentación',
   ctaPlayground: 'Playground',
   ctaDemos: 'Demos',
@@ -111,6 +111,9 @@ export const es: Messages = {
     title: 'Empezar',
     description: 'Instala el paquete y renderiza InkEditor en pocas líneas.',
     install: 'Instalar',
+    body: 'Instala el editor con npx i @forgedevstack/ink y añade plugins por nombre: titles, graph, theme o excel. Importa los estilos y monta InkEditor.',
+    signPadTitle: 'Firma + memoria de borrador',
+    signPadHint: 'Abre la firma, dibuja e inserta. Recarga para confirmar que keepInMemory restaura el borrador.',
     next: 'Continuar a la documentación completa',
   },
   changelog: {
@@ -158,6 +161,18 @@ export const es: Messages = {
       title: 'Móvil',
       description: 'Shell responsivo — paneles debajo del editor en pantallas pequeñas.',
     },
+    titles: {
+      title: 'Títulos',
+      description: 'Treinta estilos. Selecciona texto y elige un preset de la galería.',
+    },
+    sheet: {
+      title: 'Hoja',
+      description: 'Edita una grilla o importa CSV y luego insértala como tabla.',
+    },
+    graph: {
+      title: 'Gráfico',
+      description: 'Inserta un gráfico de barras, líneas o pastel.',
+    },
   },
   ai: {
     title: 'Ink AI',
@@ -198,7 +213,7 @@ export const es: Messages = {
     galleryTitle: 'El editor en movimiento',
     galleryBody:
       'Este es el editor documento 1.1.7 — en vivo. Menú de párrafo, outline, slash y Ask Ink AI. Escribe en él.',
-    editorPlaceholder: 'Empieza a escribir en Ink 1.1.7…',
+    editorPlaceholder: 'Empieza a escribir…',
     galleryHighlightToolbarTitle: 'Toolbar agrupada',
     galleryHighlightToolbarBody:
       'Estilos de párrafo, formato, listas, media y Ask Ink AI en una fila con iconos de trazo fino.',
@@ -230,6 +245,12 @@ export const es: Messages = {
     exampleAiBody: 'Chat, quick actions, review y translate con el proveedor demo local.',
     exampleCollabTitle: 'Colaboración MVP',
     exampleCollabBody: 'Comentarios y track changes con autores mock.',
+    exampleTitlesTitle: 'Títulos',
+    exampleTitlesBody: 'Estilos de título en una galería 5×6.',
+    exampleSheetTitle: 'Hoja',
+    exampleSheetBody: 'Grilla y CSV que insertan una tabla Ink.',
+    exampleGraphTitle: 'Gráfico',
+    exampleGraphBody: 'Barras, líneas y pastel como SVG en el documento.',
     exampleOpen: 'Abrir demo',
     aiSectionTitle: 'Ink AI',
     aiSectionBody:
@@ -707,6 +728,7 @@ export const es: Messages = {
     crumbsProduct: 'Producto',
     crumbsFile: 'Ink Editor.doc',
     share: 'Compartir',
+    fullscreen: 'Pantalla completa',
     sharePdf: 'Compartir como PDF',
     shareWord: 'Compartir como Word',
     shareHtml: 'Compartir como HTML',
@@ -720,7 +742,7 @@ export const es: Messages = {
     notesLocked: 'Editores extra',
     notesLockedBody: 'Una segunda pestaña de documento llega con el pack de $19 y superiores.',
     openPricing: 'Ver planes',
-    version: 'v1.1.7',
+    version: 'v1.1.8',
   },
   contentEdit: {
     title: 'Editar contenido',

@@ -50,6 +50,7 @@ export const HERO_IMG_SRC = '/ink-hero.png';
 export const LANDING_BG_SRC = '/ink-landing.png';
 export const ICON_SRC = '/ink-icon.svg';
 export const EDITOR_DEMO_SRC = '/ink-editor-demo.gif';
+export const AI_DEMO_SRC = '/ink-ai-demo.gif';
 export const EDITOR_DEMO_STILL_SRC = '/ink-editor-demo.png';
 export const DRAG_DROP_INSTALL_SRC = '/ink-drag-drop-install.gif';
 export const DRAG_DROP_INSTALL_STILL_SRC = '/ink-drag-drop-install.png';
