@@ -4,6 +4,7 @@ import { Button, Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
 import { useI18n } from '@i18n/index';
 import { DEFAULT_DOCS_SLUG, docsPath } from '@const/index';
+import { GET_STARTED_IMPORT, GET_STARTED_INSTALL } from './GetStarted.const';
 
 export const GetStarted: FC = () => {
   const { t } = useI18n();
@@ -20,11 +21,8 @@ export const GetStarted: FC = () => {
         <Typography variant="h3" className="text-lg font-semibold mb-3">
           {t.getStarted.install}
         </Typography>
-        <pre className="ink-code mb-8">{`npm install @forgedevstack/ink@1.1.3`}</pre>
-        <pre className="ink-code mb-8">{`import { InkEditor } from '@forgedevstack/ink';
-import '@forgedevstack/ink/styles.css';
-
-<InkEditor value={html} onChange={setHtml} typoAutoFix />`}</pre>
+        <pre className="ink-code mb-8">{GET_STARTED_INSTALL}</pre>
+        <pre className="ink-code mb-8">{GET_STARTED_IMPORT}</pre>
         <Typography variant="h3" className="text-lg font-semibold mb-3">
           Sign pad + draft memory
         </Typography>

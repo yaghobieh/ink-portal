@@ -4,7 +4,7 @@ export const es: Messages = {
   brand: 'Ink',
   tagline: 'Un editor de texto enriquecido que se siente bien.',
   heroSupport:
-    'Ligero, extensible y pensado para developers — con tablas, comentarios, cambios e Ink AI enchufable.',
+    'Chrome 1.1.8 — toolbar agrupada, outline, slash y Ask Ink AI. Ligero, tipado y listo para publicar.',
   ctaDocs: 'Documentación',
   ctaPlayground: 'Playground',
   ctaDemos: 'Demos',

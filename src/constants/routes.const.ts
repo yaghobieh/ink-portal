@@ -37,8 +37,8 @@ export const ROUTES = {
 export const cmsEditPath = (id: string): string =>
   `/cms/edit/${encodeURIComponent(id)}`;
 
-export const INK_VERSION = '1.1.7';
-export const PORTAL_VERSION = '1.1.7';
+export const INK_VERSION = '1.1.8';
+export const PORTAL_VERSION = '1.1.8';
 
 const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },

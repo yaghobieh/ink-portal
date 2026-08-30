@@ -41,7 +41,24 @@ export const DOCS_PAGES: DocsPageContent[] = [
           },
         ],
       },
-      { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink@1.1.6' },
+      {
+        type: 'code',
+        language: 'bash',
+        code: `npx i @forgedevstack/ink
+npx @forgedevstack/ink --plugin titles
+npx @forgedevstack/ink --plugin graph
+npx @forgedevstack/ink --plugin theme
+npx @forgedevstack/ink --plugin excel`,
+      },
+      {
+        type: 'p',
+        text: 'Install the editor, then add plugins by name: titles, graph, theme, or excel. You can pass several names after one --plugin flag.',
+      },
+      {
+        type: 'code',
+        language: 'bash',
+        code: 'npx @forgedevstack/ink --plugin titles graph theme excel',
+      },
       {
         type: 'code',
         language: 'tsx',
@@ -50,7 +67,7 @@ import '@forgedevstack/ink/styles.css';`,
       },
       {
         type: 'html',
-        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a> · current docs target <strong>1.1.6</strong>`,
+        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a>`,
       },
     ],
   },
