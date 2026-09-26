@@ -69,11 +69,15 @@ a {
 }
 
 .ink-navbar {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 50;
   background: color-mix(in srgb, var(--ink-portal-bg) 88%, transparent);
   border-bottom: 1px solid var(--ink-portal-border);
   color: var(--ink-portal-ink);
   isolation: isolate;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .ink-navbar::before {
@@ -711,11 +715,8 @@ body.dark .ink-code,
 .ink-landing__atmosphere {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center top;
-  opacity: 0.22;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(14, 138, 110, 0.09), transparent 70%);
   pointer-events: none;
-  filter: saturate(0.85);
 }
 
 .ink-landing__veil {
