@@ -1,7 +1,9 @@
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { Badge, BearIcons, Button, Flex, Typography } from '@forgedevstack/bear';
+import { InkEditor } from '@forgedevstack/ink';
 import { Layout } from '@components/Layout';
+import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import {
   GITHUB_URL,
@@ -11,14 +13,18 @@ import {
   HOME_EXAMPLES,
   HOME_FEATURE_IDS,
   HOME_GALLERY_HIGHLIGHTS,
+  HOME_HERO_EDITOR_MIN_HEIGHT_PX,
+  HOME_HERO_TOOLBAR,
   LOGO_SRC,
   ROUTES,
   STACK_LABELS,
+  THEME_CLASS_SNOW,
 } from '@const/index';
-import { HomeLiveEditor } from './HomeLiveEditor';
 
 export const Home: FC = () => {
   const { t } = useI18n();
+  const { premium, active } = useInkPremium();
+  const [value, setValue] = useState(HERO_EDITOR_HTML);
 
   const features = [
     {
@@ -108,6 +114,35 @@ export const Home: FC = () => {
               </Flex>
             </div>
 
+            <div className="ink-landing__editor-wrap">
+              <div className={`ink-landing__editor ${THEME_CLASS_SNOW}`}>
+                <InkEditor
+                  value={value}
+                  onChange={setValue}
+                  minHeight={HOME_HERO_EDITOR_MIN_HEIGHT_PX}
+                  toolbar={HOME_HERO_TOOLBAR}
+                  typoAutoFix
+                  showCharCount
+                  variant="classic"
+                  colorMode="light"
+                  premium={premium}
+                  pasteMode={active ? 'rich' : 'plain'}
+                  wysiwyg={active}
+                  features={{
+                    table: true,
+                    trackChanges: false,
+                    comments: false,
+                    ai: false,
+                    blocks: true,
+                    slash: true,
+                    signature: true,
+                    findReplace: true,
+                    horizontalRule: true,
+                  }}
+                  placeholder={t.home.editorPlaceholder}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="ink-landing__stack">
@@ -133,7 +168,33 @@ export const Home: FC = () => {
               {t.home.galleryBody}
             </Typography>
             <div className="ink-home-gallery__live">
-              <HomeLiveEditor html={HERO_EDITOR_HTML} placeholder={t.home.editorPlaceholder} showAi />
+              <div className={`ink-landing__editor ${THEME_CLASS_SNOW}`}>
+                <InkEditor
+                  value={value}
+                  onChange={setValue}
+                  minHeight={HOME_HERO_EDITOR_MIN_HEIGHT_PX}
+                  toolbar={HOME_HERO_TOOLBAR}
+                  typoAutoFix
+                  showCharCount
+                  variant="classic"
+                  colorMode="light"
+                  premium={premium}
+                  pasteMode={active ? 'rich' : 'plain'}
+                  wysiwyg={active}
+                  features={{
+                    table: true,
+                    trackChanges: false,
+                    comments: false,
+                    ai: false,
+                    blocks: true,
+                    slash: true,
+                    signature: true,
+                    findReplace: true,
+                    horizontalRule: true,
+                  }}
+                  placeholder={t.home.editorPlaceholder}
+                />
+              </div>
             </div>
             <div className="ink-home-gallery-highlights">
               {HOME_GALLERY_HIGHLIGHTS.map((item) => (
