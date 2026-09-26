@@ -11,7 +11,6 @@ import {
   HOME_EXAMPLES,
   HOME_FEATURE_IDS,
   HOME_GALLERY_HIGHLIGHTS,
-  LANDING_BG_SRC,
   LOGO_SRC,
   ROUTES,
   STACK_LABELS,
@@ -46,11 +45,7 @@ export const Home: FC = () => {
     <Layout>
       <div className="fade-in ink-landing">
         <section className="ink-landing__hero">
-          <div
-            className="ink-landing__atmosphere"
-            style={{ backgroundImage: `url(${LANDING_BG_SRC})` }}
-            aria-hidden
-          />
+          <div className="ink-landing__atmosphere" aria-hidden />
           <div className="ink-landing__veil" aria-hidden />
 
           <div className="ink-landing__grid">

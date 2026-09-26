@@ -6,8 +6,18 @@ export type ChangelogEntry = {
 
 export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
   {
-    version: '1.1.7',
+    version: '1.1.9',
     defaultOpen: true,
+    items: [
+      'Multi-document InkWorkspace with useInkWorkspace hook',
+      'PresenceStack avatars and real-time remote cursor tracking',
+      'useInkCollaboration hook with themeable collab tokens',
+      'InkTabs document navigation and tab management',
+      'Modular plugin architecture (Excel, AI, Graph, Titles, Collab)',
+    ],
+  },
+  {
+    version: '1.1.7',
     items: [
       'Document chrome: grouped toolbar, outline rail, Ask Ink AI, slash search',
       'Light heading dropdown portaled under the trigger',

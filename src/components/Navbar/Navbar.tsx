@@ -111,7 +111,7 @@ export const Navbar: FC = () => {
     ...INK_PLUGIN_CATALOG.map((plugin) => ({
       key: plugin.id,
       label: plugin.packageName,
-      description: t.nav.pluginPackInk,
+      description: plugin.description || t.nav.pluginPackInk,
       onClick: () => window.location.assign(docsPath('plugins')),
     })),
     {

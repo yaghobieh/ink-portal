@@ -198,8 +198,8 @@ export const en: Messages = {
     stackTitle: 'Works great with your stack',
     galleryTitle: 'See the editor in motion',
     galleryBody:
-      'This is the 1.1.7 document editor — live. Paragraph menu, outline, slash, and Ask Ink AI. Type in it.',
-    editorPlaceholder: 'Start writing in Ink 1.1.7…',
+      'This is the 1.1.9 collaborative document editor — live. Multi-document tabs, outline, slash, and Ask Ink AI. Type in it.',
+    editorPlaceholder: 'Start writing in Ink 1.1.9…',
     galleryHighlightToolbarTitle: 'Grouped toolbar',
     galleryHighlightToolbarBody:
       'Paragraph styles, format cluster, lists, media, and Ask Ink AI sit in one row with thin-stroke icons.',

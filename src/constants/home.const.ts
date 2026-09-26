@@ -1,15 +1,15 @@
 import type { ToolbarOption } from '@forgedevstack/ink';
 
-export const HERO_EDITOR_HTML = `<h1>Ink 1.1.7</h1>
-<p>A document editor with a grouped toolbar, outline rail, slash commands, and Ask Ink AI.</p>
+export const HERO_EDITOR_HTML = `<h1>Ink 1.1.9</h1>
+<p>A collaborative rich text editor with multi-document tabs, presence avatars, real-time cursors, and Ask Ink AI.</p>
 <ul>
-<li><b>Toolbar</b> — paragraph styles, format cluster, lists, media, undo, Ask Ink AI.</li>
-<li><b>Slash</b> — type / for headings, tables, quotes, callouts, and image.</li>
-<li><b>Outline</b> — jump headings from the rail while you write.</li>
+<li><b>Multi-doc tabs</b> — seamless tab navigation across documents with drag-and-drop.</li>
+<li><b>Real-time Collab</b> — live presence stack, remote cursor tracking, and state sync.</li>
+<li><b>Slash & Outline</b> — type / for callouts, tables, code, and jump headings on the rail.</li>
 </ul>
 <blockquote class="Ink-callout"><p>Write less configuration. Ship more product.</p></blockquote>
-<h2>What is new</h2>
-<p>Light heading menu. Thin-stroke icons. Status bar for words, characters, and synced.</p>
+<h2>What is new in 1.1.9</h2>
+<p>InkWorkspace with useInkWorkspace hook, real-time presence avatars, themeable collaboration constants, and modular plugin architecture.</p>
 <h3>Ask Ink AI</h3>
 <p>Rewrite, summarize, and Tab autocomplete on the canvas.</p>`;
 

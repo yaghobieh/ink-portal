@@ -197,8 +197,8 @@ export const es: Messages = {
     stackTitle: 'Encaja con tu stack',
     galleryTitle: 'El editor en movimiento',
     galleryBody:
-      'Este es el editor documento 1.1.7 — en vivo. Menú de párrafo, outline, slash y Ask Ink AI. Escribe en él.',
-    editorPlaceholder: 'Empieza a escribir en Ink 1.1.7…',
+      'Este es el editor colaborativo de documentos 1.1.9 — en vivo. Menú de párrafo, outline, slash y Ask Ink AI. Escribe en él.',
+    editorPlaceholder: 'Empieza a escribir en Ink 1.1.9…',
     galleryHighlightToolbarTitle: 'Toolbar agrupada',
     galleryHighlightToolbarBody:
       'Estilos de párrafo, formato, listas, media y Ask Ink AI en una fila con iconos de trazo fino.',
