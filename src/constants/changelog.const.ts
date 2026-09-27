@@ -1,8 +1,6 @@
-export type ChangelogEntry = {
-  version: string;
-  defaultOpen?: boolean;
-  items: string[];
-};
+import type { ChangelogEntry } from './changelog.types';
+
+export type { ChangelogEntry } from './changelog.types';
 
 export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
   {

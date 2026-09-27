@@ -1,7 +1,9 @@
 export const CONTENT_KIND_PAGE = 'page';
 export const CONTENT_KIND_ITEM = 'item';
 
-export type ContentKind = typeof CONTENT_KIND_PAGE | typeof CONTENT_KIND_ITEM;
+import type { ContentKind } from './ContentPages.types';
+
+export type { ContentKind } from './ContentPages.types';
 
 export const CONTENT_COLLECTION_DOCS = 'docs';
 export const CONTENT_COLLECTION_PAGES = 'pages';

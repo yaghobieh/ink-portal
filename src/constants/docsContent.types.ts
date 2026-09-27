@@ -2,9 +2,10 @@ import type { InkEditorProps, ToolbarOption, InkCommentThread, InkTrackChange } 
 
 export type DocsBlock =
   | { type: 'p'; text: string }
-  | { type: 'code'; code: string; language?: 'tsx' | 'html' | 'json' | 'bash' }
+  | { type: 'code'; code: string; language?: 'tsx' | 'html' | 'json' | 'bash' | 'css' }
   | { type: 'html'; html: string }
   | { type: 'steps'; title?: string; items: { title: string; body: string }[] }
+  | { type: 'image'; src: string; alt: string; caption?: string }
   | DocDemoBlock
   | { type: 'payload'; label: string; data: unknown };
 

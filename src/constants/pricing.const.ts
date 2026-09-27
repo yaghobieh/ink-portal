@@ -1,6 +1,8 @@
 export const PLAN_IDS = ['free', 'pro', 'ai'] as const;
 
-export type PlanId = (typeof PLAN_IDS)[number];
+import type { PlanId } from './pricing.types';
+
+export type { PlanId } from './pricing.types';
 
 export const PLAN_PRICES = {
   free: { amount: 0, period: 'forever' as const, label: '$0' },

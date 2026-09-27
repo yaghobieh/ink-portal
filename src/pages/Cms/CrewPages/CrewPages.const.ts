@@ -17,24 +17,9 @@ export const CREW_PERMISSIONS = [
   'settings:edit',
 ] as const;
 
-export type CrewPermission = (typeof CREW_PERMISSIONS)[number];
+import type { CrewPermission, CrewRole, CrewUser } from './CrewPages.types';
 
-export type CrewRole = {
-  id: string;
-  name: string;
-  description: string;
-  permissions: CrewPermission[];
-  system: boolean;
-};
-
-export type CrewUser = {
-  id: string;
-  name: string;
-  email: string;
-  username: string;
-  roleIds: string[];
-  active: boolean;
-};
+export type { CrewPermission, CrewRole, CrewUser } from './CrewPages.types';
 
 export const DEFAULT_CREW_ROLES: CrewRole[] = [
   {

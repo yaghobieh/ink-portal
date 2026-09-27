@@ -81,6 +81,23 @@ const renderStaticBlock = (
       </pre>
     );
   }
+  if (block.type === 'image') {
+    return (
+      <figure key={`${pageId}-img-${index}`} className="ink-doc-media my-6 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm p-3">
+        <img
+          src={block.src}
+          alt={block.alt}
+          className="w-full h-auto rounded-xl object-contain max-h-[380px]"
+          loading="lazy"
+        />
+        {block.caption && (
+          <figcaption className="text-center text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">
+            {block.caption}
+          </figcaption>
+        )}
+      </figure>
+    );
+  }
   if (block.type === 'html') {
     return (
       <div
