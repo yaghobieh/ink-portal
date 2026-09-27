@@ -26,16 +26,9 @@ export const PLAN_COMPARE_ROW_KEYS = [
   'compareLicensePath',
 ] as const;
 
-export type PlanCompareRowKey = (typeof PLAN_COMPARE_ROW_KEYS)[number];
+import type { PlanCompareCell, PlanCompareMatrixRow, PlanCompareRowKey } from './PlanCompareTable.types';
 
-export type PlanCompareCell = typeof COMPARE_YES | typeof COMPARE_NO | string;
-
-export type PlanCompareMatrixRow = {
-  id: PlanCompareRowKey;
-  free: PlanCompareCell;
-  pro: PlanCompareCell;
-  ai: PlanCompareCell;
-};
+export type { PlanCompareCell, PlanCompareMatrixRow, PlanCompareRowKey } from './PlanCompareTable.types';
 
 export const PLAN_COMPARE_MATRIX: PlanCompareMatrixRow[] = [
   {

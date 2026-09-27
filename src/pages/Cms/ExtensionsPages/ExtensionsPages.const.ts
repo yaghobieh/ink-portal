@@ -1,13 +1,6 @@
-export type ExtensionStatus = 'available' | 'installed' | 'coming';
+import type { ExtensionItem, ExtensionStatus } from './ExtensionsPages.types';
 
-export type ExtensionItem = {
-  id: string;
-  name: string;
-  description: string;
-  version: string;
-  tags: string[];
-  status: ExtensionStatus;
-};
+export type { ExtensionItem, ExtensionStatus } from './ExtensionsPages.types';
 
 export const EXTENSION_CATALOG: ExtensionItem[] = [
   {

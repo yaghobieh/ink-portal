@@ -1,8 +1,6 @@
-export type RoadmapItem = {
-  id: string;
-  title: string;
-  body: string;
-};
+import type { RoadmapItem } from './roadmap.types';
+
+export type { RoadmapItem } from './roadmap.types';
 
 export const ROADMAP_1_1_5: RoadmapItem[] = [
   {

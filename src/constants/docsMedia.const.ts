@@ -1,10 +1,6 @@
-export type DocsPageMedia = {
-  guid: string;
-  gifSrc: string;
-  caption: string;
-  width: number;
-  height: number;
-};
+import type { DocsPageMedia } from './docsMedia.types';
+
+export type { DocsPageMedia } from './docsMedia.types';
 
 const DOC_MEDIA_WIDTH = 720;
 const DOC_MEDIA_HEIGHT = 400;

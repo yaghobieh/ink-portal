@@ -13,7 +13,7 @@
     "@forgedevstack/bear": "^1.2.7",
     "@forgedevstack/forge-compass": "^1.0.0",
     "@forgedevstack/grid-table": "^1.1.2",
-    "@forgedevstack/ink": "file:../ink",
+    "@forgedevstack/ink": "^1.1.9",
     "@forgedevstack/synapse": "^1.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

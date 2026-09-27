@@ -41,33 +41,35 @@ export const DOCS_PAGES: DocsPageContent[] = [
           },
         ],
       },
-      {
-        type: 'code',
-        language: 'bash',
-        code: `npx i @forgedevstack/ink
-npx @forgedevstack/ink --plugin titles
-npx @forgedevstack/ink --plugin graph
-npx @forgedevstack/ink --plugin theme
-npx @forgedevstack/ink --plugin excel`,
-      },
-      {
-        type: 'p',
-        text: 'Install the editor, then add plugins by name: titles, graph, theme, or excel. You can pass several names after one --plugin flag.',
-      },
-      {
-        type: 'code',
-        language: 'bash',
-        code: 'npx @forgedevstack/ink --plugin titles graph theme excel',
-      },
+      { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink@1.1.9' },
       {
         type: 'code',
         language: 'tsx',
-        code: `import { InkEditor } from '@forgedevstack/ink';
-import '@forgedevstack/ink/styles.css';`,
+        code: `import { useState } from 'react';
+import { InkEditor } from '@forgedevstack/ink';
+import '@forgedevstack/ink/styles.css';
+
+export function DocumentEditor() {
+  const [content, setContent] = useState('<h1>Hello Ink 1.1.9</h1>');
+
+  return (
+    <InkEditor
+      value={content}
+      onChange={setContent}
+      variant="classic"
+    />
+  );
+}`,
+      },
+      {
+        type: 'image',
+        src: '/docs/installation.svg',
+        alt: 'Ink Installation Diagram',
+        caption: 'Install @forgedevstack/ink and import styles entry at app root',
       },
       {
         type: 'html',
-        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a>`,
+        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a> · current release <strong>1.1.9</strong>`,
       },
     ],
   },
@@ -530,51 +532,70 @@ toolbar={INK_COLLAB_TOOLBAR}`,
     blocks: [
       {
         type: 'p',
-        text: 'Theming is CSS-variable driven on .Ink-Editor. Helper classes (snow / bubble / dark / minimal) swap presets quickly; Premium unlocks theme={{ … }} token overrides for product branding.',
+        text: 'Theming in Ink is CSS-variable and data-attribute driven. Built-in themes (Paper, Snow, Ink, Dark) can be selected via the toolbar theme dropdown, configured programmatically with themeId="paper", or overridden via custom CSS variables.',
       },
       {
         type: 'steps',
-        title: 'What you get',
+        title: 'Built-in Themes & Controls',
         items: [
           {
-            title: 'CSS variables',
-            body: 'Override --ink-bg, --ink-text, --ink-border, --ink-toolbar, --ink-accent, --ink-shadow, --ink-radius.',
+            title: 'Paper',
+            body: 'Warm editorial cream background (#fdfbf7) with soft sepia ink accents and Georgia typography.',
           },
           {
-            title: 'Helper classes',
-            body: 'Wrap the editor in ink-theme-snow, ink-theme-bubble, ink-theme-dark, or ink-theme-minimal.',
+            title: 'Snow',
+            body: 'Crisp minimalist white canvas (#ffffff) with cool slate borders and subtle contrast.',
           },
           {
-            title: 'Premium tokens',
-            body: 'theme={{ accent, background, radius, … }} when premium is enabled.',
+            title: 'Ink',
+            body: 'Signature deep teal accent palette with modern system sans typography.',
+          },
+          {
+            title: 'Dark',
+            body: 'High-contrast midnight dark mode (#0f172a) with luminous accents and darkened toolbar.',
           },
         ],
       },
       {
-        type: 'code',
-        language: 'tsx',
-        code: `<div className="ink-theme-snow">
-  <InkEditor … />
-</div>`,
+        type: 'image',
+        src: '/docs/themes.svg',
+        alt: 'Ink Theming Architecture',
+        caption: 'Select themes via toolbar dropdown or pass themeId prop',
       },
       {
-        type: 'payload',
-        label: 'CSS variables',
-        data: {
-          vars: [
-            '--ink-bg',
-            '--ink-text',
-            '--ink-border',
-            '--ink-toolbar',
-            '--ink-accent',
-            '--ink-shadow',
-            '--ink-radius',
-          ],
-        },
+        type: 'code',
+        language: 'tsx',
+        code: `import { useState } from 'react';
+import { InkEditor } from '@forgedevstack/ink';
+import '@forgedevstack/ink/styles.css';
+
+export function ThemedEditor() {
+  const [theme, setTheme] = useState<'paper' | 'snow' | 'ink' | 'dark'>('paper');
+
+  return (
+    <InkEditor
+      themeId={theme}
+      onThemeChange={setTheme}
+      toolbar={['headingDropdown', 'fontDropdown', 'bold', 'italic', 'divider', 'theme']}
+      features={{ theme: true }}
+    />
+  );
+}`,
       },
       {
         type: 'p',
-        text: 'Tip: start with a helper class for demos, then move brand colors into CSS variables or Premium theme tokens when shipping a product shell.',
+        text: 'Custom CSS variables can also be overridden on .Ink-Editor or any enclosing parent container:',
+      },
+      {
+        type: 'code',
+        language: 'css',
+        code: `.Ink-Editor[data-ink-theme="paper"] {
+  --ink-bg: #fdfbf7;
+  --ink-text: #292524;
+  --ink-border: #e7e5e4;
+  --ink-toolbar: #f5f0e8;
+  --ink-accent: #b45309;
+}`,
       },
     ],
   },
@@ -629,90 +650,147 @@ const { html, fixedCount } = applyTypoAutoFix('<p>teh end</p>');
     blocks: [
       {
         type: 'p',
-        text: 'Ink plugins mirror the AI provider pattern: register in JS, optional host config. Preferred long-term install is a drag-and-drop .ink package (like a .vsix) — npm remains supported for apps and CI.',
+        text: 'Ink provides a modular plugin ecosystem for specialized document features like spreadsheet tables, autonomous AI assistants, SVG charts, stylized heading presets, multi-document tabs, and real-time collaboration. Each plugin can be installed via npm or configured directly into the editor toolbar.',
       },
       {
         type: 'html',
-        html: `<div class="ink-plugin-rows flex flex-col gap-2 my-4">
-  <div class="ink-plugin-row flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
-    <div><strong>@forgedevstack/ink-excel</strong> — Spreadsheet grid, formulas &amp; CSV/XLSX import</div>
-    <span class="ink-plugin-row__links flex items-center gap-2"><a class="ink-plugin-row__icon-link text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 font-mono" href="${INK_EXCEL_NPM_URL}" target="_blank" rel="noreferrer">npm</a><a class="ink-plugin-row__icon-link text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 font-mono" href="${INK_EXCEL_GITHUB_URL}" target="_blank" rel="noreferrer">GitHub</a></span>
+        html: `<div class="ink-plugin-cards flex flex-col gap-4 my-6">
+  <div class="ink-plugin-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+      <div class="flex items-center gap-2">
+        <span class="text-base font-bold">Ink Excel</span>
+        <code class="text-xs px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-mono">@forgedevstack/ink-excel</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <a class="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition" href="/demos/sheet">⚡ Live Demo</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="${INK_EXCEL_NPM_URL}" target="_blank" rel="noreferrer">npm</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="${INK_EXCEL_GITHUB_URL}" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mb-0"><strong>Spreadsheet grid, formulas &amp; CSV/XLSX import:</strong> Embeds a full spreadsheet calculation grid inside Ink. Supports column letters, row numbers, formula evaluation, real-time cell editing, and bidirectional import/export with CSV and Microsoft Excel XLSX files.</p>
   </div>
-  <div class="ink-plugin-row flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
-    <div><strong>@forgedevstack/ink/plugins/ai</strong> — Autonomous writing assistant &amp; prompt chat</div>
-    <span class="ink-plugin-row__links flex items-center gap-2"><a class="ink-plugin-row__icon-link text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 font-mono" href="https://www.npmjs.com/package/@forgedevstack/ink" target="_blank" rel="noreferrer">npm</a></span>
+
+  <div class="ink-plugin-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+      <div class="flex items-center gap-2">
+        <span class="text-base font-bold">Ink AI</span>
+        <code class="text-xs px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-mono">@forgedevstack/ink/plugins/ai</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <a class="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition" href="/demos/ai">⚡ Live Demo</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="${NPM_URL}" target="_blank" rel="noreferrer">npm</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="https://github.com/yaghobieh/ink" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mb-0"><strong>Autonomous writing assistant &amp; prompt chat:</strong> Generative AI embedded in the editor flow with inline ghost autocompletion (Tab to accept), rewrite and summarize actions, multi-turn chat panel, and customizable BYO LLM provider endpoints.</p>
   </div>
-  <div class="ink-plugin-row flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
-    <div><strong>@forgedevstack/ink/plugins/graph</strong> — Interactive bar, line, and pie charts</div>
-    <span class="ink-plugin-row__links flex items-center gap-2"><a class="ink-plugin-row__icon-link text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 font-mono" href="https://www.npmjs.com/package/@forgedevstack/ink" target="_blank" rel="noreferrer">npm</a></span>
+
+  <div class="ink-plugin-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+      <div class="flex items-center gap-2">
+        <span class="text-base font-bold">Ink Graph</span>
+        <code class="text-xs px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 font-mono">@forgedevstack/ink/plugins/graph</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <a class="text-xs font-semibold px-2.5 py-1 rounded-md bg-amber-600 text-white hover:bg-amber-700 transition" href="/demos/graph">⚡ Live Demo</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="${NPM_URL}" target="_blank" rel="noreferrer">npm</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="https://github.com/yaghobieh/ink" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mb-0"><strong>Interactive bar, line, and pie charts:</strong> Generates crisp SVG vector diagrams inside document copy. Authors can change chart types on the fly, right-click any chart to adjust values in a modal, and pick custom color palettes.</p>
   </div>
-  <div class="ink-plugin-row flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
-    <div><strong>@forgedevstack/ink/plugins/titles</strong> — Styled title gallery &amp; header presets</div>
-    <span class="ink-plugin-row__links flex items-center gap-2"><a class="ink-plugin-row__icon-link text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 font-mono" href="https://www.npmjs.com/package/@forgedevstack/ink" target="_blank" rel="noreferrer">npm</a></span>
+
+  <div class="ink-plugin-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+      <div class="flex items-center gap-2">
+        <span class="text-base font-bold">Ink Titles</span>
+        <code class="text-xs px-2 py-0.5 rounded bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 font-mono">@forgedevstack/ink/plugins/titles</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <a class="text-xs font-semibold px-2.5 py-1 rounded-md bg-purple-600 text-white hover:bg-purple-700 transition" href="/demos/titles">⚡ Live Demo</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="${NPM_URL}" target="_blank" rel="noreferrer">npm</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="https://github.com/yaghobieh/ink" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mb-0"><strong>Word-era styled title gallery &amp; header presets:</strong> Offers 30 distinct typographic treatments in a visual gallery dropdown. Enables rapid insertion of gradient headlines, neon glow banners, framed headers, and decorative accents.</p>
   </div>
-  <div class="ink-plugin-row flex items-center justify-between p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
-    <div><strong>@forgedevstack/ink/collab</strong> — Real-time multi-doc tabs, presence &amp; cursors</div>
-    <span class="ink-plugin-row__links flex items-center gap-2"><a class="ink-plugin-row__icon-link text-xs px-2 py-1 rounded bg-slate-200 dark:bg-slate-800 font-mono" href="https://www.npmjs.com/package/@forgedevstack/ink" target="_blank" rel="noreferrer">npm</a></span>
+
+  <div class="ink-plugin-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+      <div class="flex items-center gap-2">
+        <span class="text-base font-bold">Ink Collab</span>
+        <code class="text-xs px-2 py-0.5 rounded bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 font-mono">@forgedevstack/ink/collab</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <a class="text-xs font-semibold px-2.5 py-1 rounded-md bg-rose-600 text-white hover:bg-rose-700 transition" href="/demos/collaborative">⚡ Live Demo</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="${NPM_URL}" target="_blank" rel="noreferrer">npm</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="https://github.com/yaghobieh/ink" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mb-0"><strong>Multi-doc tabs, presence avatars &amp; remote cursors:</strong> Enables collaborative editing sessions with isolated undo/redo per document buffer (InkTabs), document tree navigation (InkWorkspace), active collaborator presence stacks, and colored cursor labels.</p>
+  </div>
+
+  <div class="ink-plugin-card p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+      <div class="flex items-center gap-2">
+        <span class="text-base font-bold">Ink Theme</span>
+        <code class="text-xs px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-mono">@forgedevstack/ink/plugins/theme</code>
+      </div>
+      <div class="flex items-center gap-2">
+        <a class="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition" href="/lab">⚡ Open in Lab</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="${NPM_URL}" target="_blank" rel="noreferrer">npm</a>
+        <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="https://github.com/yaghobieh/ink" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mb-0"><strong>Dynamic theme switcher:</strong> Scope-isolated styling engine featuring Paper (warm parchment), Snow (crisp white), Ink (sapphire signature), and Dark (high-contrast midnight) modes for both the editor and workspace chrome.</p>
   </div>
 </div>`,
       },
       {
         type: 'steps',
-        title: 'Install today (npm / JS register)',
+        title: 'How to Install & Configure Plugins',
         items: [
           {
-            title: 'Install packages',
-            body: 'npm install @forgedevstack/ink @forgedevstack/ink-excel',
+            title: '1. Install Packages',
+            body: 'Install the core editor and plugin extensions: npm install @forgedevstack/ink @forgedevstack/ink-excel',
           },
           {
-            title: 'Register handler',
-            body: 'inkExcel.register(createCsvExcelHandler()) — same idea as inkAi.registerProvider.',
+            title: '2. Enable in Toolbar & Features',
+            body: 'Add the plugin keys to your toolbar configuration (excel, graph, titles, theme, ai) and set features[pluginName] = true.',
           },
           {
-            title: 'Import / export',
-            body: 'Call inkExcel.import(file) → Ink-table HTML; inkExcel.export(html) → CSV blob.',
+            title: '3. Optional Provider Registration',
+            body: 'For AI and custom data sources, call inkAi.registerProvider(...) or inkExcel.register(...) to attach custom backends.',
           },
         ],
       },
       {
         type: 'code',
         language: 'tsx',
-        code: `import { inkExcel, createCsvExcelHandler } from '@forgedevstack/ink-excel';
+        code: `import { InkEditor } from '@forgedevstack/ink';
+import '@forgedevstack/ink/styles.css';
 
-inkExcel.register(createCsvExcelHandler());
-
-const result = await inkExcel.import(file);
-setHtml(result.html);`,
-      },
-      {
-        type: 'p',
-        text: 'Every plugin can be packed as a .ink file (same idea as a .vsix). Drag it onto the editor — loading, install, then the plugin appears.',
+export const MyEditor = () => (
+  <InkEditor
+    value="<h1>Hello World</h1>"
+    toolbar={[
+      'headingDropdown', 'fontDropdown', 'bold', 'italic',
+      'divider', 'table', 'excel', 'graph', 'titles', 'theme', 'ai'
+    ]}
+    features={{
+      table: true,
+      excel: true,
+      graph: true,
+      titles: true,
+      theme: true,
+      ai: true,
+    }}
+  />
+);`,
       },
       {
         type: 'html',
-        html: `<figure class="ink-doc-media"><img src="/ink-drag-drop-install.gif" alt="Drag a .ink plugin onto the editor drop zone" width="720" height="400" class="ink-doc-media__img" /><figcaption class="ink-doc-media__caption">Drag &amp; drop a .ink package</figcaption></figure>`,
-      },
-      {
-        type: 'steps',
-        title: 'Install paths',
-        items: [
-          {
-            title: 'npm (today)',
-            body: 'npm install @forgedevstack/ink-excel — best for apps and CI.',
-          },
-          {
-            title: 'Drag .ink (coming)',
-            body: 'Pack any plugin as .ink, drop it in — loading UI, then the plugin activates.',
-          },
-          {
-            title: 'CMS',
-            body: 'Soon — install and entitlement control from your site token / org plan.',
-          },
-        ],
-      },
-      {
-        type: 'html',
-        html: `Links: <a class="ink-doc-link" href="${INK_EXCEL_NPM_URL}" target="_blank" rel="noreferrer">npm</a> · <a class="ink-doc-link" href="${INK_EXCEL_GITHUB_URL}" target="_blank" rel="noreferrer">GitHub</a>`,
+        html: `<figure class="ink-doc-media"><img src="/ink-drag-drop-install.gif" alt="Drag a .ink plugin onto the editor drop zone" width="720" height="400" class="ink-doc-media__img" /><figcaption class="ink-doc-media__caption">Drag &amp; drop a .ink plugin package directly into the editor</figcaption></figure>`,
       },
     ],
   },
@@ -857,47 +935,74 @@ inkAi.registerProvider({
     blocks: [
       {
         type: 'p',
-        text: 'Ink ships comments, track changes, and a Collaborative MVP demo today. Realtime multiplayer presence (live cursors) is scoped as a Yjs/CRDT extension — not an opaque mock. This page documents what is production-ready versus what competes with Tiptap/Hocuspocus next.',
+        text: 'Ink 1.1.9 ships real-time presence avatars (PresenceStack), follow-mode navigation, remote cursor broadcasting, multi-document tab workspaces (InkTabs), and the useInkCollaboration hook. Document content stays pure HTML while collaboration states are handled via structured side channels.',
       },
       {
         type: 'steps',
-        title: 'What ships now',
+        title: 'Collaboration Features in 1.1.9',
         items: [
           {
-            title: 'Comments',
-            body: 'Thread side-channel JSON — pure decorations over HTML, no document mutation on highlight alone.',
+            title: 'PresenceStack Avatars',
+            body: 'Displays active collaborator avatars with green (active) and amber (idle) status dots in the toolbar.',
           },
           {
-            title: 'Track changes',
-            body: 'Accept / reject flow with author metadata for review workflows.',
+            title: 'Follow Collaborator (onFollow)',
+            body: 'Clicking an avatar button calls onFollow(collaborator), allowing host apps to scroll to their caret or active block.',
           },
           {
-            title: 'Collaborative MVP demo',
-            body: 'Presence stubs for product UX; not a claimed CRDT engine.',
+            title: 'Remote Cursors',
+            body: 'Broadcasts caret position and selection range with custom user colors and name tags.',
           },
           {
-            title: 'Yjs extension (roadmap)',
-            body: 'CRDT document sync + live cursors as an installable Extension — parity path vs Tiptap cloud.',
+            title: 'useInkCollaboration Hook',
+            body: 'Manages connected users, active/idle heartbeat, and cursor dispatch over WebSockets, WebRTC, or BroadcastChannel.',
           },
         ],
       },
       {
-        type: 'p',
-        text: 'Architecture note: Ink keeps HTML as the persisted document. Collaboration decorations must stay pure (presence / cursors / comments) so they do not rewrite the core HTML until a merge step. That is the opposite of bolting OT onto contenteditable without a CRDT store.',
+        type: 'image',
+        src: '/docs/collaboration.svg',
+        alt: 'Realtime Collaboration in Ink',
+        caption: 'Presence avatars, live remote cursors, and multi-doc tabs',
       },
       {
         type: 'code',
         language: 'tsx',
-        code: `<InkEditor
-  features={{ comments: true, trackChanges: true }}
-  comments={threads}
-  trackChanges={changes}
-  showCommentsPanel
-/>`,
-      },
-      {
-        type: 'p',
-        text: 'Tip: for CMS multiplayer, install the Realtime Collab (Yjs) extension from Ink CMS → Extensions when it moves from Coming to Available. Until then, use comments + revisions for review.',
+        code: `import React from 'react';
+import { InkEditor, useInkCollaboration } from '@forgedevstack/ink';
+import type { InkCollaborator } from '@forgedevstack/ink';
+import '@forgedevstack/ink/styles.css';
+
+export function CollaborativeEditor({ docId, currentUser }: { docId: string; currentUser: InkCollaborator }) {
+  const {
+    collaborators,
+    broadcastCursor,
+  } = useInkCollaboration({
+    roomId: docId,
+    user: currentUser,
+  });
+
+  const handleFollow = (collaborator: InkCollaborator) => {
+    if (collaborator.cursor?.blockId) {
+      document.querySelector(\`[data-block-id="\${collaborator.cursor.blockId}"]\`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  return (
+    <InkEditor
+      value="<p>Collaborative document...</p>"
+      collaboration={{
+        enabled: true,
+        showPresenceStack: true,
+        maxAvatars: 4,
+        collaborators,
+        onFollow: handleFollow,
+        onBroadcastCursor: broadcastCursor,
+      }}
+    />
+  );
+}`,
       },
     ],
   },

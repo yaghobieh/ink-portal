@@ -1,4 +1,5 @@
 import { ENABLE_LAB } from './env.const';
+import packageJson from '../../package.json';
 
 export const ROUTES = {
   HOME: '/',
@@ -12,6 +13,9 @@ export const ROUTES = {
   DEMO_TABLES: '/demos/tables',
   DEMO_MARKDOWN: '/demos/markdown',
   DEMO_MOBILE: '/demos/mobile',
+  DEMO_TITLES: '/demos/titles',
+  DEMO_EXCEL: '/demos/sheet',
+  DEMO_GRAPH: '/demos/graph',
   PLAYGROUND: '/playground',
   GET_STARTED: '/get-started',
   CHANGELOG: '/changelog',
@@ -37,8 +41,8 @@ export const ROUTES = {
 export const cmsEditPath = (id: string): string =>
   `/cms/edit/${encodeURIComponent(id)}`;
 
-export const INK_VERSION = '1.1.9';
-export const PORTAL_VERSION = '1.1.9';
+export const INK_VERSION = packageJson.version;
+export const PORTAL_VERSION = packageJson.version;
 
 const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },

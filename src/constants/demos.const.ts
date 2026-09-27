@@ -1,19 +1,8 @@
 import { ROUTES } from './routes.const';
 
-export type DemoCardId =
-  | 'featureRich'
-  | 'ai'
-  | 'collab'
-  | 'document'
-  | 'tables'
-  | 'markdown'
-  | 'playground'
-  | 'mobile';
+import type { DemoCard, DemoCardId } from './demos.types';
 
-export interface DemoCard {
-  id: DemoCardId;
-  href: string;
-}
+export type { DemoCard, DemoCardId } from './demos.types';
 
 export const DEMO_CARDS: DemoCard[] = [
   { id: 'featureRich', href: ROUTES.DEMO_FEATURE },

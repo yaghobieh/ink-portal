@@ -19,23 +19,11 @@ export const HOME_FEATURE_IDS = ['lightweight', 'extensible', 'developer'] as co
 
 export const HOME_AI_GIF_SRC = '/ink-ai-demo.gif';
 
-export type HomeAiFeatureKey =
-  | 'aiAutocompleteTitle'
-  | 'aiGenerateTitle'
-  | 'aiHostedTitle'
-  | 'aiByoTitle';
+import type { HomeAiFeature, HomeAiFeatureBodyKey, HomeAiFeatureKey } from './home.types';
 
-export type HomeAiFeatureBodyKey =
-  | 'aiAutocompleteBody'
-  | 'aiGenerateBody'
-  | 'aiHostedBody'
-  | 'aiByoBody';
+export type { HomeAiFeature, HomeAiFeatureBodyKey, HomeAiFeatureKey } from './home.types';
 
-export const HOME_AI_FEATURES: Array<{
-  id: string;
-  titleKey: HomeAiFeatureKey;
-  bodyKey: HomeAiFeatureBodyKey;
-}> = [
+export const HOME_AI_FEATURES: HomeAiFeature[] = [
   {
     id: 'autocomplete',
     titleKey: 'aiAutocompleteTitle',
