@@ -71,6 +71,7 @@ export const es: Messages = {
     tocA11y: 'Accesibilidad',
     tocPremium: 'Premium',
     tocCollaboration: 'Colaboración',
+    tocWhatsNew: 'Novedades de 1.2.0',
   },
   playground: {
     title: 'Playground',
@@ -122,7 +123,10 @@ export const es: Messages = {
   },
   demos: {
     title: 'Demos',
-    description: 'Hub de demos — explora Ink con datos mock locales.',
+    description: 'Demos de Ink 1.2.0 — IA de selección, Markdown, Word, PDF y el resto del editor.',
+    eyebrow: 'Ink 1.2.0',
+    featuredTitle: 'El documento se puede compartir',
+    catalogTitle: 'Todas las demos',
     back: 'Todas las demos',
     open: 'Abrir demo',
     mobileNote: 'La barra y los paneles laterales se apilan en pantallas estrechas.',
@@ -197,8 +201,18 @@ export const es: Messages = {
     stackTitle: 'Encaja con tu stack',
     galleryTitle: 'El editor en movimiento',
     galleryBody:
-      'Este es el editor colaborativo de documentos 1.1.9 — en vivo. Menú de párrafo, outline, slash y Ask Ink AI. Escribe en él.',
-    editorPlaceholder: 'Empieza a escribir en Ink 1.1.9…',
+      'Este es el editor 1.2.0 — en vivo. Selecciona texto para la IA, exporta Markdown o Word, y menciona a alguien.',
+    editorPlaceholder: 'Empieza a escribir en Ink 1.2.0…',
+    whatsNewTitle: 'Novedades de 1.2.0',
+    whatsNewBody: 'El documento puede salir del editor. Estas son las funciones de este portal.',
+    shareAiTitle: 'IA de selección',
+    shareAiBody: 'Mejora, acorta, amplía, corrige, cambia el tono o traduce el texto seleccionado.',
+    shareMarkdownTitle: 'Markdown',
+    shareMarkdownBody: 'Importa y exporta Markdown, o escribe #, > y 1. al inicio de una línea.',
+    shareExportTitle: 'Word y PDF',
+    shareExportBody: 'Descarga un .docx o abre el diálogo de impresión para guardar un PDF.',
+    sharePeopleTitle: 'Versiones y menciones',
+    sharePeopleBody: 'Guarda una instantánea, compárala, y escribe @ para mencionar a alguien.',
     galleryHighlightToolbarTitle: 'Toolbar agrupada',
     galleryHighlightToolbarBody:
       'Estilos de párrafo, formato, listas, media y Ask Ink AI en una fila con iconos de trazo fino.',
@@ -457,7 +471,7 @@ export const es: Messages = {
 
     editorsSubtitle: 'Looks: classic, document, simple, agent, docx, notion-like — CMS host Bifrost.',
     editorsLivePreview: 'Vista previa',
-    editorsVersion: '1.1.6',
+    editorsVersion: '1.2.0',
     openPlayground: 'Abrir playground',
     plansTitle: 'Niveles de pack',
     plansSubtitle: 'Tu pack actual está marcado en verde. Cambia cuando quieras.',
@@ -492,9 +506,9 @@ export const es: Messages = {
   },
   lab: {
     title: 'Lab',
-    description: 'Sandbox privado para probar nuevas funciones de Ink antes de documentarlas.',
-    note: 'Solo para pruebas internas — no es documentación pública. En dev usa ../ink/dist local si está built.',
-    placeholder: 'Prueba nuevas funciones…',
+    description: 'Sandbox privado para el build local de Ink 1.2.0.',
+    note: 'Solo para pruebas internas. Este servidor carga ../ink/dist de la rama local 1.2.0.',
+    placeholder: 'Selecciona texto, escribe @, o prueba la barra nueva…',
     aiOpenAiReady:
       'Clave OpenAI detectada (VITE_OPENAI_API_KEY). Autocomplete y panel AI usan tokens reales — solo local temporal.',
     aiOpenAiMissing:

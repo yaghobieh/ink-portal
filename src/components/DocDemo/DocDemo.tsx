@@ -1,6 +1,7 @@
 import { useState, type FC } from 'react';
 import { Button, Flex, Typography } from '@forgedevstack/bear';
 import { InkEditor, type InkCommentThread, type InkTrackChange } from '@forgedevstack/ink';
+import { useInkColorMode } from '@hooks/index';
 import { DOC_DEMO_MIN_HEIGHT_PX } from '@const/numbers.const';
 import { EMPTY_STRING } from '@const/strings.const';
 import type { DocDemoBlock } from '@const/docsContent.types';
@@ -17,6 +18,7 @@ export const DocDemo: FC<DocDemoBlock> = (props) => {
     payload,
     showLiveHtml = true,
   } = props;
+  const colorMode = useInkColorMode();
   const [html, setHtml] = useState(initialHtml);
   const [comments, setComments] = useState<InkCommentThread[]>(editor.comments ?? []);
   const [trackChanges, setTrackChanges] = useState<InkTrackChange[]>(editor.trackChanges ?? []);
@@ -37,8 +39,8 @@ export const DocDemo: FC<DocDemoBlock> = (props) => {
   ];
 
   return (
-    <div className="ink-doc-demo rounded-xl border border-slate-200 bg-white overflow-hidden my-4">
-      <Flex justify="between" align="start" className="gap-3 p-4 border-b border-slate-100 flex-wrap">
+    <div className="ink-doc-demo rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 overflow-hidden my-4">
+      <Flex justify="between" align="start" className="gap-3 p-4 border-b border-slate-100 dark:border-slate-800 flex-wrap">
         <div className="min-w-0">
           {title ? (
             <Typography variant="h4" className="text-base font-semibold m-0">
@@ -68,11 +70,12 @@ export const DocDemo: FC<DocDemoBlock> = (props) => {
       </Flex>
 
       {tab === 'preview' ? (
-        <div className="p-4 bg-[#fafafa]">
+        <div className="ink-doc-demo__stage p-4">
           <div className="ink-paper p-1">
             <InkEditor
               value={html}
               onChange={setHtml}
+              colorMode={colorMode}
               minHeight={editor.minHeight ?? DOC_DEMO_MIN_HEIGHT_PX}
               toolbar={editor.toolbar}
               features={editor.features}

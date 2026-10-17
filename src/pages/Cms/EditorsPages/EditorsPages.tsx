@@ -3,9 +3,9 @@ import { useNucleus } from '@forgedevstack/synapse';
 import { Badge, Button, Card, Flex, Spinner, Typography } from '@forgedevstack/bear';
 import { InkEditor, type InkEditorVariant } from '@forgedevstack/ink';
 import { Link } from '@forgedevstack/forge-compass/react';
-import { useAuth } from '@hooks/index';
+import { useAuth, useInkColorMode } from '@hooks/index';
 import { useI18n } from '@i18n/index';
-import { ROUTES, THEME_CLASS_SNOW } from '@const/index';
+import { ROUTES, THEME_CLASS_DARK, THEME_CLASS_SNOW } from '@const/index';
 import { authNucleus, contentNucleus } from '@sdk/index';
 import type { PlaygroundVariant } from '@pages/Playground/Playground.types';
 import { CmsShell, CMS_NAV_IDS } from '../CmsShell';
@@ -30,6 +30,8 @@ const variantFromSlug = (slug: string): PlaygroundVariant => {
 
 export const EditorsPages: FC = () => {
   const { t } = useI18n();
+  const colorMode = useInkColorMode();
+  const editorTheme = colorMode === 'dark' ? THEME_CLASS_DARK : THEME_CLASS_SNOW;
   const { token: providerToken } = useAuth();
   const { token } = useNucleus(authNucleus);
   const { items, loading, error, fetchContentByCollection } = useNucleus(contentNucleus);
@@ -113,14 +115,14 @@ export const EditorsPages: FC = () => {
               v{t.dashboard.editorsVersion}
             </Badge>
           </Flex>
-          <div className={`ink-cms-editor-stage ${THEME_CLASS_SNOW}`}>
+          <div className={`ink-cms-editor-stage ${editorTheme}`}>
             <InkEditor
               value={htmlByVariant[activeVariant]}
               onChange={(value) =>
                 setHtmlByVariant((prev) => ({ ...prev, [activeVariant]: value }))
               }
               variant={activeVariant as InkEditorVariant}
-              colorMode="light"
+              colorMode={colorMode}
               minHeight={EDITOR_PREVIEW_MIN_HEIGHT_PX}
               features={{ blocks: true, slash: true, table: true }}
             />

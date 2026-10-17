@@ -616,6 +616,46 @@ body.dark .ink-code,
   border-radius: 0.25rem;
 }
 
+.ink-theme-snow .Ink-Editor[data-color-mode='dark'],
+.ink-theme-bubble .Ink-Editor[data-color-mode='dark'],
+.ink-theme-minimal .Ink-Editor[data-color-mode='dark'] {
+  color-scheme: dark;
+  --ink-border: #3f3f46;
+  --ink-bg: #18181b;
+  --ink-toolbar: #27272a;
+  --ink-text: #f4f4f5;
+  --ink-muted: #a1a1aa;
+  --ink-accent: #2dd4bf;
+  --ink-accent-soft: rgb(45 212 191 / 0.15);
+}
+
+html.dark .Ink-AiSelection,
+html.dark .Ink-InlineToolbar {
+  color-scheme: dark;
+  --ink-border: #3f3f46;
+  --ink-bg: #18181b;
+  --ink-text: #f4f4f5;
+  --ink-muted: #a1a1aa;
+  --ink-accent: #2dd4bf;
+  --ink-accent-soft: rgb(45 212 191 / 0.15);
+  background: #18181b;
+  color: #f4f4f5;
+  border-color: #3f3f46;
+}
+
+.ink-doc-demo__stage {
+  background: #fafafa;
+}
+
+html.dark .ink-doc-demo {
+  background: var(--ink-portal-paper);
+  border-color: var(--ink-portal-border);
+}
+
+html.dark .ink-doc-demo__stage {
+  background: transparent;
+}
+
 .ink-theme-bubble .Ink-Editor {
   --ink-border: transparent;
   --ink-bg: #ffffff;
@@ -1202,4 +1242,69 @@ body.dark .inkOutline,
 
 .ink-pricing-steps {
   padding-left: 1.25rem;
+}
+
+.ink-share-grid,
+.ink-demos-featured {
+  display: grid;
+  gap: 1rem;
+}
+
+.ink-share-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ink-demos-featured {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 2.5rem;
+}
+
+.ink-share-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--ink-portal-border);
+  border-radius: 1rem;
+  background: var(--ink-portal-paper);
+  color: inherit;
+  text-decoration: none;
+}
+
+.ink-share-card__shot {
+  display: block;
+  width: 100%;
+  height: 168px;
+  object-fit: cover;
+  background: #f8fafc;
+}
+
+.ink-share-card .font-semibold {
+  margin: 0.9rem 1rem 0.35rem;
+}
+
+.ink-share-card .ink-text-muted {
+  margin: 0 1rem 1rem;
+}
+
+.ink-demos-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.ink-demos-hero__shot {
+  width: 100%;
+  border-radius: 1.25rem;
+  border: 1px solid var(--ink-portal-border);
+  background: var(--ink-portal-paper);
+}
+
+@media (max-width: 900px) {
+  .ink-share-grid,
+  .ink-demos-hero,
+  .ink-demos-featured {
+    grid-template-columns: 1fr;
+  }
 }

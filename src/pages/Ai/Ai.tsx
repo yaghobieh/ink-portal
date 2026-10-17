@@ -10,15 +10,17 @@ import {
 } from '@forgedevstack/ink';
 import { registerPortalAiProviders, resolvePortalAiProviderId } from '@/ai/index';
 import { Layout } from '@components/Layout';
-import { useInkPremium } from '@hooks/index';
+import { useInkColorMode, useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
-import { DEMO_HTML_AI, HERO_EDITOR_MIN_HEIGHT_PX, ROUTES, THEME_CLASS_SNOW } from '@const/index';
+import { DEMO_HTML_AI, HERO_EDITOR_MIN_HEIGHT_PX, ROUTES, THEME_CLASS_DARK, THEME_CLASS_SNOW } from '@const/index';
 
 registerPortalAiProviders();
 
 export const Ai: FC = () => {
   const { t } = useI18n();
   const { premium, active } = useInkPremium();
+  const colorMode = useInkColorMode();
+  const editorTheme = colorMode === 'dark' ? THEME_CLASS_DARK : THEME_CLASS_SNOW;
   const [value, setValue] = useState(DEMO_HTML_AI);
   const modelCatalog: InkAiModelCatalogEntry[] = INK_AI_MODEL_CATALOG;
   const providerId = resolvePortalAiProviderId();
@@ -95,11 +97,12 @@ export const Ai: FC = () => {
             <Typography id="live-demo" variant="h3" className="text-xl font-semibold mb-3 scroll-mt-24">
               {t.ai.liveDemo}
             </Typography>
-            <div className={`${THEME_CLASS_SNOW} ink-paper ink-hero-editor`}>
+            <div className={`${editorTheme} ink-paper ink-hero-editor`}>
               <InkEditor
                 value={value}
                 onChange={setValue}
                 minHeight={HERO_EDITOR_MIN_HEIGHT_PX}
+                colorMode={colorMode}
                 toolbar={INK_COLLAB_TOOLBAR}
                 premium={premium}
                 pasteMode={active ? 'rich' : 'plain'}

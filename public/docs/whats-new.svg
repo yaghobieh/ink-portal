@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="400" viewBox="0 0 720 400">
+  <rect width="720" height="400" rx="24" fill="#f8fafc"/>
+  <rect x="36" y="36" width="648" height="328" rx="16" fill="#fff" stroke="#0f766e" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="64" y="78" font-family="ui-sans-serif,system-ui" font-size="22" font-weight="700" fill="#0f172a">Ink 1.2.0</text>
+  <text x="64" y="108" font-family="ui-sans-serif,system-ui" font-size="14" fill="#64748b">The document can be shared</text>
+  <rect x="64" y="132" width="280" height="28" rx="6" fill="#ccfbf1"/>
+  <text x="76" y="151" font-family="ui-sans-serif,system-ui" font-size="13" fill="#0f766e">Select this sentence</text>
+  <g>
+    <rect x="360" y="124" width="280" height="44" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
+    <text x="376" y="151" font-family="ui-sans-serif,system-ui" font-size="13" font-weight="650" fill="#0f172a">Improve   Shorter   Translate</text>
+  </g>
+  <rect x="64" y="196" width="92" height="28" rx="8" fill="#0f766e"/>
+  <text x="78" y="215" font-family="ui-sans-serif,system-ui" font-size="12" fill="#fff">Markdown</text>
+  <rect x="166" y="196" width="72" height="28" rx="8" fill="#0f172a"/>
+  <text x="186" y="215" font-family="ui-sans-serif,system-ui" font-size="12" fill="#fff">Word</text>
+  <rect x="248" y="196" width="64" height="28" rx="8" fill="#be185d"/>
+  <text x="266" y="215" font-family="ui-sans-serif,system-ui" font-size="12" fill="#fff">PDF</text>
+  <text x="64" y="268" font-family="ui-sans-serif,system-ui" font-size="14" fill="#0f172a">@Sarah  ·  version 3  ·  captioned image</text>
+  <text x="64" y="320" font-family="ui-sans-serif,system-ui" font-size="13" fill="#64748b">Ink docs · 1.2.0</text>
+</svg>

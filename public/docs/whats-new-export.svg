@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="400" viewBox="0 0 720 400">
+  <rect width="720" height="400" rx="24" fill="#f8fafc"/>
+  <rect x="48" y="48" width="280" height="304" rx="16" fill="#fff" stroke="#0f172a" stroke-opacity="0.2" stroke-width="2"/>
+  <text x="72" y="92" font-family="ui-sans-serif,system-ui" font-size="20" font-weight="700" fill="#0f172a">Report.docx</text>
+  <rect x="72" y="116" width="180" height="10" rx="5" fill="#e2e8f0"/>
+  <rect x="72" y="138" width="210" height="10" rx="5" fill="#e2e8f0"/>
+  <rect x="72" y="160" width="150" height="10" rx="5" fill="#e2e8f0"/>
+  <rect x="72" y="200" width="200" height="36" rx="8" fill="#0f172a"/>
+  <text x="96" y="223" font-family="ui-sans-serif,system-ui" font-size="14" fill="#fff">Download Word</text>
+  <rect x="392" y="48" width="280" height="304" rx="16" fill="#fff" stroke="#be185d" stroke-opacity="0.45" stroke-width="2"/>
+  <text x="416" y="92" font-family="ui-sans-serif,system-ui" font-size="20" font-weight="700" fill="#be185d">Print / PDF</text>
+  <rect x="416" y="120" width="200" height="140" rx="8" fill="#fff1f2" stroke="#fecdd3"/>
+  <text x="436" y="196" font-family="ui-sans-serif,system-ui" font-size="14" fill="#9f1239">Page 1</text>
+  <text x="416" y="300" font-family="ui-sans-serif,system-ui" font-size="13" fill="#64748b">Opens the print dialog</text>
+</svg>

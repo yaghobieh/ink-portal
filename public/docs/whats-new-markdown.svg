@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="400" viewBox="0 0 720 400">
+  <rect width="720" height="400" rx="24" fill="#f8fafc"/>
+  <rect x="36" y="36" width="310" height="328" rx="16" fill="#0f172a"/>
+  <text x="60" y="78" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="16" fill="#5eead4"># Heading</text>
+  <text x="60" y="112" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="16" fill="#e2e8f0">&gt; A quote</text>
+  <text x="60" y="146" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="16" fill="#e2e8f0">1. First item</text>
+  <rect x="370" y="36" width="314" height="328" rx="16" fill="#fff" stroke="#0f766e" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="394" y="84" font-family="ui-sans-serif,system-ui" font-size="26" font-weight="700" fill="#0f172a">Heading</text>
+  <text x="394" y="124" font-family="ui-sans-serif,system-ui" font-size="15" fill="#475569">A quote</text>
+  <text x="394" y="160" font-family="ui-sans-serif,system-ui" font-size="15" fill="#0f172a">1. First item</text>
+  <text x="394" y="320" font-family="ui-sans-serif,system-ui" font-size="13" fill="#64748b">Import · Export Markdown</text>
+</svg>

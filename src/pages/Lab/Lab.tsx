@@ -79,10 +79,10 @@ export const Lab: FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <Typography variant="h1" className="text-3xl font-bold tracking-tight mb-1">
-                {t.lab.title} (Ink v1.1.9)
+                {t.lab.title} (Ink v1.2.0 local)
               </Typography>
               <Typography variant="body1" className="ink-text-muted mb-0">
-                {t.lab.description} — Interactive Multi-Document Workspace & Real-Time Collaboration
+                {t.lab.description} — local ink branch with the 1.2.0 share features
               </Typography>
             </div>
           </div>
@@ -129,6 +129,7 @@ export const Lab: FC = () => {
                 pasteMode: active ? 'rich' : 'plain',
                 wysiwyg: active,
                 features: LAB_FEATURES,
+                memoryKey: `ink-lab-1.2.0-${activeDocId}`,
                 placeholder: t.lab.placeholder,
                 ai: {
                   enabled: true,

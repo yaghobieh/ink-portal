@@ -40,6 +40,8 @@ export default defineConfig(({ command, mode }) => {
           include: ['@forgedevstack/ink'],
         },
     server: {
+      port: 5174,
+      strictPort: true,
       ...(aliasLocalInk
         ? {
             fs: {

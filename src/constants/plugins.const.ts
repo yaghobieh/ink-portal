@@ -68,7 +68,7 @@ export const INK_PLUGIN_CATALOG: InkPluginCatalogEntry[] = [
     packageName: '@forgedevstack/ink/plugins/theme',
     npmUrl: NPM_URL,
     gitUrl: GITHUB_URL,
-    demoUrl: ROUTES.LAB,
+    demoUrl: ROUTES.PLAYGROUND,
     description: 'Dynamic editor theming: Paper, Snow, Ink, and Dark modes',
     explanation: 'Applies scoped typography and color palettes to the editor and workspace chrome without polluting global CSS. Switch effortlessly between warm vintage Paper, crisp Snow, signature Ink, and high-contrast Dark themes.',
   },

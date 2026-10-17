@@ -1,4 +1,6 @@
 export { InkPremiumProvider, useInkPremium } from './InkPremiumProvider';
+export { useInkColorMode } from './useInkColorMode';
+export type { InkPortalColorMode } from './useInkColorMode';
 export { PREMIUM_LICENSE_QUERY, PREMIUM_PAID_QUERY } from './premium.const';
 export { AuthProvider, useAuth } from './AuthProvider';
 export {
