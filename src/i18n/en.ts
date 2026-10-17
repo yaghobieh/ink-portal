@@ -71,6 +71,7 @@ export const en: Messages = {
     tocA11y: 'Accessibility',
     tocPremium: 'Premium',
     tocCollaboration: 'Collaboration',
+    tocWhatsNew: "What's new in 1.2.0",
   },
   playground: {
     title: 'Playground',
@@ -122,7 +123,10 @@ export const en: Messages = {
   },
   demos: {
     title: 'Demos',
-    description: 'Demo hub — explore Ink features with local mock data.',
+    description: 'Ink 1.2.0 demos — selection AI, Markdown, Word, PDF, and the rest of the editor.',
+    eyebrow: 'Ink 1.2.0',
+    featuredTitle: 'The document can be shared',
+    catalogTitle: 'All demos',
     back: 'All demos',
     open: 'Open demo',
     mobileNote: 'Toolbar and side panels stack on narrow viewports for mobile-friendly editing.',
@@ -198,8 +202,18 @@ export const en: Messages = {
     stackTitle: 'Works great with your stack',
     galleryTitle: 'See the editor in motion',
     galleryBody:
-      'This is the 1.1.9 collaborative document editor — live. Multi-document tabs, outline, slash, and Ask Ink AI. Type in it.',
-    editorPlaceholder: 'Start writing in Ink 1.1.9…',
+      'This is the 1.2.0 editor — live. Select text for AI, export Markdown or Word, and mention a collaborator.',
+    editorPlaceholder: 'Start writing in Ink 1.2.0…',
+    whatsNewTitle: "What's new in 1.2.0",
+    whatsNewBody: 'The document can leave the editor. These are the features in this portal build.',
+    shareAiTitle: 'Selection AI',
+    shareAiBody: 'Improve, shorten, expand, fix, change tone, or translate the highlight, then apply it.',
+    shareMarkdownTitle: 'Markdown',
+    shareMarkdownBody: 'Import and export Markdown, or type #, >, and 1. at the start of a line.',
+    shareExportTitle: 'Word and PDF',
+    shareExportBody: 'Download a .docx or open the print dialog to save a PDF.',
+    sharePeopleTitle: 'Versions and mentions',
+    sharePeopleBody: 'Save a snapshot, compare it, and type @ to mention someone on the document.',
     galleryHighlightToolbarTitle: 'Grouped toolbar',
     galleryHighlightToolbarBody:
       'Paragraph styles, format cluster, lists, media, and Ask Ink AI sit in one row with thin-stroke icons.',
@@ -457,7 +471,7 @@ export const en: Messages = {
     editorsTitle: 'Editor variants',
     editorsSubtitle: 'Looks: classic, document, simple, agent, docx, notion-like — CMS host for Bifrost.',
     editorsLivePreview: 'Live preview',
-    editorsVersion: '1.1.6',
+    editorsVersion: '1.2.0',
     openPlayground: 'Open playground',
     plansTitle: 'Pack levels',
     plansSubtitle: 'Your current pack is marked green. Switch anytime.',
@@ -492,9 +506,9 @@ export const en: Messages = {
   },
   lab: {
     title: 'Lab',
-    description: 'Private sandbox to try new Ink features before they ship in docs.',
-    note: 'Internal testing only — not public documentation. Dev uses local ../ink/dist when built.',
-    placeholder: 'Try new features…',
+    description: 'Private sandbox for the local Ink 1.2.0 build.',
+    note: 'Internal testing only. This dev server loads ../ink/dist from the local 1.2.0 lab branch.',
+    placeholder: 'Select text, type @, or try the new toolbar…',
     aiOpenAiReady:
       'OpenAI key detected (VITE_OPENAI_API_KEY). Ghost autocomplete + AI panel use real tokens — temp local only.',
     aiOpenAiMissing:

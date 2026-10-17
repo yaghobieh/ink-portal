@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@forgedevstack/bear';
 import { InkEditor } from '@forgedevstack/ink';
-import { useAuth } from '@hooks/index';
+import { useAuth, useInkColorMode } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import {
   DRAG_WIDGET_MIME,
@@ -41,6 +41,7 @@ type ContentRevision = {
 
 export const ContentEdit: FC = () => {
   const { t } = useI18n();
+  const colorMode = useInkColorMode();
   const params = useParams<{ id?: string }>();
   const { navigate } = useNavigate();
   const { token: providerToken } = useAuth();
@@ -249,7 +250,7 @@ export const ContentEdit: FC = () => {
                   />
                 ) : (
                   <div
-                    className="ink-cms-editor-stage ink-theme-snow"
+                    className={`ink-cms-editor-stage ${colorMode === 'dark' ? 'ink-theme-dark' : 'ink-theme-snow'}`}
                     onDragOver={(event) => event.preventDefault()}
                     onDrop={onEditorDrop}
                   >
@@ -259,7 +260,7 @@ export const ContentEdit: FC = () => {
                         setBodyHtml(next);
                         setSaveOk(false);
                       }}
-                      colorMode="light"
+                      colorMode={colorMode}
                       variant="document"
                       minHeight={CONTENT_EDIT_EDITOR_MIN_HEIGHT_PX}
                       features={{ blocks: true, slash: true, table: true }}

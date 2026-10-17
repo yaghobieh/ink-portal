@@ -2,12 +2,13 @@ import { type FC, useState } from 'react';
 import { InkEditor, INK_AI_DEMO_PROVIDER_ID } from '@forgedevstack/ink';
 import { HOME_HERO_FEATURES, HOME_HERO_TOOLBAR } from '@const/home.const';
 import { HOME_HERO_EDITOR_MIN_HEIGHT_PX } from '@const/numbers.const';
-import { useInkPremium } from '@hooks/index';
+import { useInkColorMode, useInkPremium } from '@hooks/index';
 import type { HomeLiveEditorProps } from './HomeLiveEditor.types';
 
 export const HomeLiveEditor: FC<HomeLiveEditorProps> = (props) => {
   const { html, placeholder, showAi } = props;
   const { premium, active } = useInkPremium();
+  const colorMode = useInkColorMode();
   const [value, setValue] = useState(html);
 
   return (
@@ -21,7 +22,7 @@ export const HomeLiveEditor: FC<HomeLiveEditorProps> = (props) => {
       showOutline
       variant="document"
       chrome="borderless"
-      colorMode="light"
+      colorMode={colorMode}
       premium={premium}
       pasteMode={active ? 'rich' : 'plain'}
       wysiwyg={active}

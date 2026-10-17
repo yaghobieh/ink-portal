@@ -27,7 +27,7 @@ registerPortalAiProviders();
 export const Playground: FC = () => {
   const { t } = useI18n();
   const { premium, active } = useInkPremium();
-  const { config, set, reset, html, setHtml, toolbar, themeClass, generatedCode } =
+  const { config, set, reset, html, setHtml, toolbar, themeClass, generatedCode, colorMode } =
     usePlaygroundConfig();
   const [view, setView] = useState<PlaygroundView>('preview');
   const [copied, setCopied] = useState(false);
@@ -172,7 +172,7 @@ export const Playground: FC = () => {
           />
         </aside>
 
-        <main className="flex-1 min-w-0 flex flex-col overflow-hidden bg-[#fafafa]">
+        <main className="flex-1 min-w-0 flex flex-col overflow-hidden bg-[#fafafa] dark:bg-transparent">
           {view === 'preview' ? (
             <div className="flex-1 overflow-auto p-6 md:p-10">
               <div className={`max-w-4xl mx-auto ink-paper p-1 ${themeClass}`}>
@@ -185,7 +185,7 @@ export const Playground: FC = () => {
                   allowImagePaste={config.allowImagePaste}
                   showCharCount={config.showCharCount}
                   readOnly={config.readOnly}
-                  colorMode="light"
+                  colorMode={colorMode}
                   minHeight={PLAYGROUND_EDITOR_MIN_HEIGHT_PX}
                   premium={premium}
                   pasteMode={active ? 'rich' : 'plain'}

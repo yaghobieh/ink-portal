@@ -16,6 +16,64 @@ export type { DocsBlock, DocsPageContent, DocDemoBlock } from './docsContent.typ
 
 export const DOCS_PAGES: DocsPageContent[] = [
   {
+    id: 'whats-new',
+    labelKey: 'tocWhatsNew',
+    blocks: [
+      {
+        type: 'p',
+        text: 'Ink 1.2.0 is the release where a document can leave the editor. Selection AI, Markdown, Word and PDF, Office paste, local versions, mentions, images, comments, format painter, and table cells are in this build.',
+      },
+      {
+        type: 'image',
+        src: '/docs/whats-new.svg',
+        alt: 'Ink 1.2.0 share features',
+        caption: 'Selection AI sits on the highlight. Markdown, Word, and PDF leave from the toolbar.',
+      },
+      {
+        type: 'steps',
+        title: 'What shipped in 1.2.0',
+        items: [
+          {
+            title: 'Selection AI',
+            body: 'Select text and use Improve, Shorter, Longer, Fix, Tone, or Translate, then Apply. The demo provider runs locally.',
+          },
+          {
+            title: 'Markdown',
+            body: 'Import and export Markdown. Typing # , > , or 1. at the start of a line converts the block.',
+          },
+          {
+            title: 'Word and PDF',
+            body: 'Export Word downloads a .docx. Export PDF opens the browser print dialog.',
+          },
+          {
+            title: 'Office paste',
+            body: 'Pasting from Word or Google Docs keeps headings, lists, links, and tables, and drops Office styling.',
+          },
+          {
+            title: 'Versions, mentions, and images',
+            body: 'Save a named snapshot and compare it. Type @ to mention a collaborator. Click an image to set width, alignment, alt text, and a caption.',
+          },
+          {
+            title: 'Comments, case, and tables',
+            body: 'Resolve a comment without losing the highlight. Copy formatting or change case. Right-click a cell to merge, split, set a background, or change vertical align.',
+          },
+        ],
+      },
+      {
+        type: 'code',
+        language: 'tsx',
+        code: `features={{
+  ai: true,
+  markdown: true,
+  export: true,
+  versionHistory: true,
+  mentions: true,
+  formatPainter: true,
+}}`,
+      },
+    ],
+  },
+  {
     id: 'installation',
     labelKey: 'tocInstallation',
     blocks: [
@@ -41,7 +99,7 @@ export const DOCS_PAGES: DocsPageContent[] = [
           },
         ],
       },
-      { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink@1.1.9' },
+      { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink@1.2.0' },
       {
         type: 'code',
         language: 'tsx',
@@ -50,7 +108,7 @@ import { InkEditor } from '@forgedevstack/ink';
 import '@forgedevstack/ink/styles.css';
 
 export function DocumentEditor() {
-  const [content, setContent] = useState('<h1>Hello Ink 1.1.9</h1>');
+  const [content, setContent] = useState('<h1>Hello Ink 1.2.0</h1>');
 
   return (
     <InkEditor
@@ -69,7 +127,7 @@ export function DocumentEditor() {
       },
       {
         type: 'html',
-        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a> · current release <strong>1.1.9</strong>`,
+        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a> · current release <strong>1.2.0</strong>`,
       },
     ],
   },
@@ -737,7 +795,7 @@ const { html, fixedCount } = applyTypoAutoFix('<p>teh end</p>');
         <code class="text-xs px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-mono">@forgedevstack/ink/plugins/theme</code>
       </div>
       <div class="flex items-center gap-2">
-        <a class="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition" href="/lab">⚡ Open in Lab</a>
+        <a class="text-xs font-semibold px-2.5 py-1 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition" href="/playground">⚡ Open in Playground</a>
         <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="${NPM_URL}" target="_blank" rel="noreferrer">npm</a>
         <a class="text-xs px-2 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono hover:bg-slate-200" href="https://github.com/yaghobieh/ink" target="_blank" rel="noreferrer">GitHub</a>
       </div>
@@ -1064,4 +1122,4 @@ export const DOCS_PAGE_BY_ID = Object.fromEntries(DOCS_PAGES.map((page) => [page
   DocsPageContent
 >;
 
-export const DEFAULT_DOCS_SLUG = 'installation';
+export const DEFAULT_DOCS_SLUG = 'whats-new';

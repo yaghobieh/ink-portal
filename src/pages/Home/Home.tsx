@@ -3,7 +3,7 @@ import { Link } from '@forgedevstack/forge-compass/react';
 import { Badge, BearIcons, Button, Flex, Typography } from '@forgedevstack/bear';
 import { InkEditor } from '@forgedevstack/ink';
 import { Layout } from '@components/Layout';
-import { useInkPremium } from '@hooks/index';
+import { useInkColorMode, useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import {
   GITHUB_URL,
@@ -15,15 +15,19 @@ import {
   HOME_GALLERY_HIGHLIGHTS,
   HOME_HERO_EDITOR_MIN_HEIGHT_PX,
   HOME_HERO_TOOLBAR,
+  HOME_SHARE_FEATURES,
   LOGO_SRC,
   ROUTES,
   STACK_LABELS,
+  THEME_CLASS_DARK,
   THEME_CLASS_SNOW,
 } from '@const/index';
 
 export const Home: FC = () => {
   const { t } = useI18n();
   const { premium, active } = useInkPremium();
+  const colorMode = useInkColorMode();
+  const editorTheme = colorMode === 'dark' ? THEME_CLASS_DARK : THEME_CLASS_SNOW;
   const [value, setValue] = useState(HERO_EDITOR_HTML);
 
   const features = [
@@ -115,7 +119,7 @@ export const Home: FC = () => {
             </div>
 
             <div className="ink-landing__editor-wrap">
-              <div className={`ink-landing__editor ${THEME_CLASS_SNOW}`}>
+              <div className={`ink-landing__editor ${editorTheme}`}>
                 <InkEditor
                   value={value}
                   onChange={setValue}
@@ -124,7 +128,7 @@ export const Home: FC = () => {
                   typoAutoFix
                   showCharCount
                   variant="classic"
-                  colorMode="light"
+                  colorMode={colorMode}
                   premium={premium}
                   pasteMode={active ? 'rich' : 'plain'}
                   wysiwyg={active}
@@ -162,13 +166,37 @@ export const Home: FC = () => {
         <section className="ink-home-section">
           <div className="ink-home-section__inner">
             <Typography variant="h2" className="ink-home-section__title">
+              {t.home.whatsNewTitle}
+            </Typography>
+            <Typography variant="body1" className="ink-home-section__body">
+              {t.home.whatsNewBody}
+            </Typography>
+            <div className="ink-share-grid">
+              {HOME_SHARE_FEATURES.map((feature) => (
+                <Link key={feature.id} to={feature.href} className="ink-share-card">
+                  <img src={feature.image} alt="" className="ink-share-card__shot" />
+                  <Typography variant="h5" className="font-semibold mb-2">
+                    {t.home[feature.titleKey]}
+                  </Typography>
+                  <Typography variant="body2" className="ink-text-muted mb-0">
+                    {t.home[feature.bodyKey]}
+                  </Typography>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="ink-home-section ink-home-section--muted">
+          <div className="ink-home-section__inner">
+            <Typography variant="h2" className="ink-home-section__title">
               {t.home.galleryTitle}
             </Typography>
             <Typography variant="body1" className="ink-home-section__body">
               {t.home.galleryBody}
             </Typography>
             <div className="ink-home-gallery__live">
-              <div className={`ink-landing__editor ${THEME_CLASS_SNOW}`}>
+              <div className={`ink-landing__editor ${editorTheme}`}>
                 <InkEditor
                   value={value}
                   onChange={setValue}
@@ -177,7 +205,7 @@ export const Home: FC = () => {
                   typoAutoFix
                   showCharCount
                   variant="classic"
-                  colorMode="light"
+                  colorMode={colorMode}
                   premium={premium}
                   pasteMode={active ? 'rich' : 'plain'}
                   wysiwyg={active}

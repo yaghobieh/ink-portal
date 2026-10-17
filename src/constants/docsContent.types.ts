@@ -65,6 +65,7 @@ export interface DocsPageContent {
     | 'tocWordpress'
     | 'tocA11y'
     | 'tocPremium'
-    | 'tocCollaboration';
+    | 'tocCollaboration'
+    | 'tocWhatsNew';
   blocks: DocsBlock[];
 }

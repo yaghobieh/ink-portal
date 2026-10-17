@@ -14,6 +14,7 @@ const media = (slug: string, caption: string): DocsPageMedia => ({
 });
 
 export const DOCS_PAGE_MEDIA: Record<string, DocsPageMedia> = {
+  'whats-new': media('whats-new', 'Ink 1.2.0 selection AI, Markdown, and Word export'),
   installation: media('installation', 'Install @forgedevstack/ink and mount the editor'),
   quickstart: media('quickstart', 'Controlled value / onChange quickstart'),
   configuration: media('configuration', 'Toolbar, features, and variant configuration'),

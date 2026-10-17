@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import type { PlaygroundConfig } from '../Playground.types';
 import { DEFAULT_CONFIG, DEFAULT_PLAYGROUND_HTML, resolveToolbar, THEME_CLASS_MAP } from '../Playground.const';
 import { PLAYGROUND_EDITOR_MIN_HEIGHT_PX } from '@const/index';
+import { useInkColorMode } from '@hooks/index';
 
 export const usePlaygroundConfig = () => {
   const [config, setConfig] = useState<PlaygroundConfig>(DEFAULT_CONFIG);
@@ -18,6 +19,8 @@ export const usePlaygroundConfig = () => {
 
   const toolbar = useMemo(() => resolveToolbar(config.toolbarPreset), [config.toolbarPreset]);
   const themeClass = THEME_CLASS_MAP[config.theme];
+  const portalColorMode = useInkColorMode();
+  const colorMode = config.theme === 'dark' || portalColorMode === 'dark' ? 'dark' as const : 'light' as const;
 
   const generatedCode = useMemo(() => {
     const lines = [
@@ -40,7 +43,7 @@ export const usePlaygroundConfig = () => {
       `        readOnly={${config.readOnly}}`,
       `        features={{ table: ${config.table}, trackChanges: ${config.trackChanges}, comments: ${config.comments}, ai: ${config.ai}, blocks: ${config.blocks}, slash: true }}`,
       `        showCommentsPanel={${config.comments}}`,
-      `        colorMode="light"`,
+      `        colorMode="${colorMode}"`,
       `        ai={${config.ai ? '{ enabled: true, autocomplete: true, placement: "sidebar", openOnInit: true }' : 'undefined'}}`,
       `        minHeight={${PLAYGROUND_EDITOR_MIN_HEIGHT_PX}}`,
       `      />`,
@@ -49,7 +52,7 @@ export const usePlaygroundConfig = () => {
       `}`,
     ];
     return lines.join('\n');
-  }, [config, html, themeClass, toolbar]);
+  }, [colorMode, config, html, themeClass, toolbar]);
 
-  return { config, set, reset, html, setHtml, toolbar, themeClass, generatedCode };
+  return { config, set, reset, html, setHtml, toolbar, themeClass, generatedCode, colorMode };
 };

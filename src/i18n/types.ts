@@ -70,6 +70,7 @@ export interface Messages {
     tocA11y: string;
     tocPremium: string;
     tocCollaboration: string;
+    tocWhatsNew: string;
   };
   playground: {
     title: string;
@@ -133,6 +134,9 @@ export interface Messages {
     markdown: { title: string; description: string };
     playground: { title: string; description: string };
     mobile: { title: string; description: string };
+    eyebrow: string;
+    featuredTitle: string;
+    catalogTitle: string;
   };
   ai: {
     title: string;
@@ -170,6 +174,16 @@ export interface Messages {
     galleryTitle: string;
     galleryBody: string;
     editorPlaceholder: string;
+    whatsNewTitle: string;
+    whatsNewBody: string;
+    shareAiTitle: string;
+    shareAiBody: string;
+    shareMarkdownTitle: string;
+    shareMarkdownBody: string;
+    shareExportTitle: string;
+    shareExportBody: string;
+    sharePeopleTitle: string;
+    sharePeopleBody: string;
     galleryHighlightToolbarTitle: string;
     galleryHighlightToolbarBody: string;
     galleryHighlightSlashTitle: string;

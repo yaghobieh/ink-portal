@@ -1,17 +1,15 @@
 import type { ToolbarOption } from '@forgedevstack/ink';
 
-export const HERO_EDITOR_HTML = `<h1>Ink 1.1.9</h1>
-<p>A collaborative rich text editor with multi-document tabs, presence avatars, real-time cursors, and Ask Ink AI.</p>
+export const HERO_EDITOR_HTML = `<h1>Ink 1.2.0</h1>
+<p>Select this sentence and ask Ink AI to improve it. Export the page as Markdown or Word when it is ready to share.</p>
 <ul>
-<li><b>Multi-doc tabs</b> — seamless tab navigation across documents with drag-and-drop.</li>
-<li><b>Real-time Collab</b> — live presence stack, remote cursor tracking, and state sync.</li>
-<li><b>Slash & Outline</b> — type / for callouts, tables, code, and jump headings on the rail.</li>
+<li><b>Selection AI</b> — Improve, Shorter, Longer, Fix, Tone, and Translate on the highlight.</li>
+<li><b>Markdown, Word, PDF</b> — import, export, and paste from Office without the styling junk.</li>
+<li><b>Versions and @mentions</b> — save a snapshot, then mention a collaborator.</li>
 </ul>
-<blockquote class="Ink-callout"><p>Write less configuration. Ship more product.</p></blockquote>
-<h2>What is new in 1.1.9</h2>
-<p>InkWorkspace with useInkWorkspace hook, real-time presence avatars, themeable collaboration constants, and modular plugin architecture.</p>
-<h3>Ask Ink AI</h3>
-<p>Rewrite, summarize, and Tab autocomplete on the canvas.</p>`;
+<blockquote class="Ink-callout"><p>The document can leave the editor.</p></blockquote>
+<h2>What is new in 1.2.0</h2>
+<p>Format painter, change case, image captions, comment resolve, and table cell merge are on the toolbar and the cell menu.</p>`;
 
 export const STACK_LABELS = ['React', 'Vue', 'Svelte', 'Next.js', 'Angular'] as const;
 
@@ -67,6 +65,13 @@ export const HOME_HERO_TOOLBAR: ToolbarOption[] = [
   'undo',
   'redo',
   'ai',
+  'importMarkdown',
+  'exportMarkdown',
+  'exportDocx',
+  'exportPdf',
+  'versions',
+  'formatPainter',
+  'changeCase',
 ];
 
 export const HOME_HERO_FEATURES = {
@@ -79,7 +84,43 @@ export const HOME_HERO_FEATURES = {
   signature: true,
   findReplace: true,
   horizontalRule: true,
+  markdown: true,
+  export: true,
+  versionHistory: true,
+  mentions: true,
+  formatPainter: true,
 } as const;
+
+export const HOME_SHARE_FEATURES = [
+  {
+    id: 'ai',
+    titleKey: 'shareAiTitle' as const,
+    bodyKey: 'shareAiBody' as const,
+    image: '/docs/whats-new.svg',
+    href: '/demos/ai',
+  },
+  {
+    id: 'markdown',
+    titleKey: 'shareMarkdownTitle' as const,
+    bodyKey: 'shareMarkdownBody' as const,
+    image: '/docs/whats-new-markdown.svg',
+    href: '/demos/markdown',
+  },
+  {
+    id: 'export',
+    titleKey: 'shareExportTitle' as const,
+    bodyKey: 'shareExportBody' as const,
+    image: '/docs/whats-new-export.svg',
+    href: '/demos/feature-rich',
+  },
+  {
+    id: 'people',
+    titleKey: 'sharePeopleTitle' as const,
+    bodyKey: 'sharePeopleBody' as const,
+    image: '/docs/whats-new-people.svg',
+    href: '/demos/collaborative',
+  },
+] as const;
 
 export const HOME_GALLERY_HIGHLIGHTS = [
   {

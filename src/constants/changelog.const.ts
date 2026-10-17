@@ -4,8 +4,20 @@ export type { ChangelogEntry } from './changelog.types';
 
 export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
   {
-    version: '1.1.9',
+    version: '1.2.0',
     defaultOpen: true,
+    items: [
+      'Selection AI on a text highlight: Improve, Shorter, Longer, Fix, Tone, Translate',
+      'Markdown import, export, and block shortcuts',
+      'Word (.docx) download and PDF via the print dialog',
+      'Word and Google Docs paste cleanup',
+      'Local version history with restore and compare',
+      '@mentions, image frame, comment resolve, format painter, and table cell styles',
+    ],
+  },
+  {
+    version: '1.1.9',
+    defaultOpen: false,
     items: [
       'Multi-document InkWorkspace with useInkWorkspace hook',
       'PresenceStack avatars and real-time remote cursor tracking',
