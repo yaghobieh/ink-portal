@@ -21,17 +21,17 @@ export const DOCS_PAGES: DocsPageContent[] = [
     blocks: [
       {
         type: 'p',
-        text: 'Ink 1.2.0 is the release where a document can leave the editor. Selection AI, Markdown, Word and PDF, Office paste, local versions, mentions, images, comments, format painter, and table cells are in this build.',
+        text: 'Ink 1.2.2 is the release where a document can leave the editor. Selection AI, Markdown, Word and PDF, Office paste, local versions, mentions, images, comments, format painter, and table cells are in this build.',
       },
       {
         type: 'image',
         src: '/docs/whats-new.svg',
-        alt: 'Ink 1.2.0 share features',
+        alt: 'Ink 1.2.2 share features',
         caption: 'Selection AI sits on the highlight. Markdown, Word, and PDF leave from the toolbar.',
       },
       {
         type: 'steps',
-        title: 'What shipped in 1.2.0',
+        title: 'What shipped in 1.2.2',
         items: [
           {
             title: 'Selection AI',
@@ -99,7 +99,7 @@ export const DOCS_PAGES: DocsPageContent[] = [
           },
         ],
       },
-      { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink@1.2.0' },
+      { type: 'code', language: 'bash', code: 'npm install @forgedevstack/ink@1.2.2' },
       {
         type: 'code',
         language: 'tsx',
@@ -108,7 +108,7 @@ import { InkEditor } from '@forgedevstack/ink';
 import '@forgedevstack/ink/styles.css';
 
 export function DocumentEditor() {
-  const [content, setContent] = useState('<h1>Hello Ink 1.2.0</h1>');
+  const [content, setContent] = useState('<h1>Hello Ink 1.2.2</h1>');
 
   return (
     <InkEditor
@@ -127,7 +127,7 @@ export function DocumentEditor() {
       },
       {
         type: 'html',
-        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a> · current release <strong>1.2.0</strong>`,
+        html: `Package: <a class="ink-doc-link" href="${NPM_URL}" target="_blank" rel="noreferrer">@forgedevstack/ink</a> · current release <strong>1.2.2</strong>`,
       },
     ],
   },
@@ -1079,10 +1079,6 @@ export function CollaborativeEditor({ docId, currentUser }: { docId: string; cur
           { title: 'Ink (free / MIT)', body: 'Core editor — no premium tokens, no hosted AI. Safe for OSS and demos.' },
           { title: 'Ink Pro', body: 'Theme / icons / rich paste / BYO AI key via premium + provider register.' },
           { title: 'Ink AI', body: 'Hosted OpenAI — entitlements + token usage from ink-server (Neon).' },
-          {
-            title: 'Billing posture',
-            body: 'Global SaaS: prefer MoR (Paddle / Lemon) for tax; Israel B2B: local PSP (PayMe / Tranzila). Portal checkout wires to ink-server.',
-          },
           {
             title: 'Social proof',
             body: 'Ink CMS (this portal) is the first production host. Design-partner logos replace “Coming soon” placeholders as they go live.',

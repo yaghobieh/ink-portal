@@ -3,21 +3,22 @@ import { Link } from '@forgedevstack/forge-compass/react';
 import { Badge, Button, Card, Flex, Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
 import { PlanCompareTable } from '@components/PlanCompareTable';
-import { useInkPremium } from '@hooks/index';
+import { PREMIUM_PAID_QUERY, useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import {
   INK_API_URL,
   INK_PREMIUM_LICENSE_EXAMPLE,
-  PLAN_AI_TOKENS_MONTHLY,
   PLAN_FEATURE_KEYS,
   PLAN_PRICES,
   ROUTES,
+  inkProCheckoutHref,
 } from '@const/index';
 
 export const Pricing: FC = () => {
   const { t } = useI18n();
   const { active, clear } = useInkPremium();
-  const tokenLabel = PLAN_AI_TOKENS_MONTHLY.toLocaleString();
+  const successUrl = `${window.location.origin}${ROUTES.PREMIUM_SUCCESS}?${PREMIUM_PAID_QUERY}=1`;
+  const checkoutHref = inkProCheckoutHref(successUrl);
 
   return (
     <Layout>
@@ -98,44 +99,22 @@ export const Pricing: FC = () => {
                 <li key={key}>{t.pricing[key]}</li>
               ))}
             </ul>
-            <Button variant="ink" className="mt-6" disabled>
-              {t.pricing.ctaCheckoutSoon}
+            <Button
+              variant="ink"
+              className="mt-6"
+              onClick={() => window.open(checkoutHref, '_blank', 'noopener,noreferrer')}
+            >
+              {t.pricing.ctaPro}
             </Button>
             <Typography variant="caption" className="ink-text-muted block mt-3">
               {t.pricing.checkoutHint}
             </Typography>
-          </Card>
-
-          <Card className="ink-pricing-card ink-pricing-card--ai p-6">
-            <Flex align="center" gap={2} className="mb-1">
-              <Typography variant="h3" className="font-semibold mb-0">
-                {t.pricing.aiTitle}
-              </Typography>
-              <Badge variant="success">{t.pricing.aiBadge}</Badge>
-            </Flex>
-            <Typography variant="h2" className="text-3xl font-bold mb-1">
-              {PLAN_PRICES.ai.label}
-              <Typography variant="caption" className="ink-text-muted ml-2 font-normal">
-                {t.pricing.aiPeriod}
-              </Typography>
-            </Typography>
-            <Typography variant="body2" className="ink-text-muted mb-4">
-              {t.pricing.aiBody.replace('{tokens}', tokenLabel)}
-            </Typography>
-            <ul className="ink-pricing-list">
-              {PLAN_FEATURE_KEYS.ai.map((key) => (
-                <li key={key}>
-                  {key === 'aiItemTokens'
-                    ? t.pricing.aiItemTokens.replace('{tokens}', tokenLabel)
-                    : t.pricing[key]}
-                </li>
-              ))}
-            </ul>
-            <Button variant="ink" className="mt-6" disabled>
-              {t.pricing.ctaCheckoutSoon}
-            </Button>
-            <Typography variant="caption" className="ink-text-muted block mt-3">
-              {t.pricing.checkoutHint}
+            <Typography variant="caption" className="ink-text-muted block mt-2">
+              {t.pricing.agreeBefore}{' '}
+              <Link to={ROUTES.TERMS} className="ink-doc-link">
+                {t.pricing.termsLink}
+              </Link>
+              .
             </Typography>
           </Card>
         </div>

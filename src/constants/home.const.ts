@@ -1,6 +1,6 @@
 import type { ToolbarOption } from '@forgedevstack/ink';
 
-export const HERO_EDITOR_HTML = `<h1>Ink 1.2.0</h1>
+export const HERO_EDITOR_HTML = `<h1>Ink 1.2.2</h1>
 <p>Select this sentence and ask Ink AI to improve it. Export the page as Markdown or Word when it is ready to share.</p>
 <ul>
 <li><b>Selection AI</b> — Improve, Shorter, Longer, Fix, Tone, and Translate on the highlight.</li>
@@ -8,7 +8,7 @@ export const HERO_EDITOR_HTML = `<h1>Ink 1.2.0</h1>
 <li><b>Versions and @mentions</b> — save a snapshot, then mention a collaborator.</li>
 </ul>
 <blockquote class="Ink-callout"><p>The document can leave the editor.</p></blockquote>
-<h2>What is new in 1.2.0</h2>
+<h2>What is new in 1.2.2</h2>
 <p>Format painter, change case, image captions, comment resolve, and table cell merge are on the toolbar and the cell menu.</p>`;
 
 export const STACK_LABELS = ['React', 'Vue', 'Svelte', 'Next.js', 'Angular'] as const;

@@ -1,4 +1,4 @@
-export type PlanId = 'free' | 'pro' | 'ai';
+export type PlanId = 'free' | 'pro';
 
 export interface PlanPriceInfo {
   amount: number;

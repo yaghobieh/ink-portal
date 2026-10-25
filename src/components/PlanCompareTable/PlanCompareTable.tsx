@@ -21,7 +21,6 @@ export const PlanCompareTable: FC<PlanCompareTableProps> = (props) => {
         feature: t.pricing[row.id],
         free: t.pricing.compareFreePath,
         pro: t.pricing.compareProPath,
-        ai: t.pricing.compareAiPath,
       };
     }
     if (row.id === 'compareNpmAccess') {
@@ -30,7 +29,6 @@ export const PlanCompareTable: FC<PlanCompareTableProps> = (props) => {
         feature: t.pricing[row.id],
         free: t.pricing.compareFreeNpm,
         pro: t.pricing.compareProNpm,
-        ai: t.pricing.compareAiNpm,
       };
     }
     return {
@@ -38,7 +36,6 @@ export const PlanCompareTable: FC<PlanCompareTableProps> = (props) => {
       feature: t.pricing[row.id],
       free: row.free,
       pro: row.pro,
-      ai: row.ai,
     };
   });
 
@@ -61,14 +58,6 @@ export const PlanCompareTable: FC<PlanCompareTableProps> = (props) => {
       id: PLAN_COMPARE_COLUMN_IDS.PRO,
       accessor: 'pro',
       header: t.pricing.proTitle,
-      sortable: false,
-      render: (value, row) =>
-        renderPlanCell(String(value ?? ''), planCellDiffers(row as PlanCompareTableRow)),
-    },
-    {
-      id: PLAN_COMPARE_COLUMN_IDS.AI,
-      accessor: 'ai',
-      header: t.pricing.aiTitle,
       sortable: false,
       render: (value, row) =>
         renderPlanCell(String(value ?? ''), planCellDiffers(row as PlanCompareTableRow)),

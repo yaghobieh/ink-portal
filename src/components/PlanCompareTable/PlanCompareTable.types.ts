@@ -8,7 +8,6 @@ export type PlanCompareMatrixRow = {
   id: PlanCompareRowKey;
   free: PlanCompareCell;
   pro: PlanCompareCell;
-  ai: PlanCompareCell;
 };
 
 export type PlanCompareTableRow = {
@@ -16,7 +15,6 @@ export type PlanCompareTableRow = {
   feature: string;
   free: PlanCompareCell;
   pro: PlanCompareCell;
-  ai: PlanCompareCell;
 };
 
 export type PlanCompareTableProps = {

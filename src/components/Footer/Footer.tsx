@@ -64,6 +64,9 @@ export const Footer: FC = () => {
               <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="ink-footer-link">
                 <Typography variant="caption">GitHub</Typography>
               </a>
+              <Link to={ROUTES.TERMS} className="ink-footer-link">
+                <Typography variant="caption">{t.footer.terms}</Typography>
+              </Link>
             </Flex>
           </div>
         </div>
