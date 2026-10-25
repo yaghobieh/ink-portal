@@ -53,8 +53,8 @@ export const Terms: FC = () => {
         </section>
 
         <Typography variant="body2" className="mt-10">
-          <Link to={ROUTES.DOCS} className="ink-doc-link">
-            {t.ctaDocs}
+          <Link to={ROUTES.PRICING} className="ink-doc-link">
+            {t.terms.backPricing}
           </Link>
         </Typography>
       </div>

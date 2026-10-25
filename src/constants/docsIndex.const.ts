@@ -143,6 +143,12 @@ export const DOCS_INDEX: DocsIndexEntry[] = [
     keywords: ['demos', 'examples', 'editor'],
     path: ROUTES.DEMOS,
   },
+  {
+    id: 'pricing',
+    title: 'Pricing',
+    keywords: ['pricing', 'lemon', 'license', 'pro'],
+    path: ROUTES.PRICING,
+  },
 ];
 
 export const docsHref = (slugOrPath: string): string => {

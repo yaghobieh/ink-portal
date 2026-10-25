@@ -47,6 +47,7 @@ export const PORTAL_VERSION = packageJson.version;
 const NAV_LINKS_BASE = [
   { id: 'docs' as const, href: ROUTES.DOCS },
   { id: 'demos' as const, href: ROUTES.DEMOS },
+  { id: 'pricing' as const, href: ROUTES.PRICING },
   { id: 'plugins' as const, href: `${ROUTES.DOCS}/plugins` },
 ];
 

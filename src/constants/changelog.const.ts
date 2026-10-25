@@ -10,6 +10,7 @@ export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
       'Portal tracks @forgedevstack/ink 1.2.2',
       'Split view follows the Ink Pro license. The single editor stays available without it',
       'The license also unlocks theme tokens, toolbar icons, rich paste, image upload, and WYSIWYG mode',
+      'Pricing checkout is on the portal. A valid license key unlocks Pro in the editors',
     ],
   },
   {

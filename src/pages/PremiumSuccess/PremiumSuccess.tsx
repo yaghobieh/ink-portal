@@ -2,6 +2,7 @@ import { useEffect, useState, type FC, type FormEvent } from 'react';
 import { Link } from '@forgedevstack/forge-compass/react';
 import { Badge, Button, Flex, Typography } from '@forgedevstack/bear';
 import { Layout } from '@components/Layout';
+import { resolveInkPremium } from '@forgedevstack/ink';
 import { useInkPremium } from '@hooks/index';
 import { useI18n } from '@i18n/index';
 import { ROUTES } from '@const/index';
@@ -11,6 +12,9 @@ export const PremiumSuccess: FC = () => {
   const { licenseKey, active, activate } = useInkPremium();
   const [draft, setDraft] = useState('');
   const [rejected, setRejected] = useState(false);
+  const opened = Object.entries(resolveInkPremium(licenseKey ? { licenseKey } : undefined).features)
+    .filter(([, on]) => on)
+    .map(([feature]) => feature);
 
   useEffect(() => {
     const fromReceipt = new URLSearchParams(window.location.search).get('license_key');
@@ -28,15 +32,22 @@ export const PremiumSuccess: FC = () => {
     <Layout>
       <div className="fade-in max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <Badge variant={active ? 'success' : 'info'} className="mb-4">
-          {t.premiumSuccess.badge}
+          {active ? t.pricing.activeBadge : t.premiumSuccess.badge}
         </Badge>
         <Typography variant="h1" className="text-4xl font-bold mb-3 tracking-tight">
-          {t.premiumSuccess.title}
+          {active ? t.pricing.activeTitle : t.premiumSuccess.title}
         </Typography>
         <Typography variant="body1" className="ink-text-muted mb-6 text-lg">
-          {t.premiumSuccess.body}
+          {active ? t.pricing.activeBody : t.premiumSuccess.body}
         </Typography>
         {licenseKey ? <pre className="ink-code mb-6">{licenseKey}</pre> : null}
+        {opened.length > 0 ? (
+          <ul className="ink-pricing-list mb-6">
+            {opened.map((feature) => (
+              <li key={feature}>{feature}</li>
+            ))}
+          </ul>
+        ) : null}
         <form onSubmit={save} className="mb-8">
           <label className="block mb-2" htmlFor="ink-license-key">
             <Typography variant="body2" className="font-semibold mb-0">

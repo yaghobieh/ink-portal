@@ -9,6 +9,8 @@ import { GetStarted } from '@pages/GetStarted';
 import { Changelog } from '@pages/Changelog';
 import { Ai } from '@pages/Ai';
 import { DemoPage, Demos } from '@pages/Demos';
+import { Pricing } from '@pages/Pricing';
+import { PremiumSuccess } from '@pages/PremiumSuccess';
 import { Terms } from '@pages/Terms';
 import {
   CmsLogin,
@@ -44,6 +46,8 @@ const routes = [
   { path: ROUTES.GET_STARTED, name: 'get-started', component: GetStarted },
   { path: ROUTES.CHANGELOG, name: 'changelog', component: Changelog },
   { path: ROUTES.AI, name: 'ai', component: Ai },
+  { path: ROUTES.PREMIUM_SUCCESS, name: 'premium-success', component: PremiumSuccess },
+  { path: ROUTES.PRICING, name: 'pricing', component: Pricing },
   { path: ROUTES.TERMS, name: 'terms', component: Terms },
   { path: ROUTES.CMS_LOGIN, name: 'cms-login', component: CmsLogin },
   { path: ROUTES.CMS, name: 'cms', component: Dashboard },
