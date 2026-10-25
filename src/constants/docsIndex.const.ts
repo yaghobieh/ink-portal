@@ -13,8 +13,8 @@ export const DOCS_TOC = DOCS_PAGES.map((page) => ({
 export const DOCS_INDEX: DocsIndexEntry[] = [
   {
     id: 'whats-new',
-    title: "What's new in 1.2.0",
-    keywords: ['1.2.0', 'markdown', 'docx', 'pdf', 'mentions', 'versions', 'selection', 'ai', 'paste'],
+    title: "What's new in 1.2.2",
+    keywords: ['1.2.2', 'markdown', 'docx', 'pdf', 'mentions', 'versions', 'selection', 'ai', 'paste'],
     path: `${ROUTES.DOCS}/whats-new`,
   },
   {
@@ -142,12 +142,6 @@ export const DOCS_INDEX: DocsIndexEntry[] = [
     title: 'Demos',
     keywords: ['demos', 'examples', 'editor'],
     path: ROUTES.DEMOS,
-  },
-  {
-    id: 'pricing',
-    title: 'Pricing',
-    keywords: ['pricing', 'polar', 'lemon', 'israel', 'stripe', 'apple pay'],
-    path: ROUTES.PRICING,
   },
 ];
 

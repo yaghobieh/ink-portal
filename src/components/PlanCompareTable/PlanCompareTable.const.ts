@@ -7,7 +7,6 @@ export const PLAN_COMPARE_COLUMN_IDS = {
   FEATURE: 'feature',
   FREE: 'free',
   PRO: 'pro',
-  AI: 'ai',
 } as const;
 
 export const PLAN_COMPARE_ROW_KEYS = [
@@ -16,12 +15,6 @@ export const PLAN_COMPARE_ROW_KEYS = [
   'compareCssThemes',
   'comparePremiumLicense',
   'compareByoAi',
-  'compareHostedAi',
-  'compareAiTokens',
-  'compareAutocomplete',
-  'compareSiteToken',
-  'compareCreditsPool',
-  'compareUsageDashboard',
   'compareNpmAccess',
   'compareLicensePath',
 ] as const;
@@ -31,84 +24,13 @@ import type { PlanCompareCell, PlanCompareMatrixRow, PlanCompareRowKey } from '.
 export type { PlanCompareCell, PlanCompareMatrixRow, PlanCompareRowKey } from './PlanCompareTable.types';
 
 export const PLAN_COMPARE_MATRIX: PlanCompareMatrixRow[] = [
-  {
-    id: 'compareCoreEditor',
-    free: COMPARE_YES,
-    pro: COMPARE_YES,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareTablesCollab',
-    free: COMPARE_YES,
-    pro: COMPARE_YES,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareCssThemes',
-    free: COMPARE_YES,
-    pro: COMPARE_YES,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'comparePremiumLicense',
-    free: COMPARE_NO,
-    pro: COMPARE_YES,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareByoAi',
-    free: COMPARE_NO,
-    pro: COMPARE_YES,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareHostedAi',
-    free: COMPARE_NO,
-    pro: COMPARE_NO,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareAiTokens',
-    free: COMPARE_NO,
-    pro: COMPARE_NO,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareAutocomplete',
-    free: COMPARE_NO,
-    pro: COMPARE_NO,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareSiteToken',
-    free: COMPARE_NO,
-    pro: COMPARE_YES,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareCreditsPool',
-    free: COMPARE_NO,
-    pro: COMPARE_NO,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareUsageDashboard',
-    free: COMPARE_NO,
-    pro: COMPARE_YES,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareNpmAccess',
-    free: COMPARE_YES,
-    pro: COMPARE_YES,
-    ai: COMPARE_YES,
-  },
-  {
-    id: 'compareLicensePath',
-    free: COMPARE_YES,
-    pro: COMPARE_YES,
-    ai: COMPARE_YES,
-  },
+  { id: 'compareCoreEditor', free: COMPARE_YES, pro: COMPARE_YES },
+  { id: 'compareTablesCollab', free: COMPARE_YES, pro: COMPARE_YES },
+  { id: 'compareCssThemes', free: COMPARE_YES, pro: COMPARE_YES },
+  { id: 'comparePremiumLicense', free: COMPARE_NO, pro: COMPARE_YES },
+  { id: 'compareByoAi', free: COMPARE_NO, pro: COMPARE_YES },
+  { id: 'compareNpmAccess', free: COMPARE_YES, pro: COMPARE_YES },
+  { id: 'compareLicensePath', free: COMPARE_YES, pro: COMPARE_YES },
 ];
 
 export const PLAN_COMPARE_EMPTY_INDEX = NUMBER_ZERO;

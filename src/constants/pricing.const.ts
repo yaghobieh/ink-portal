@@ -1,4 +1,4 @@
-export const PLAN_IDS = ['free', 'pro', 'ai'] as const;
+export const PLAN_IDS = ['free', 'pro'] as const;
 
 import type { PlanId } from './pricing.types';
 
@@ -6,11 +6,8 @@ export type { PlanId } from './pricing.types';
 
 export const PLAN_PRICES = {
   free: { amount: 0, period: 'forever' as const, label: '$0' },
-  pro: { amount: 29, period: 'once' as const, label: '$29' },
-  ai: { amount: 19, period: 'month' as const, label: '$19' },
+  pro: { amount: 10, period: 'once' as const, label: '$10' },
 } as const;
-
-export const PLAN_AI_TOKENS_MONTHLY = 100_000;
 
 export const PLAN_FEATURE_KEYS = {
   free: [
@@ -25,15 +22,7 @@ export const PLAN_FEATURE_KEYS = {
     'proItemPaste',
     'proItemUpload',
     'proItemWysiwyg',
+    'proItemSplit',
     'proItemByoAi',
-    'proItemTypo',
-  ] as const,
-  ai: [
-    'aiItemAllPro',
-    'aiItemHosted',
-    'aiItemTokens',
-    'aiItemAutocomplete',
-    'aiItemGenerate',
-    'aiItemUsage',
   ] as const,
 } as const;

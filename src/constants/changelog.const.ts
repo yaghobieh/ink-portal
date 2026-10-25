@@ -4,8 +4,24 @@ export type { ChangelogEntry } from './changelog.types';
 
 export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
   {
-    version: '1.2.0',
+    version: '1.2.2',
     defaultOpen: true,
+    items: [
+      'Portal tracks @forgedevstack/ink 1.2.2',
+      'Split view follows the Ink Pro license. The single editor stays available without it',
+      'The license also unlocks theme tokens, toolbar icons, rich paste, image upload, and WYSIWYG mode',
+    ],
+  },
+  {
+    version: '1.2.1',
+    defaultOpen: false,
+    items: [
+      'License key shape accepts Ink Pro keys',
+    ],
+  },
+  {
+    version: '1.2.0',
+    defaultOpen: false,
     items: [
       'Selection AI on a text highlight: Improve, Shorter, Longer, Fix, Tone, Translate',
       'Markdown import, export, and block shortcuts',

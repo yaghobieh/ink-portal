@@ -39,6 +39,7 @@ export const es: Messages = {
     builtWith: 'Hecho con',
     ecosystem: 'Ecosistema ForgeStack',
     resources: 'Recursos',
+    terms: 'Términos',
     domainNote: 'inkforgejs.com — regístralo en tu registrador si aún no está activo.',
   },
   docs: {
@@ -71,7 +72,7 @@ export const es: Messages = {
     tocA11y: 'Accesibilidad',
     tocPremium: 'Premium',
     tocCollaboration: 'Colaboración',
-    tocWhatsNew: 'Novedades de 1.2.0',
+    tocWhatsNew: 'Novedades de 1.2.2',
   },
   playground: {
     title: 'Playground',
@@ -123,8 +124,8 @@ export const es: Messages = {
   },
   demos: {
     title: 'Demos',
-    description: 'Demos de Ink 1.2.0 — IA de selección, Markdown, Word, PDF y el resto del editor.',
-    eyebrow: 'Ink 1.2.0',
+    description: 'Demos de Ink 1.2.2 — IA de selección, Markdown, Word, PDF y el resto del editor.',
+    eyebrow: 'Ink 1.2.2',
     featuredTitle: 'El documento se puede compartir',
     catalogTitle: 'Todas las demos',
     back: 'Todas las demos',
@@ -201,9 +202,9 @@ export const es: Messages = {
     stackTitle: 'Encaja con tu stack',
     galleryTitle: 'El editor en movimiento',
     galleryBody:
-      'Este es el editor 1.2.0 — en vivo. Selecciona texto para la IA, exporta Markdown o Word, y menciona a alguien.',
-    editorPlaceholder: 'Empieza a escribir en Ink 1.2.0…',
-    whatsNewTitle: 'Novedades de 1.2.0',
+      'Este es el editor 1.2.2 — en vivo. Selecciona texto para la IA, exporta Markdown o Word, y menciona a alguien.',
+    editorPlaceholder: 'Empieza a escribir en Ink 1.2.2…',
+    whatsNewTitle: 'Novedades de 1.2.2',
     whatsNewBody: 'El documento puede salir del editor. Estas son las funciones de este portal.',
     shareAiTitle: 'IA de selección',
     shareAiBody: 'Mejora, acorta, amplía, corrige, cambia el tono o traduce el texto seleccionado.',
@@ -266,7 +267,7 @@ export const es: Messages = {
   pricing: {
     title: 'Precios',
     description:
-      'Tres paquetes. El checkout va a ink-server (Neon + JWT). PayPal está desactivado en este portal.',
+      'El editor es gratis. Ink Pro cuesta $10 una vez y abre las herramientas premium.',
     freeTitle: 'Ink',
     freeBody: 'Publica el editor. Sin IA ni tokens premium — núcleo MIT puro.',
     freeBadge: 'Gratis · MIT',
@@ -275,7 +276,7 @@ export const es: Messages = {
     freeItemCss: 'Variables CSS y clases de tema',
     freeItemNoAi: 'Sin IA alojada · sin unlock BYO AI',
     proTitle: 'Ink Pro',
-    proBody: 'Superficie premium + conecta tu propia clave OpenAI. Typo y herramientas de diseño incluidas.',
+    proBody: 'Tema, iconos, paste rico, subida de imágenes, modo WYSIWYG, editores divididos y tu propia clave de IA.',
     proBadge: 'Pro',
     proPeriod: 'único',
     proItemTheme: 'Tokens de color / radio / tipografía',
@@ -283,21 +284,12 @@ export const es: Messages = {
     proItemPaste: 'Paste HTML rico conserva el diseño',
     proItemUpload: 'onImageUpload hacia tu CDN',
     proItemWysiwyg: 'Modo de estilo WYSIWYG',
+    proItemSplit: 'Editores divididos, uno al lado del otro',
     proItemByoAi: 'Conecta tu AI key (OpenAI / BYO)',
-    proItemTypo: 'Typo auto-fix + helpers Pro',
-    aiTitle: 'Ink AI',
-    aiBody: 'Todo Pro, más OpenAI alojado — {tokens} tokens / mes con autocomplete y generate.',
-    aiBadge: 'AI',
-    aiPeriod: '/ mes',
-    aiItemAllPro: 'Todo lo de Ink Pro',
-    aiItemHosted: 'OpenAI integrado (sin pegar key al usuario final)',
-    aiItemTokens: '{tokens} tokens incluidos cada mes',
-    aiItemAutocomplete: 'Autocomplete mientras escribes',
-    aiItemGenerate: 'Auto-generar drafts, reescribir, resumir',
-    aiItemUsage: 'Medidor de uso + audit en la API de cuenta',
     ctaFree: 'Empezar',
-    ctaCheckoutSoon: 'Checkout pronto',
-    checkoutHint: 'Billing vía entitlements de ink-server — sin botones PayPal aquí.',
+    ctaPro: 'Comprar Ink Pro',
+    checkoutHint: 'Abre Lemon Squeezy. La clave llega en el correo del recibo. Pégala en la página de éxito.',
+    agreeBefore: 'Al comprar Ink Pro aceptas los',
     activeBadge: 'Activo',
     activeTitle: 'Features Pro desbloqueadas en este navegador',
     activeBody: 'Home, demos, AI y playground usan la licencia local para previews.',
@@ -311,8 +303,7 @@ export const es: Messages = {
     howNpmNote:
       'Apps con @forgedevstack/ink pasan la license una vez (env o backend). Ejemplo:',
     compareTitle: 'Comparar packs',
-    compareSubtitle:
-      'Core MIT gratis vs Pro (licencia de pago) vs AI (Pro + tokens alojados). El mismo paquete npm para todos.',
+    compareSubtitle: 'Núcleo MIT gratis e Ink Pro. Los dos usan el mismo paquete npm público.',
     compareDiffHint: 'Las celdas resaltadas muestran dónde difieren los planes.',
     compareColFeature: 'Función',
     compareCoreEditor: 'InkEditor + toolbar',
@@ -320,45 +311,74 @@ export const es: Messages = {
     compareCssThemes: 'Variables CSS y clases de tema',
     comparePremiumLicense: 'Features Pro de licencia (tokens de tema, WYSIWYG, paste rico, upload)',
     compareByoAi: 'Trae tu propia AI key',
-    compareHostedAi: 'AI alojada (sin key del usuario final)',
-    compareAiTokens: 'Tokens AI alojados al mes',
-    compareAutocomplete: 'Autocomplete AI en línea',
     compareNpmAccess: 'Cómo obtienes la librería (npm)',
-    compareLicensePath: 'Cómo Pro / AI desbloquean features',
+    compareLicensePath: 'Cómo Pro desbloquea las funciones',
     compareFreePath: 'Solo core MIT',
     compareProPath: 'Licencia de pago desbloquea features Pro',
-    compareAiPath: 'Features Pro + tokens AI alojados',
     compareFreeNpm: 'npm público (MIT)',
     compareProNpm: 'Mismo npm + license Pro',
-    compareAiNpm: 'Mismo npm + license Pro + plan AI',
-    compareSiteToken: 'site_id + site_token para editor de pago',
-    compareCreditsPool: 'Créditos Ink del pool de la empresa',
-    compareUsageDashboard: 'Medidor de uso (requests + restante)',
     termsLink: 'Términos de servicio',
   },
   terms: {
     title: 'Términos de servicio',
+    updated: 'Vigente desde el 24 de octubre de 2026',
     description:
-      'Borrador para clientes de pago de Ink Pro e Ink AI. No es asesoría legal — el ToS final llega con el checkout.',
-    licensesTitle: 'Licencias',
-    licensesBody:
-      'El core MIT de @forgedevstack/ink sigue abierto. Pro desbloquea features de pago con license key o entitlement. Ink AI incluye Pro más uso de AI alojada según los límites del plan.',
+      'Estos términos cubren el editor Ink gratuito y la licencia de pago Ink Pro vendida en inkforgejs.com.',
+    partiesTitle: 'A quién le compras',
+    partiesBody:
+      'Ink lo ofrece John Yaghobieh (“nosotros”) en inkforgejs.com. El paquete npm es @forgedevstack/ink. El pago lo gestiona Lemon Squeezy, que es el comerciante de registro. Los términos y la privacidad de Lemon Squeezy se aplican al pago.',
+    freeTitle: 'Editor gratuito',
+    freeBody:
+      'El núcleo con licencia MIT sigue siendo gratis. Incluye InkEditor, la barra, tablas, comentarios, control de cambios y bloques. La licencia MIT del paquete rige ese núcleo. Estos términos no anulan la licencia MIT.',
+    proTitle: 'Ink Pro',
+    proBody:
+      'Ink Pro es una compra única de 10 dólares estadounidenses. Es una clave de licencia para funciones del mismo paquete npm: tokens de tema, iconos de la barra, pegado rico, subida de imágenes, modo WYSIWYG, editores divididos y conectar tu propia clave de IA. No incluye un servicio de IA alojada, un segundo paquete ni horas de soporte.',
+    grantTitle: 'Cesión de licencia',
+    grantBody:
+      'Tras el pago recibes una clave. Esa clave permite a quien compra usar las funciones Pro en las aplicaciones que desarrolle, incluidas las comerciales, sin límite de aplicaciones. La clave es para un comprador. Puedes guardarla en un repositorio privado y en las apps que publicas. No recibes la propiedad de Ink, su copyright ni sus marcas.',
+    restrictionsTitle: 'Lo que no puedes hacer',
+    restrictionsBody:
+      'No puedes vender, publicar ni compartir la clave. No puedes alquilarla, sublicenciarla ni dejar que otra persona o empresa la use como propia. No puedes quitar los avisos de copyright del paquete. No puedes presentar Ink como un producto tuyo. No puedes usar el editor para infringir la ley.',
+    deliveryTitle: 'Entrega',
+    deliveryBody:
+      'Ink Pro se entrega por correo. Lemon Squeezy envía la clave de licencia en el recibo al terminar el pago. Pega esa clave en la página de éxito y pásala a InkEditor como premium.licenseKey. La instalación sigue siendo npm install @forgedevstack/ink. Conserva una copia. No enviamos un instalador aparte.',
+    paymentTitle: 'Pago e impuestos',
+    paymentBody:
+      'El precio es 10 dólares estadounidenses, un solo pago. Lemon Squeezy cobra tu medio de pago y emite el recibo. Los impuestos que Lemon Squeezy deba cobrar se añaden en el checkout. Un cambio de precio futuro solo afecta a compras nuevas. Una clave ya comprada sigue funcionando.',
     refundsTitle: 'Reembolsos',
     refundsBody:
-      'Compras Pro únicas pueden reembolsarse en un plazo razonable si la license no se usó en producción. Los planes AI mensuales terminan al cierre del periodo; los tokens no usados no se acumulan salvo indicación contraria.',
-    aiTitle: 'Uso de AI',
-    aiBody:
-      'La AI alojada puede enviar contexto del documento al proveedor configurado bajo tu cuenta. No envíes secretos ni datos personales que no puedas procesar. Abuso o evasión de cuotas puede suspender el acceso AI.',
-    lawTitle: 'Ley aplicable',
+      'Puedes pedir un reembolso en los 14 días siguientes a la compra si la clave no se usó en una aplicación de producción en vivo. Pídelo con el recibo de Lemon Squeezy o por correo. Como la clave se entrega al momento, usarla en una app de producción cierra el plazo. Lemon Squeezy envía el reembolso al medio de pago original.',
+    privacyTitle: 'Privacidad',
+    privacyBody:
+      'Los datos de pago, la dirección de facturación y el correo del recibo los recoge Lemon Squeezy, no inkforgejs.com. Este sitio guarda la clave en el almacenamiento local del navegador para que Pro siga activo en ese navegador. No vendemos datos personales. Para una consulta sobre una compra, escríbenos e incluye el correo del checkout. La política de privacidad de Lemon Squeezy cubre los datos que ellos tratan.',
+    warrantyTitle: 'Garantía',
+    warrantyBody:
+      'Ink e Ink Pro se ofrecen tal cual. No prometemos que el editor esté libre de errores, sirva para un fin concreto o no cambie. Las funciones pueden corregirse o ajustarse en versiones posteriores del mismo paquete. Tu clave sigue abriendo las funciones Pro en las versiones 1.x posteriores.',
+    liabilityTitle: 'Responsabilidad',
+    liabilityBody:
+      'En la medida máxima que permita la ley, no respondemos por lucro cesante, pérdida de datos ni daños indirectos derivados del uso de Ink. Nuestra responsabilidad total por una compra es el importe que pagaste por esa compra. Nada de esto limita una responsabilidad que la ley no permita limitar.',
+    terminationTitle: 'Fin de la licencia',
+    terminationBody:
+      'El núcleo MIT sigue disponible bajo la licencia MIT. La licencia Pro termina si incumples estos términos, incluido compartir la clave. Cuando termina debes dejar de usar las funciones Pro. Las secciones de propiedad, garantía, responsabilidad y ley siguen aplicando.',
+    changesTitle: 'Cambios',
+    changesBody:
+      'Podemos actualizar estos términos publicando una versión nueva en esta página con una fecha nueva. Los términos vigentes el día del pago se aplican a esa compra. Seguir usando una versión posterior del sitio significa que aceptas los términos publicados entonces.',
+    lawTitle: 'Ley',
     lawBody:
-      'Estos términos borrador se rigen por la ley de la entidad vendedora indicada en el checkout. Las disputas siguen esa jurisdicción hasta que un ToS completo reemplace esta página.',
+      'Estos términos se rigen por las leyes del Estado de Israel, sin sus normas de conflicto de leyes. Los tribunales competentes de Israel tienen jurisdicción exclusiva, salvo cuando la ley de consumo de tu país te dé un tribunal al que no puedes renunciar.',
+    contactTitle: 'Contacto',
+    contactBody:
+      'Preguntas sobre estos términos o una compra: yaghobieh@gmail.com. Incluye el correo usado en el checkout.',
     backPricing: 'Volver a precios',
   },
   premiumSuccess: {
     badge: 'Cuenta',
     title: 'Checkout completo',
-    body: 'Cuando billing esté live, esta página recibe el redirect del server y guarda el plan.',
-    npmNote: 'Para npm, usa la license de la API de entitlements.',
+    body: 'Lemon Squeezy envía la clave de licencia con el recibo. Pégala aquí. Esta página no crea una clave.',
+    pasteLabel: 'Clave del recibo',
+    pasteButton: 'Activar Pro',
+    pasteError: 'Esa clave no es una licencia de Lemon Squeezy ni una clave Ink Pro.',
+    npmNote: 'Pasa la clave a InkEditor como premium.licenseKey. El mismo paquete npm sigue público.',
     ctaPlayground: 'Abrir playground',
     ctaDemos: 'Ver demos',
   },
@@ -471,7 +491,7 @@ export const es: Messages = {
 
     editorsSubtitle: 'Looks: classic, document, simple, agent, docx, notion-like — CMS host Bifrost.',
     editorsLivePreview: 'Vista previa',
-    editorsVersion: '1.2.0',
+    editorsVersion: '1.2.2',
     openPlayground: 'Abrir playground',
     plansTitle: 'Niveles de pack',
     plansSubtitle: 'Tu pack actual está marcado en verde. Cambia cuando quieras.',
@@ -506,8 +526,8 @@ export const es: Messages = {
   },
   lab: {
     title: 'Lab',
-    description: 'Sandbox privado para el build local de Ink 1.2.0.',
-    note: 'Solo para pruebas internas. Este servidor carga ../ink/dist de la rama local 1.2.0.',
+    description: 'Sandbox privado para el build local de Ink 1.2.2.',
+    note: 'Solo para pruebas internas. Este servidor carga ../ink/dist de la rama local 1.2.2.',
     placeholder: 'Selecciona texto, escribe @, o prueba la barra nueva…',
     aiOpenAiReady:
       'Clave OpenAI detectada (VITE_OPENAI_API_KEY). Autocomplete y panel AI usan tokens reales — solo local temporal.',

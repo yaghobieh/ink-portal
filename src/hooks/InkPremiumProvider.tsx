@@ -8,7 +8,6 @@ import {
 } from 'react';
 import {
   isInkPremiumLicenseKey,
-  mintInkPremiumLicenseKey,
 } from '@forgedevstack/ink';
 import { PREMIUM_LICENSE_STORAGE_KEY } from './premium.const';
 import type { InkPremiumContextValue, InkPremiumProviderProps } from './premium.types';
@@ -37,8 +36,8 @@ export const InkPremiumProvider: FC<InkPremiumProviderProps> = ({ children }) =>
   const [licenseKey, setLicenseKey] = useState<string | null>(() => readStoredLicense());
 
   const activate = useCallback((incoming?: string) => {
-    const next =
-      incoming && isInkPremiumLicenseKey(incoming) ? incoming.trim() : mintInkPremiumLicenseKey();
+    const next = incoming?.trim() ?? '';
+    if (!isInkPremiumLicenseKey(next)) return '';
     writeStoredLicense(next);
     setLicenseKey(next);
     return next;
